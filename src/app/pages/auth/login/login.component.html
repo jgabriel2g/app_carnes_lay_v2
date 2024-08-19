@@ -1,0 +1,45 @@
+<ion-content>
+  <div class="container mx-auto px-0 sm:px-6 lg:px-8 h-full">
+    <div class="flex flex-col justify-center items-center gap-y-4 h-full  mx-auto md:max-w-md max-w-[290px]">
+      <!-- Logo image-->
+      <img src="assets/images/logo.png" class="mb-5" alt="">
+
+      <!-- Username input field -->
+      <div class="mb-5 w-full">
+        <label for="email" >Usuario</label>
+        <div class="relative mt-1s rounded-2xl shadow-md">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <input type="email" name="email" id="email" class="inputs" placeholder="you@example.com">
+        </div>
+      </div>
+
+      <!-- Password input field -->
+      <div class="mb-5 w-full">
+        <label for="password" >Contraseña</label>
+        <div class="relative mt-1s rounded-2xl shadow-md">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+            </svg>
+          </div>
+          <input type="password" name="password" id="password" class="inputs" placeholder="*****">
+        </div>
+        <!-- Recover password anchor tag -->
+        <div class="flex items-center justify-end mt-2">
+          <div class="text-sm leading-6">
+            <a routerLink="/auth/recoverPassword" class="font-semibold text-[#b3241c] hover:text-red-900">¿Olvidaste tu contraseña?</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button  -->
+      <div class="mb-5 w-full shadow-md rounded-2xl">
+        <button type="button" class="btn-primary">Iniciar sesión</button>
+      </div>
+    </div>
+  </div>
+</ion-content>
