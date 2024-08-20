@@ -17,7 +17,7 @@
 
 
 .ion-page {
-  background-color: white !important;
+  @apply bg-gray-100 ;
 }
 
 label{
@@ -35,4 +35,9 @@ label{
 
 .text-primary {
   color: #b3241c;
+}
+
+
+.active {
+  @apply bg-[#b3241c] text-white
 }

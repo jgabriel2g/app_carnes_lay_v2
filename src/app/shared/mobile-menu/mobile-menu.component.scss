@@ -1,0 +1,43 @@
+ion-tab-bar {
+  height: 86px;
+  border-radius : 26px, 26px, 0px, 0px !important;
+  background-color: transparent !important;
+
+
+}
+
+ion-tab-button {
+  background-color:white  !important;
+  border: none;
+}
+
+.first {
+  border-radius: 26px 0px 0px 0px;
+}
+.last {
+  border-radius:  0px 26px 0px 0px;
+}
+
+
+img {
+  height: 28px !important;
+  width: 28px !important;
+}
+
+span {
+  margin-top: 5px;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  font-weight: bold;
+  color: #b3241c
+};
+
+.active-link {
+  color: white !important;
+}
+
+.active-button {
+  color: white;
+  background-color: #b3241c !important;
+}
