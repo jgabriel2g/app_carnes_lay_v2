@@ -1,17 +1,21 @@
-import { HostListener } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+  selector: 'app-create',
+  templateUrl: './create.component.html',
+  styleUrls: ['./create.component.scss'],
 })
-export class MainComponent  implements OnInit {
+export class CreateComponent  implements OnInit {
+
+
   public windowWith:any;
 
   ngOnInit() {
     this.checkScreenWidth();
+
   }
+  public isColapsed:boolean = false
+
 
   constructor() {
     this.checkScreenWidth(); // Verifica el ancho inicial
@@ -26,4 +30,5 @@ export class MainComponent  implements OnInit {
 
     this.windowWith = window.innerWidth
   }
+
 }

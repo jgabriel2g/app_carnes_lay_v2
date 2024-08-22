@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ActivationEnd } from '@angular/router';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router, ActivatedRoute, ActivationEnd, RouterModule } from '@angular/router';
 import { Subscription, filter, map } from 'rxjs';
 import { IonTabs } from "@ionic/angular/standalone";
 import { IonicModule } from '@ionic/angular';
@@ -12,31 +12,19 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports:[
     IonicModule,
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
-export class MobileMenuComponent  implements OnDestroy {
+export class MobileMenuComponent    {
+  @Output() close = new EventEmitter<boolean>();
+  constructor() { }
+  public showInventoryMenu:boolean = false;
 
-  public routeStep!: number
-  public routeStepSubs$ : Subscription;
-  public activeFill:string ='';
-    constructor(private router: Router,  private route: ActivatedRoute) {
-     this.routeStepSubs$ = this.getDataRoutes()
-                            .subscribe( ({route}) =>  {
-                              this.routeStep = Number(route);
-                              console.log(route)
-                          });
-     }
-  ngOnDestroy(): void {
-    this.routeStepSubs$.unsubscribe()
+
+  actionResponse(value:boolean) {
+    this.close.emit(value);
   }
-  getDataRoutes(){
-    return this.router.events
-    .pipe(
-      filter( (event:any) => event instanceof ActivationEnd),
-      filter( (event: ActivationEnd)=> event.snapshot.firstChild === null  ),
-      map( (event: ActivationEnd)=> event.snapshot.data  ),
-    )
-  };
+
 
 }

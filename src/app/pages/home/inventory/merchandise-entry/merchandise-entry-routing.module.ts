@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { ListComponent } from './list/list.component';
-import { FormComponent } from './form/form.component';
 import { CreateComponent } from './create/create.component';
-import { UpdateComponent } from './update/update.component';
 
 const routes: Routes = [
   {
@@ -13,10 +12,6 @@ const routes: Routes = [
   {
     path:'create',
     component:CreateComponent
-  },
-  {
-    path:'update/:id',
-    component:UpdateComponent
   },
   {
     path:'**',
@@ -29,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UsersRoutingModule { }
+export class MerchandiseEntryRoutingModule { }
