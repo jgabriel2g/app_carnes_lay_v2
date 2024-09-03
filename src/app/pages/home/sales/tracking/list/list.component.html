@@ -1,0 +1,95 @@
+<div class="px-8 pt-20 sm:px-6 lg:px-8 block">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold leading-6 text-primary">Ventas</h1>
+      <p class="mt-2 text-sm text-gray-700">Una lista de todas las ventas de la plataforma incluyendo sus productos, monto, fecha , método de pago, vendedor y # de caja  </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <button type="button" routerLink="/home/sales/new" class="btn-primary px-6">Abrir caja</button>
+    </div>
+  </div>
+  <div class="mt-8 flow-root">
+    <div class="flex justify-end flex-col items-end gap-y-4 ">
+      <div>
+        <select id="sales-box" name="sales-box" class="block p-2  text-sm text-gray-900 border border-red-300  rounded-lg w-80 bg-white focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500">
+          <option>United States</option>
+          <option selected>Selecciona la caja</option>
+          <option>Mexico</option>
+        </select>
+      </div>
+      <div class="flex justify-center sm:justify-end">
+        <div class="relative shadow-md rounded-lg">
+          <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
+            <svg class="w-5 h-5 text-red-500 dark:text-red-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+          </div>
+          <input type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-red-300  rounded-lg w-80 bg-white focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500" placeholder="Buscar ventas">
+        </div>
+      </div>
+    </div>
+    <div class="-mx-4 -mb-2 overflow-x-auto ">
+      <div class="inline-block min-w-full py-2 align-middle ">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Productos</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Monto </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Fecha</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Método de pago</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Vendedor</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary"># de caja</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">$ 120.000</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">12/01/2024</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Efectivo</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Pedro perez</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">3</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+            </tr>
+            <!-- More sales... -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <nav class="flex justify-center mt-10" aria-label="Page navigation example">
+      <ul class="flex items-center gap-x-2 -space-x-px h-10 text-base">
+        <li>
+          <a href="#" class="rounded-full flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border-e-0   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            <span class="sr-only">Previous</span>
+            <svg class="w-3 h-3 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="rounded-full flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+        </li>
+        <li>
+          <a href="#" class="rounded-full flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+        </li>
+        <li>
+          <a href="#" aria-current="page" class="z-10 rounded-full flex items-center justify-center px-4 h-10 leading-tight text-red-600 border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-700  dark:bg-gray-700 dark:text-white">3</a>
+        </li>
+        <li>
+          <a href="#" class="rounded-full flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
+        </li>
+        <li>
+          <a href="#" class="rounded-full flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
+        </li>
+        <li>
+          <a href="#" class="rounded-full flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            <span class="sr-only">Next</span>
+            <svg class="w-3 h-3 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+  </div>
+</div>
+

@@ -20,6 +20,7 @@ export class MobileMenuComponent    {
   @Output() close = new EventEmitter<boolean>();
   constructor() { }
   public showInventoryMenu:boolean = false;
+  public showSalesMenu:boolean = false;
 
 
   actionResponse(value:boolean) {

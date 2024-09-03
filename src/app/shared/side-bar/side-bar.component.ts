@@ -16,6 +16,7 @@ export class SideBarComponent  implements OnInit {
 
     public windowWith:any;
     public showInventoryMenu:boolean = false;
+    public showSalesMenu:boolean = false;
     ngOnInit() {
       this.checkScreenWidth();
 

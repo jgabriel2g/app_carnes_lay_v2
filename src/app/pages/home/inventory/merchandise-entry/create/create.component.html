@@ -1,3 +1,9 @@
-<p>
-  create works!
-</p>
+
+
+<ion-content *ngIf="windowWith < 500" >
+  <app-merchandise-entry-form></app-merchandise-entry-form>
+</ion-content>
+
+<div *ngIf="windowWith >  500">
+ <app-merchandise-entry-form></app-merchandise-entry-form>
+</div>

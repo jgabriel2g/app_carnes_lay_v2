@@ -9,13 +9,15 @@ import { InventoryFormComponent } from 'src/app/shared/inventory-form/inventory-
 import { ListComponent } from './list/list.component';
 import { UpdateComponent } from './update/update.component';
 import { CreateComponent } from './create/create.component';
+import { StockComponent } from './stock/stock.component';
 
 
 @NgModule({
   declarations: [
     ListComponent,
     UpdateComponent,
-    CreateComponent
+    CreateComponent,
+    StockComponent
   ],
   imports: [
     CommonModule,
