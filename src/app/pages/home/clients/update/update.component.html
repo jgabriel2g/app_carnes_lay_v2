@@ -1,0 +1,7 @@
+<ion-content *ngIf="windowWith < 500" >
+  <app-clients-form [clientData]="ClientInfo" (formSubmit)="updateClient($event)"></app-clients-form>
+</ion-content>
+
+<div *ngIf="windowWith >  500">
+ <app-clients-form  [clientData]="ClientInfo" (formSubmit)="updateClient($event)"></app-clients-form>
+</div>

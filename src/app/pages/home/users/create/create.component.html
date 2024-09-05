@@ -1,7 +1,7 @@
 <ion-content *ngIf="windowWith < 500" >
-   <app-form></app-form>
+   <app-form (formSubmit)="newUser($event)"></app-form>
 </ion-content>
 
 <div *ngIf="windowWith >  500">
-  <app-form></app-form>
+  <app-form (formSubmit)="newUser($event)"></app-form>
 </div>

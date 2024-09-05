@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SubmitRecoverPasswordCodeComponent } from './submit-recover-password-code/submit-recover-password-code.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { SubmitRecoverPasswordCodeComponent } from './submit-recover-password-co
   imports: [
     CommonModule,
     AuthRoutingModule,
-    IonicModule
+    IonicModule,
+    FormsModule
   ]
 })
 export class AuthModule { }

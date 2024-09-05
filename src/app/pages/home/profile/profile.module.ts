@@ -6,6 +6,7 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { UsersFormComponent } from '../../../shared/users-form/users-form.component';
 import { IonicModule } from '@ionic/angular';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { IonicModule } from '@ionic/angular';
     CommonModule,
     ProfileRoutingModule,
     UsersFormComponent,
-    IonicModule
+    IonicModule,
+    ReactiveFormsModule
   ]
 })
 export class ProfileModule { }

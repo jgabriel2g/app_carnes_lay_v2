@@ -17,12 +17,28 @@ export class AuthService {
   constructor(private http:HttpClient) { }
 
   login(data:{}){
-    const url = `${this.baseUrl}/auth/login`;
+    const url = `${this.baseUrl}/auth/login/`;
     return this.http.post(url, data);
   };
 
   changePassword(data:{}){
-    const url = `${this.baseUrl}/auth/password/change`;
+    const url = `${this.baseUrl}/auth/password/change/`;
     return this.http.post(url, data, this.header)
-  }
+  };
+
+  resetPassword(data:{}){
+    const url = `${this.baseUrl}/auth/password/reset/`;
+    return this.http.post(url, data)
+  };
+
+  confirmResetPassword(data:{}){
+    const url = `${this.baseUrl}/auth/password/reset/confirm/`;
+    return this.http.post(url, data)
+  };
+
+  refreshToken(data:{}){
+    const url = `${this.baseUrl}/auth/token/refresh/`;
+    return this.http.post(url, data)
+  };
+
 }

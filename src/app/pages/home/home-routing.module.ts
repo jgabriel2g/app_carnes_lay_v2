@@ -27,7 +27,16 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () => import('../../pages/home/profile/profile.module').then( m => m.ProfileModule),
         data: {route:'4'}
-
+      },
+      {
+        path: 'providers',
+        loadChildren: () => import('../../pages/home/providers/providers.module').then( m => m.ProvidersModule),
+        data: {route:'4'}
+      },
+      {
+        path: 'clients',
+        loadChildren: () => import('../../pages/home/clients/clients.module').then( m => m.ClientsModule),
+        data: {route:'4'}
       },
       {
         path:'**',

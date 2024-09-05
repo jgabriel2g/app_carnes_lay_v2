@@ -1,0 +1,188 @@
+<div class="container mx-auto pb-4 px-6 sm:px-6 lg:px-8  max-w-full ">
+  <div class="py-4">
+    <div>
+      <nav class="mb-10" aria-label="Back">
+        <a routerLink="/home/providers" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
+          <svg class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+          </svg>
+          Retroceder
+        </a>
+      </nav>
+      <nav class="hidden sm:flex" aria-label="Breadcrumb">
+        <ol role="list" class="flex items-center space-x-4">
+          <li>
+            <div class="flex">
+              <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-700">Home</a>
+            </div>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              </svg>
+              <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Proveedores</a>
+            </div>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              </svg>
+              <a href="#" aria-current="page" class="ml-4 text-sm font-medium text-red-500 hover:text-red-700">Formulario</a>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="mt-4 md:flex md:items-center md:justify-between">
+      <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Proveedores</h2>
+      </div>
+      <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
+        <button [disabled]="isLoading" (click)="onSubmit()" type="button" class="btn-primary px-6">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="providersForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-full pt-10  mx-auto ">
+
+
+    <!-- first name input field -->
+    <div class="mb-2 w-full">
+      <label for="names" >Nombres</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="first_name" type="text" name="names" id="names" class="inputs" placeholder="Ingresa el nombre">
+      </div>
+      <div *ngIf="providersForm.get('first_name')?.invalid && providersForm.get('first_name')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('first_name')?.errors?.['required']">Primer nombre es requerido</small>
+      </div>
+    </div>
+
+    <!-- last name input field -->
+    <div class="mb-2 w-full">
+      <label for="last-names" >Apellidos</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="last_name" type="text" name="last-names" id="last-names" class="inputs" placeholder="Ingresa el apellido">
+      </div>
+      <div *ngIf="providersForm.get('last_name')?.invalid && providersForm.get('last_name')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('last_name')?.errors?.['required']">Apellido es requerido</small>
+      </div>
+    </div>
+
+    <!-- email name input field -->
+    <div class="mb-2 w-full">
+      <label for="email" >Correo electrónico</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="email" type="email" name="email" id="email" class="inputs" placeholder="Ingresa el correo electrónico">
+      </div>
+      <div *ngIf="providersForm.get('email')?.invalid && providersForm.get('email')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('email')?.errors?.['required']">Correo electrónico es requerido</small>
+        <small class="error-message" *ngIf="providersForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</small>
+      </div>
+    </div>
+
+    <!-- phone name input field -->
+    <div class="mb-2 w-full">
+      <label for="phone" >Teléfono</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="phone" type="text" name="phone" id="phone" class="inputs" placeholder="Ingresa el teléfono">
+      </div>
+      <div *ngIf="providersForm.get('phone')?.invalid && providersForm.get('phone')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('phone')?.errors?.['required']">Teléfono es requerido</small>
+      </div>
+    </div>
+
+    <!-- id type name input field -->
+    <div class="mb-2 w-full">
+      <label for="id-type" >Tipo de identificación</label>
+      <select formControlName="identification_type" id="id-type" name="id-type" class="inputs">
+        <option value=0>Selecciona el tipo de documento</option>
+        <option [value]="d.id" *ngFor="let d of DocTypes">{{d.name}}</option>
+      </select>
+      <div *ngIf="providersForm.get('identification_type')?.invalid && providersForm.get('identification_type')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('identification_type')?.errors">Tipo de documento es requerido</small>
+      </div>
+    </div>
+
+    <!-- id  input field -->
+    <div class="mb-2 w-full">
+      <label for="id" >Número de identificación</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="identification_number" type="text" name="id" id="id" class="inputs" placeholder="Ingresa el número de identificación">
+      </div>
+      <div *ngIf="providersForm.get('identification_number')?.invalid && providersForm.get('identification_number')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('identification_number')?.errors?.['required']">El Documento es requerido</small>
+      </div>
+    </div>
+
+    <!-- department field -->
+    <div class="mb-2 w-full">
+      <label for="id" >Dirección de residencia</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="address" type="text" name="id" id="id" class="inputs" placeholder="Ingresa la dirección de residencia">
+      </div>
+      <div *ngIf="providersForm.get('address')?.invalid && providersForm.get('address')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('address')?.errors?.['required']">La dirección es requerido</small>
+      </div>
+    </div>
+
+    <!-- Departamento input field -->
+    <div class="mb-2 w-full">
+      <label for="id-type" >Departamento</label>
+      <select (change)="catchMunicipalities()" formControlName="department" id="id-type" name="id-type" class="inputs">
+        <option value=''>Selecciona el departamento</option>
+        <option [value]="d.id"  *ngFor="let d of Departments">{{d.name}}</option>
+      </select>
+      <div *ngIf="providersForm.get('department')?.invalid && providersForm.get('department')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('department')?.errors?.['required']">El departamento es requerido</small>
+      </div>
+    </div>
+    <!-- id type name input field -->
+    <div class="mb-2 w-full" *ngIf="Municipalities.length" >
+      <label for="id-type" >Municipio</label>
+      <select formControlName="municipality" id="id-type" name="id-type" class="inputs">
+        <option value="">Selecciona el municipio</option>
+        <option [value]="d.id" *ngFor="let d of Municipalities">{{d.name}}</option>
+      </select>
+      <div *ngIf="providersForm.get('municipality')?.invalid && providersForm.get('municipality')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('municipality')?.errors">Municipio es requerido</small>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+
+

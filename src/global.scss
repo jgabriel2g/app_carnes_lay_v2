@@ -58,3 +58,17 @@ input[type='text']:focus {
 
   --tw-ring-color: transparent !important
 }
+
+.alert-title  {
+  text-align: center !important;
+  color: #b3241c !important;
+}
+
+.alert-message  {
+  text-align: center !important;
+}
+.error-message{
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+}

@@ -1,0 +1,7 @@
+<ion-content *ngIf="windowWith < 500" >
+  <app-providers-form (formSubmit)="newProvider($event)"></app-providers-form>
+</ion-content>
+
+<div *ngIf="windowWith >  500">
+ <app-providers-form (formSubmit)="newProvider($event)"></app-providers-form>
+</div>
