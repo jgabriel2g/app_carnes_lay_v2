@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {  AutoCompleteModule } from 'primeng/autocomplete';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { SalesService } from '../../core/services/sales.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
@@ -20,7 +20,8 @@ export interface Sales  {
   total_received:number,
   products:any,
   sale:number,
-  isFinalized:boolean
+  isFinalized:boolean,
+  bill:any
 }
 @Component({
   selector: 'app-sales-form',
@@ -32,7 +33,7 @@ export interface Sales  {
     CommonModule,
     FormsModule,
     AutoCompleteModule,
-    IonicModule
+    IonicModule,
   ]
 })
 export class SalesFormComponent  implements OnInit {
@@ -44,9 +45,9 @@ export class SalesFormComponent  implements OnInit {
   public PaymentMethods:any[]= [];
   public Products:any[]= [];
   public openDetailMerchEntry:boolean = false;
+  public showTicket:boolean = false;
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
-
   public sales:Sales[] = [
     {
       date:'',
@@ -55,13 +56,14 @@ export class SalesFormComponent  implements OnInit {
       total_received:0,
       products:[],
       sale:0  ,
-      isFinalized:false
+      isFinalized:false,
+      bill:null
      },
   ];
 
   activeSale:Sales = this.sales[0];
 
-  constructor(private fb: FormBuilder, private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
+  constructor(private alertController:AlertController, private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
 
   ngOnInit() {
     this.getDisplayStock();
@@ -79,9 +81,9 @@ export class SalesFormComponent  implements OnInit {
        "payment_method": this.activeSale.payment_method,
        "total_received": this.activeSale.total_received,
        "sale": this.registerBox,
-       "products": this.activeSale.products.map( (product:any) => ({
+       "display_products": this.activeSale.products.map( (product:any) => ({
           product: product.product,
-          amount: product.amount
+          amount: product.amount.toString()
         })
         )
      };
@@ -98,6 +100,7 @@ export class SalesFormComponent  implements OnInit {
               this.reloadBoxInfo.emit(true)
               this.alertSvc.presentAlert('Éxito', 'Venta completada');
               this.selectedClient = null
+              this.activeSale.bill = resp;
             }
           });
   };
@@ -109,7 +112,8 @@ export class SalesFormComponent  implements OnInit {
       total_received:0,
       products:[],
       sale:0,
-      isFinalized:false
+      isFinalized:false,
+      bill:{}
     }
 
     this.sales.push(newSale);
@@ -128,7 +132,8 @@ export class SalesFormComponent  implements OnInit {
         total_received:0,
         products:[],
         sale:0,
-        isFinalized:false
+        isFinalized:false,
+        bill:{}
       }
 
     }
@@ -236,13 +241,13 @@ export class SalesFormComponent  implements OnInit {
 
   }
 
-  permitirSoloNumeros(event: KeyboardEvent) {
-    const teclaPresionada = event.key;
+  onlyNumbers(event: KeyboardEvent) {
+    const pressKey = event.key;
     // Permitir solo números (0-9), teclas de control (como Backspace) y signos como "-" y "."
-    const esNumero = /^[0-9]$/.test(teclaPresionada);
-    const teclasDeControl = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
+    const isNumber = /^[0-9]$/.test(pressKey);
+    const controlKey = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
 
-    if (!esNumero && !teclasDeControl.includes(teclaPresionada)) {
+    if (!isNumber && !controlKey.includes(pressKey)) {
       event.preventDefault(); // Bloquear la tecla si no es válida
     }
   }
@@ -269,5 +274,13 @@ export class SalesFormComponent  implements OnInit {
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
   };
+
+  printBill(){
+    sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill))
+    this.router.navigateByUrl('/ticket')
+  }
+
+
+
 
 }

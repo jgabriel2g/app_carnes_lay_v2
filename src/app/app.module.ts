@@ -9,10 +9,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/refresh';
+import { TicketComponent } from './pages/ticket/ticket.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  declarations: [AppComponent, TicketComponent],
+  imports: [BrowserModule,CommonModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,

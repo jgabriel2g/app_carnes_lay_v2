@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { InventoryService } from '../../../../../core/services/inventory.service';
@@ -18,8 +18,12 @@ export class LoadNewComponent  implements OnInit {
   selectedItem: string = '';
   productForm: FormGroup;
   @Output() close = new EventEmitter<boolean>();
-
+  @Input() displayStockId:any;
   ngOnInit(): void {
+    if (this.displayStockId !== undefined) {
+        this.getDisplayStock();
+    }
+    console.log(this.displayStockId)
       this.getUnitTypes();
       this.getProducts();
   }
@@ -38,16 +42,30 @@ export class LoadNewComponent  implements OnInit {
     if (value) {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
-        this.salesSvc.createDisplayStock(this.productForm.value)
-            .subscribe({
-              error:(err:any) => {
-               this.handleError(err)
-              },
-              next:(resp:any) => {
-                this.alertSvc.presentAlert('Éxito', 'Producto cargado al punto de venta');
-                this.close.emit(value);
-              }
-            })
+        if (this.displayStockId !== undefined) {
+          this.salesSvc.updateDisplayStock(this.productForm.value, this.displayStockId)
+          .subscribe({
+            error:(err:any) => {
+             this.handleError(err)
+            },
+            next:(resp:any) => {
+              this.alertSvc.presentAlert('Éxito', 'Producto actualizado al punto de venta');
+              this.close.emit(value);
+            }
+          })
+        } else  {
+          this.salesSvc.createDisplayStock(this.productForm.value)
+              .subscribe({
+                error:(err:any) => {
+                 this.handleError(err)
+                },
+                next:(resp:any) => {
+                  this.alertSvc.presentAlert('Éxito', 'Producto cargado al punto de venta');
+                  this.close.emit(value);
+                }
+              })
+
+        }
       } else {
         this.alertSvc.presentAlert('Ooops', 'Revisa los campos');
 
@@ -55,6 +73,23 @@ export class LoadNewComponent  implements OnInit {
     } else {
       this.close.emit(value);
     }
+  }
+
+  getDisplayStock(){
+    this.salesSvc.getDisplayStockById(this.displayStockId)
+          .subscribe({
+            error:(err:any) =>{
+              this.handleError(err);
+            },
+            next:(resp:any) => {
+              console.log(resp)
+              this.productForm.get('product')?.setValue(resp.product.id);
+              this.productForm.get('quantity')?.setValue(Number(resp.quantity));
+              this.productForm.get('type_of_unit_measurement')?.setValue(resp.type_of_unit_measurement);
+              this.productForm.get('price')?.setValue(resp.price);
+              this.selectedItem = resp.product.name;
+            }
+          })
   }
 
   getUnitTypes(){

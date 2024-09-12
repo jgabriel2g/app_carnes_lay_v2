@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { TicketComponent } from './pages/ticket/ticket.component';
 
 const routes: Routes = [
   {
@@ -10,6 +11,11 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomeModule),
+    canActivate:[AuthGuard]
+  },
+  {
+    path: 'ticket',
+    component: TicketComponent,
     canActivate:[AuthGuard]
   },
   {

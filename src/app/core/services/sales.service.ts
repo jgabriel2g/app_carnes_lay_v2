@@ -38,6 +38,8 @@ export class SalesService {
   };
 
 
+
+
   // DISPLAY STOCK MANAGE
 
   getDisplayStock(limit:number, offset:number){
@@ -49,6 +51,16 @@ export class SalesService {
     const url =  `${this.authSvc.baseUrl}/sale/display-stock/`;
     return this.http.post(url, data, this.authSvc.header);
   };
+
+  getDisplayStockById(id:any){
+    const url =  `${this.authSvc.baseUrl}/sale/display-stock/${id}/`;
+    return this.http.get(url, this.authSvc.header);
+  }
+
+  updateDisplayStock(data:{}, id:any){
+    const url =  `${this.authSvc.baseUrl}/sale/display-stock/${id}/`;
+    return this.http.patch(url,data,  this.authSvc.header);
+  }
 
   // BILLS MANAGE
 
@@ -65,6 +77,11 @@ export class SalesService {
   getSaleById(id:any){
     const url =  `${this.authSvc.baseUrl}/sale/bill/${id}/`;
     return this.http.get(url, this.authSvc.header);
+  }
+
+  deleteBillSale(id:any){
+    const url =  `${this.authSvc.baseUrl}/sale/bill/${id}/`;
+    return this.http.delete(url, this.authSvc.header);
   }
 
 }

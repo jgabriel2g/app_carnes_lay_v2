@@ -36,7 +36,6 @@ export class ListComponent  implements OnInit {
           this.isLoading = !this.isLoading;
         },
         next:(resp:any) => {
-          console.log(resp)
           this.Bills = resp.results;
           this.totalItems = resp.count;
           this.totalPages = Math.ceil(this.totalItems / this.limit);
@@ -44,24 +43,42 @@ export class ListComponent  implements OnInit {
           this.updatePageNumbers();
         }
       });
-  }
+  };
+
+  deleteBill(id:any){
+      this.salesSvc.deleteBillSale(id)
+          .subscribe({
+            error:(err:any) =>{
+              console.log(err);
+              this.handleError(err);
+            },
+            next:(resp:any) => {
+              this.getBill()
+              this.alertSvc.presentAlert('Éxito', 'Factura eliminada');
+            }
+          });
+  };
+
+
   updatePageNumbers(): void {
     this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
+  };
+
+
 
   goToPage(page: number): void {
     this.currentPage = page;
     this.offset = (page - 1) * this.limit;
     this.getBill();
-  }
+  };
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.offset += this.limit;
       this.getBill();
-    }
-  }
+    };
+  };
 
   previousPage(): void {
     if (this.currentPage > 1) {
@@ -103,6 +120,6 @@ export class ListComponent  implements OnInit {
     });
 
     await alert.present();
-  }
+  };
 
 }

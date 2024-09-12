@@ -28,7 +28,8 @@
             <div class="mb-3" >
               <label for="products-finder">Buscador de producto</label>
               <p-autoComplete
-                placeholder="Producto"
+                [disabled]="displayStockId !== undefined"
+                [placeholder]="displayStockId !== undefined ? selectedItem : 'Producto'"
                 [suggestions]="suggestions"
                 (completeMethod)="search($event)"
                 (onSelect)="onProductSelect($event)"

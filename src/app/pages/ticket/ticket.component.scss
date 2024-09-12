@@ -1,0 +1,27 @@
+h4, h5, h6, p {
+  margin-bottom: 0 !important;
+  margin-top: 3px !important;
+
+}
+
+.ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: dashed .5px black;
+}
+.table>:not(caption)>*>*{
+    padding: 0 !important;
+}
+
+table {
+  font-size: 12px;
+}
+
+.ticket-auth {
+  font-size: 11px;
+}
+@media print {
+  .no-print {
+    display: none;
+  }
+}

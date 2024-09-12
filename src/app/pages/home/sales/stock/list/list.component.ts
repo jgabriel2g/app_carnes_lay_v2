@@ -19,14 +19,16 @@ export class ListComponent  implements OnInit {
   pageNumbers: number[] = [];
   displayStocks:any[] = [];
   public isLoading:boolean = false;
+  public displayId:any
   constructor(private salesSvc:SalesService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
     this.getDisplayStock();
   }
 
-  closeLoadStockDialog(close:boolean){
+  closeLoadStockDialog( displayId?:any){
     this.loadMoreStock = !this.loadMoreStock;
+    this.displayId =displayId
     this.getDisplayStock();
   }
 
@@ -40,7 +42,6 @@ export class ListComponent  implements OnInit {
           this.isLoading = !this.isLoading;
         },
         next:(resp:any) => {
-          console.log(resp)
           this.displayStocks = resp.results;
           this.totalItems = resp.count;
           this.totalPages = Math.ceil(this.totalItems / this.limit);
