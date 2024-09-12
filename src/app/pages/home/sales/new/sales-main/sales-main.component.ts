@@ -33,8 +33,8 @@ export class SalesMainComponent  implements OnInit {
 
 
   getBoxSalesById(){
-    const box = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '')
-    this.salesSvc.getBoxSaleById(box.id)
+    this.boxInfo = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '')
+    this.salesSvc.getBoxSaleById(this.boxInfo.id)
           .subscribe({
             error:(err:any) => {
               console.log(err)
@@ -68,6 +68,9 @@ export class SalesMainComponent  implements OnInit {
     this.checkScreenWidth();
   };
 
+  reloadBoxInfo(event:any) {
+    this.getBoxSalesById();
+  }
 
 
   handleError(err: any) {

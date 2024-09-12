@@ -82,7 +82,7 @@
       </div>
     <ng-template #desktopView class="h-full">
       <div class="h-full">
-        <app-sales-form  ></app-sales-form>
+        <app-sales-form (reloadBoxInfo)="reloadBoxInfo($event)" [registerBox]="boxInfo?.id" ></app-sales-form>
       </div>
     </ng-template>
   </div>

@@ -31,6 +31,7 @@
         <table class="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">#</th>
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Productos</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Monto </th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Fecha</th>
@@ -40,12 +41,13 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
-            <tr *ngFor="let b of Bills">
-              <td (click)="showBillDetail(b.products)" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.sale | currency}}</td>
+            <tr *ngFor="let b of Bills; let i = index">
+              <td  class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{i + 1}}</td>
+              <td (click)="showBillDetail(b.display_products)" class="cursor-pointer whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.total_cost | currency}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.date | date:"short"}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.payment_method}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.user}}</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.payment_method?.name}}</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{b.user?.first_name}} {{b.user?.last_name}} </td>
               <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> </td> -->
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
             </tr>

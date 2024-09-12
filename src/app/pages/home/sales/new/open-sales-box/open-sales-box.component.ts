@@ -36,23 +36,28 @@ export class OpenSalesBoxComponent  implements OnInit {
   };
 
   openSalesBox(){
-    this.isLoading = true;
-    const data = {
-      base_money: this.boxInitMoney
-    };
+    if (this.boxInitMoney <= 0 ) {
+      this.alertSvc.presentAlert('Ooops', 'Debes ingresar un monto de inicio');
+    } else {
 
-    this.salesSvc.createNewBoxSale(data)
-        .subscribe({
-          error:(err:any) => {
-            console.log(err);
-            this.isLoading = false;
-          },
-          next:(resp:any) => {
-            sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp));
-            this.router.navigateByUrl('/home/sales/new/salesMain/1');
-            this.isLoading = false;
-          }
-        });
+      this.isLoading = true;
+      const data = {
+        base_money: this.boxInitMoney
+      };
+
+      this.salesSvc.createNewBoxSale(data)
+      .subscribe({
+        error:(err:any) => {
+          console.log(err);
+          this.isLoading = false;
+        },
+        next:(resp:any) => {
+          sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp));
+          this.router.navigateByUrl('/home/sales/new/salesMain/1');
+          this.isLoading = false;
+        }
+      });
+    }
   };
 
   handleError(err: any) {

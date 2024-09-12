@@ -27,6 +27,7 @@ export class ListComponent  implements OnInit {
 
   closeLoadStockDialog(close:boolean){
     this.loadMoreStock = !this.loadMoreStock;
+    this.getDisplayStock();
   }
 
 

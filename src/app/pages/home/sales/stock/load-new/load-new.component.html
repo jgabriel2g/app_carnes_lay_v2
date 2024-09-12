@@ -34,7 +34,7 @@
                 (onSelect)="onProductSelect($event)"
 
               ></p-autoComplete>
-              <div *ngIf="productForm.get('product')?.invalid && productForm.get('product')?.touched">
+              <div class="error-message" *ngIf="productForm.get('product')?.invalid && productForm.get('product')?.touched">
                 Producto es requerido
               </div>
             </div>
@@ -45,28 +45,29 @@
               <label for="unit-type" >Unidad de presentación</label>
               <select  formControlName="type_of_unit_measurement" id="unit-type" name="location" class="inputs">
                 <option value="">Selecciona la unidad de presentación</option>
-                <option *ngFor="let ut of unitTypes" [value]=ut.name >{{ut.name}} </option>
+                <option  value="kg" > Kilogramos</option>
+                <option  value="Und" > Unidades</option>
               </select>
-              <div *ngIf="productForm.get('type_of_unit_measurement')?.invalid && productForm.get('type_of_unit_measurement')?.touched">
+              <div class="error-message" *ngIf="productForm.get('type_of_unit_measurement')?.invalid && productForm.get('type_of_unit_measurement')?.touched">
                 Unidad de presentación es requerida
               </div>
             </div>
 
             <!-- Product quantity field -->
             <div class="mb-3">
-              <label for="product-quantity" >Unidades del producto</label>
+              <label for="product-quantity" >Cantidad del producto</label>
               <div class="relative shadow-md rounded-lg">
                 <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z" />
                   </svg>
                 </div>
-                <input formControlName="quantity" type="text" id="product-quantity" class="inputs" placeholder="Ingresa las unidades a ingresar del producto">
+                <input formControlName="quantity" type="text" id="product-quantity" class="inputs" placeholder="Ingresa las cantidad a ingresar del producto">
               </div>
               <div *ngIf="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
-                <div *ngIf="productForm.get('quantity')?.errors?.['required']">Cantidad es requerida.</div>
-                <div *ngIf="productForm.get('quantity')?.errors?.['min']">Cantidad debe ser mayor a 1 </div>
-                <div *ngIf="productForm.get('quantity')?.errors?.['pattern']">Cantidad debe ser un número.</div>
+                <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['required']">Cantidad es requerida.</div>
+                <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['min']">Cantidad debe ser mayor a 1 </div>
+                <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['pattern']">Cantidad debe ser un número.</div>
               </div>
             </div>
 
@@ -82,9 +83,9 @@
                 <input formControlName="price" type="text" id="product-price" class="inputs" placeholder="Ingresa el precio">
               </div>
               <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
-                <div *ngIf="productForm.get('price')?.errors?.['required']">Precio es requerido.</div>
-                <div *ngIf="productForm.get('price')?.errors?.['min']">Precio debe ser mayor a 1 </div>
-                <div *ngIf="productForm.get('price')?.errors?.['pattern']">Precio debe ser un número.</div>
+                <div class="error-message" *ngIf="productForm.get('price')?.errors?.['required']">Precio es requerido.</div>
+                <div class="error-message" *ngIf="productForm.get('price')?.errors?.['min']">Precio debe ser mayor a 1 </div>
+                <div class="error-message" *ngIf="productForm.get('price')?.errors?.['pattern']">Precio debe ser un número.</div>
               </div>
             </div>
 

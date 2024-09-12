@@ -78,6 +78,7 @@
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Cantidad</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Precio</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                       <span class="sr-only">Edit</span>
                     </th>
@@ -93,7 +94,7 @@
                         [disabled]="activeSale.isFinalized" [(ngModel)]="sP.amount"
                         type="number"
                         id="product-price"
-                        class="inputs bg-gray-100"
+                        class="inputs bg-gray-100 "
                         [placeholder]="sP.type_of_unit_measurement"
                         (keyup)="updateTotalSaleValue()"
                         (keydown)="permitirSoloNumeros($event)"
@@ -101,7 +102,11 @@
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <!-- Product price field -->
-                        {{sP.amount * sP.price}}
+                      {{sP.price | currency}}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <!-- Product cost field -->
+                      {{sP.amount * sP.price | currency}}
                     </td>
                     <td class="relative whitespace-nowrap py-4 flex justify-end gap-x-3">
                       <button (click)="removeProduct(i)">
@@ -131,7 +136,7 @@
           <dt class="truncate text-sm font-medium text-gray-500">Total Pagado</dt>
           <input [disabled]="activeSale.isFinalized" [(ngModel)]="activeSale.total_received" (keydown)="permitirSoloNumeros($event)" type="number" name="sale-value-pay" id="sale-value-pay" class="inputs mt-2" placeholder="Ingresa el valor pagado por el cliente">
         </div>
-        <button (click)="createSale()"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized" >Cerrar factura</button>
+        <button (click)="createSale()"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized" >Registrar</button>
       </dl>
     </div>
   </div>

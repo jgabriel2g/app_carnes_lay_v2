@@ -34,8 +34,8 @@
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Código</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre </th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Precio</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Unidades</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Peso</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Cantidad</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Unidad de medida</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
@@ -44,7 +44,7 @@
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.product?.name}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.price | currency}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.quantity}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.type_of_unit_measurement?.name}}</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.type_of_unit_measurement}}</td>
             </tr>
             <!-- More products... -->
           </tbody>

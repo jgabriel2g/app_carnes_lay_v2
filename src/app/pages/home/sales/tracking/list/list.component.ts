@@ -94,7 +94,7 @@ export class ListComponent  implements OnInit {
   // Función para mostrar la alerta
   async showBillDetail(products:any) {
     const messageContent = products.map((p:any) =>
-      `Producto: ${p.product}, Cantidad: ${p.amount}`).join('<br>');
+      `Producto: ${p.product.product.name}, Cantidad: ${p.amount}, Costo: ${p.product.price}`).join('<br>');
 
     const alert = await this.alertController.create({
       header: 'Detalle de compra',

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -44,7 +44,8 @@ export class SalesFormComponent  implements OnInit {
   public PaymentMethods:any[]= [];
   public Products:any[]= [];
   public openDetailMerchEntry:boolean = false;
-
+  @Input() registerBox:any;
+  @Output() reloadBoxInfo = new EventEmitter<boolean>();
 
   public sales:Sales[] = [
     {
@@ -53,7 +54,7 @@ export class SalesFormComponent  implements OnInit {
       payment_method:1,
       total_received:0,
       products:[],
-      sale:0,
+      sale:0  ,
       isFinalized:false
      },
   ];
@@ -77,7 +78,7 @@ export class SalesFormComponent  implements OnInit {
        "date":this.activeSale.date,
        "payment_method": this.activeSale.payment_method,
        "total_received": this.activeSale.total_received,
-       "sale": parseFloat(this.activeSale.sale.toString()),
+       "sale": this.registerBox,
        "products": this.activeSale.products.map( (product:any) => ({
           product: product.product,
           amount: product.amount
@@ -94,6 +95,7 @@ export class SalesFormComponent  implements OnInit {
             next:(resp:any) => {
               console.log(resp);
               this.activeSale.isFinalized = true;
+              this.reloadBoxInfo.emit(true)
               this.alertSvc.presentAlert('Éxito', 'Venta completada');
               this.selectedClient = null
             }
@@ -215,7 +217,8 @@ export class SalesFormComponent  implements OnInit {
       amount: null,
       price: selectedProduct.price,
       type_of_unit_measurement: `Ingresa la cantidad en ${selectedProduct.type_of_unit_measurement}`,
-      isFinalized:false
+      isFinalized:false,
+
     }
     this.activeSale.products.push(productToAdd);
     this.selectedProduct = null
