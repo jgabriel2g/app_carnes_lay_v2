@@ -10,6 +10,7 @@ import { SalesMainComponent } from './new/sales-main/sales-main.component';
 
 @NgModule({
   declarations: [
+
   ],
   imports: [
     CommonModule,

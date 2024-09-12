@@ -15,7 +15,9 @@ export class LoginComponent  implements OnInit {
 
   constructor(private authSvc:AuthService, private router:Router, private alertSvc:AlertsService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    sessionStorage.clear();
+  }
 
   login(){
     this.isLoading = !this.isLoading;
@@ -27,7 +29,6 @@ export class LoginComponent  implements OnInit {
     this.authSvc.login(data)
         .subscribe({
           error:(err:any) => {
-            console.log(err);
             this.alertSvc.presentAlert('Oooops', 'Credenciales incorrectas')
           },
           next:(resp:any) => {

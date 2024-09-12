@@ -21,7 +21,6 @@ const routes: Routes = [
         path: 'inventory',
         loadChildren: () => import('../../pages/home/inventory/inventory.module').then( m => m.InventoryModule),
         data: {route:'3'}
-
       },
       {
         path: 'profile',

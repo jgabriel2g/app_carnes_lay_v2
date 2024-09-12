@@ -6,6 +6,7 @@ import { LoadNewComponent } from './load-new/load-new.component';
 import { ListComponent } from './list/list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { IonicModule } from '@ionic/angular';
     StockRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule
+    IonicModule,
+    AutoCompleteModule
   ]
 })
 export class StockModule { }

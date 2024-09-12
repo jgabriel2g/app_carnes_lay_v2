@@ -1,0 +1,12 @@
+.sales-form-container {
+  height: 100%; /* Ocupa toda la altura disponible */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sales-wrapper {
+  flex-grow: 1; /* Permite que este div crezca y ocupe el espacio restante */
+  overflow-y: auto; /* Activa el scroll vertical si es necesario */
+  // height: 100%;
+}

@@ -1,13 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { SalesService } from '../../../../../core/services/sales.service';
+import { Router } from '@angular/router';
+import { AlertsService } from '../../../../../core/services/alerts.service';
 
 
-export interface Sales  {
-  initDate:string,
-  finalDate:string,
-  user:string,
-  paymentMethod:number,
-  products:any,
-}
 
 
 @Component({
@@ -16,67 +12,82 @@ export interface Sales  {
   styleUrls: ['./sales-main.component.scss'],
 })
 export class SalesMainComponent  implements OnInit {
-  public sales:Sales[] = [
-    {
-      initDate:'',
-      finalDate:'',
-      user:'Pepito',
-      paymentMethod:1,
-      products:[],
-     },
-  ];
-
-  activeSale:any = this.sales[0];
 
 
-  selectTab( data:any) {
-    this.activeSale = data;
-  }
-  constructor() {
+  public windowWith:any;
+  public isColapsed:boolean = false
+
+  public boxInfo:any;
+
+
+  constructor(private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) {
     this.checkScreenWidth(); // Verifica el ancho inicial
   }
 
   ngOnInit() {
-    this.checkScreenWidth();
-
-  }
-
-  newSale(){
-    const newSale = {
-      initDate:'',
-      finalDate:'',
-      user:'Pepito',
-      paymentMethod:1,
-      products:[],
-    }
-
-    this.sales.push(newSale);
-    console.log(this.sales)
-  }
-
-  deleteTab(i:number){
-    this.sales.splice(i, 1);
-    if (this.sales[0]) {
-      this.activeSale = this.sales[this.sales.length - 1]
-    } else{
-      this.activeSale = null
-    }
-  }
+      this.checkScreenWidth();
+      setTimeout(() => this.checkScreenWidth(), 0);
+      this.getBoxSalesById();
+  };
 
 
 
-  public windowWith:any;
+  getBoxSalesById(){
+    const box = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '')
+    this.salesSvc.getBoxSaleById(box.id)
+          .subscribe({
+            error:(err:any) => {
+              console.log(err)
+            },
+            next:(resp:any) => {
+              this.boxInfo = resp;
+            }
+          });
+  };
 
-  public isColapsed:boolean = false
+  closeBox(){
+    const box = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '')
+    this.salesSvc.closeBoxSale(box.id)
+        .subscribe({
+          error:(err:any) => {
+            console.log(err);
+          },
+          next:(resp:any) => {
+            this.router.navigateByUrl('/home/sales/new/');
+          }
+        });
+  };
+
+  checkScreenWidth() {
+    this.windowWith = window.innerWidth;
+  };
+
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.checkScreenWidth();
-  }
+  };
 
-  checkScreenWidth() {
 
-    this.windowWith = window.innerWidth
-  }
+
+  handleError(err: any) {
+    if (err.error) {
+      // Obtenemos todas las claves (nombres de los campos)
+      const errorKeys = Object.keys(err.error);
+
+      // Creamos un mensaje para la alerta con todos los errores
+      let errorMessage = '';
+      errorKeys.forEach(key => {
+        // Concatenamos el nombre del campo y el mensaje de error
+        errorMessage += ` ${err.error[key]}\n`;
+      });
+
+      // Mostrar alerta con el mensaje de error concatenado
+      this.alertSvc.presentAlert('Ooops', errorMessage);
+    } else {
+      // Si no hay errores específicos en err.error, mostrar un mensaje general
+      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
+    };
+  };
 
 }

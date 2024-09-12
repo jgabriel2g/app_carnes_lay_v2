@@ -37,11 +37,15 @@ label{
 .text-primary {
   color: #b3241c;
 }
+.bg-primary {
+  background-color: #b3241c;
+}
 
 
 .active {
   @apply bg-[#b3241c] text-white
 }
+
 .p-autocomplete, .p-component,  .p-element, .p-inputwrapper,
 .p-element, .p-autocomplete-input, .p-inputtext, .p-component{
   width: 100% !important;
@@ -67,6 +71,7 @@ input[type='text']:focus {
 .alert-message  {
   text-align: center !important;
 }
+
 .error-message{
   font-size: 12px;
   font-weight: 600;

@@ -14,7 +14,6 @@ export class UsersService {
     return this.http.get(url, this.authSvc.header)
   };
 
-
   createUsers(data:{}){
     const url = `${this.authSvc.baseUrl}/auth/register/`;
     return this.http.post(url, data, this.authSvc.header);

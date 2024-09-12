@@ -6,6 +6,8 @@ import { OpenSalesBoxComponent } from './open-sales-box/open-sales-box.component
 import { SalesMainComponent } from './sales-main/sales-main.component';
 import { SalesFormComponent } from '../../../../shared/sales-form/sales-form.component';
 import { IonicModule } from '@ionic/angular';
+import { LoaderComponent } from '../../../../shared/loader/loader.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +19,10 @@ import { IonicModule } from '@ionic/angular';
     CommonModule,
     NewRoutingModule,
     SalesFormComponent,
-    IonicModule
+    IonicModule,
+    LoaderComponent,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class NewModule { }

@@ -10,7 +10,7 @@ const routes: Routes = [
     component:ListComponent
   },
   {
-    path:'create',
+    path:'create/:id',
     component:CreateComponent
   },
   {

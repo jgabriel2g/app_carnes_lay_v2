@@ -10,20 +10,20 @@ import { ThirdPartyService } from 'src/app/core/services/third-party.service';
 })
 export class UpdateComponent  implements OnInit {
   public windowWith:any;
+  public isColapsed:boolean = false;
+
   public providerId:any;
   public providerInfo:any;
-  public isColapsed:boolean = false
 
   ngOnInit() {
     this.checkScreenWidth();
-      this.checkScreenWidth();
-      this.activatedRoute.params.subscribe((params:any) => {
-        this.providerId = params.id;
-      })
-      this.providerInfo = JSON.parse(sessionStorage.getItem('provider')|| '');
-    }
+    this.activatedRoute.params.subscribe((params:any) => {
+      this.providerId = params.id;
+    })
+    this.providerInfo = JSON.parse(sessionStorage.getItem('provider')|| '');
+  }
 
-    constructor(private activatedRoute:ActivatedRoute,private alertSvc:AlertsService,  private thirdPartySvc:ThirdPartyService, private router:Router) {
+  constructor(private activatedRoute:ActivatedRoute,private alertSvc:AlertsService,  private thirdPartySvc:ThirdPartyService, private router:Router) {
     this.checkScreenWidth();
   }
 

@@ -16,6 +16,6 @@ export class ProfileService {
 
   updateUserInfo(data:{}){
     const url = `${this.authSvc.baseUrl}/auth/user/`;
-    return this.http.patch(url, data, this.authSvc.header)
-  }
+    return this.http.patch(url, data, this.authSvc.header);
+  };
 }

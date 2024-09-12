@@ -1,7 +1,7 @@
 <ion-content *ngIf="windowWith < 500" >
-  <app-inventory-form></app-inventory-form>
+  <app-inventory-form [productInfo]="productInfo" (formSubmit)="updateProduct($event)" ></app-inventory-form>
 </ion-content>
 
 <div *ngIf="windowWith >  500">
- <app-inventory-form></app-inventory-form>
+ <app-inventory-form [productInfo]="productInfo" (formSubmit)="updateProduct($event)" ></app-inventory-form>
 </div>
