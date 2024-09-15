@@ -29,19 +29,21 @@ export class ProvidersFormComponent  implements OnInit {
   @Input() providerData:any;
   providersForm: FormGroup;
   public isLoading:boolean = false;
-  ngOnInit(): void {
-    this.getDocTypes();
-    this.getDepartments();
+  async ngOnInit() {
+    await this.getDocTypes();
+    await this.getDepartments();
+    console.log(this.providerData)
     if (this.providerData !== undefined) {
         this.providersForm.get('first_name')?.setValue(this.providerData.first_name)
         this.providersForm.get('last_name')?.setValue(this.providerData.last_name)
         this.providersForm.get('email')?.setValue(this.providerData.email)
         this.providersForm.get('phone')?.setValue(this.providerData.phone)
         this.providersForm.get('identification_number')?.setValue(this.providerData.identification_number)
-        this.providersForm.get('identification_type')?.setValue(this.providerData.identification_type)
+        this.providersForm.get('identification_type')?.setValue(this.providerData.identification_type.id)
         this.providersForm.get('address')?.setValue(this.providerData.address)
-        this.providersForm.get('municipality')?.setValue(this.providerData.municipality);
-        this.getDepartments();
+        this.providersForm.get('department')?.setValue(this.providerData.municipality.department.id);
+        this.providersForm.get('municipality')?.setValue(this.providerData.municipality.id);
+        console.log(this.providerData.municipality.department.id)
     }
   }
 
@@ -90,8 +92,10 @@ export class ProvidersFormComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            console.log(resp)
             this.Departments = resp.results;
+            if (this.providerData !== undefined) {
+                  this.catchMunicipalities();
+            }
           }
         });
   };

@@ -27,10 +27,14 @@ export class ListComponent  implements OnInit {
   }
 
   closeLoadStockDialog( displayId?:any){
-    this.loadMoreStock = !this.loadMoreStock;
-    this.displayId =displayId
-    this.getDisplayStock();
-  }
+    if (displayId == false) {
+      this.loadMoreStock = !this.loadMoreStock;
+      this.getDisplayStock();
+    } else {
+      this.loadMoreStock = !this.loadMoreStock;
+      this.displayId =displayId
+    };
+  };
 
 
   getDisplayStock(){

@@ -21,6 +21,7 @@ export class ListComponent  implements OnInit {
   Purchases: any[] = [];
   public isLoading:boolean = false;
   public rejectionReason:string = '';
+  updateData:any;
   constructor(private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, private alertController: AlertController) { }
 
   ngOnInit() {
@@ -111,13 +112,21 @@ export class ListComponent  implements OnInit {
 
   updatePurchaseStatus(providerId:any, status:any, purchaseId:any){
     this.isLoading = !this.isLoading;
-    const data = {
-      "provider": providerId,
-      "status":status ,
-      "reason": this.rejectionReason.length ? this.rejectionReason : null
+
+    if (this.rejectionReason == null) {
+      this.updateData = {
+        "provider": providerId,
+        "status":status ,
+      }
+    } else {
+      this.updateData = {
+        "provider": providerId,
+        "status":status ,
+        "reason": this.rejectionReason
+      }
     }
 
-    this.inventorySvc.updatePurchase(data, purchaseId)
+    this.inventorySvc.updatePurchase(this.updateData, purchaseId)
       .subscribe({
         error:(err:any) => {
           console.log(err);
@@ -133,8 +142,8 @@ export class ListComponent  implements OnInit {
             this.getPurchaseStocks();
           }
         }
-      })
-  }
+      });
+  };
 
   async rejectRequest(providerId:any, purchaseId:any) {
     console.log('Presentando alerta'); // Verifica si llega hasta aquí
@@ -171,5 +180,9 @@ export class ListComponent  implements OnInit {
 
     console.log('Presentando alerta'); // Verifica si llega hasta aquí
     await alert.present();
+  }
+
+  reasonAlert(alert:string){
+    this.alertSvc.presentAlert('Cargue de mercancía rechazado', `Razón: ${alert}`)
   }
 }

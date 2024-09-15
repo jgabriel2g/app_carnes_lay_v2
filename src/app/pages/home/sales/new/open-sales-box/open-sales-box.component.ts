@@ -9,7 +9,7 @@ import { AlertsService } from '../../../../../core/services/alerts.service';
   styleUrls: ['./open-sales-box.component.scss'],
 })
 export class OpenSalesBoxComponent  implements OnInit {
-  public isLoading:boolean = false;
+  public isLoading:boolean = true;
   public boxInitMoney:number = 0;
   constructor(private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) { }
 

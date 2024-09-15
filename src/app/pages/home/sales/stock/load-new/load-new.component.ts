@@ -20,12 +20,14 @@ export class LoadNewComponent  implements OnInit {
   @Output() close = new EventEmitter<boolean>();
   @Input() displayStockId:any;
   ngOnInit(): void {
+
     if (this.displayStockId !== undefined) {
         this.getDisplayStock();
-    }
-    console.log(this.displayStockId)
+    } else {
       this.getUnitTypes();
       this.getProducts();
+    }
+    console.log(this.displayStockId)
   }
 
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
@@ -83,6 +85,8 @@ export class LoadNewComponent  implements OnInit {
             },
             next:(resp:any) => {
               console.log(resp)
+              this.getUnitTypes();
+              this.getProducts();
               this.productForm.get('product')?.setValue(resp.product.id);
               this.productForm.get('quantity')?.setValue(Number(resp.quantity));
               this.productForm.get('type_of_unit_measurement')?.setValue(resp.type_of_unit_measurement);

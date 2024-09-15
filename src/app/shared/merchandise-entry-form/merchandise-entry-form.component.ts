@@ -104,6 +104,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
 
   onOpenDetailMerchEntry(event:boolean) {
     this.openDetailMerchEntry = false;
+    this.getStock();
   };
 
   loadStockDetailModal(s:any){

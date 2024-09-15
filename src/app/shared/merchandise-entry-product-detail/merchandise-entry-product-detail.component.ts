@@ -68,7 +68,6 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
       },
       next:(resp:any) => {
         this.getStockDetail()
-        this.alertSvc.presentAlert('Éxito', 'Detalle agregado')
         this.isLoading = !this.isLoading;
       }
     })

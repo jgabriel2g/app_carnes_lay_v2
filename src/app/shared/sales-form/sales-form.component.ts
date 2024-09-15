@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ interface AutoCompleteCompleteEvent {
 }
 
 export interface Sales  {
-  date:string,
+  date:any,
   user:string,
   payment_method:number,
   total_received:number,
@@ -36,7 +36,7 @@ export interface Sales  {
     IonicModule,
   ]
 })
-export class SalesFormComponent  implements OnInit {
+export class SalesFormComponent  implements OnInit ,AfterViewInit{
   selectedClient: any;
   selectedProduct: any;
   productSuggestions: any[]= [];
@@ -50,7 +50,7 @@ export class SalesFormComponent  implements OnInit {
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
   public sales:Sales[] = [
     {
-      date:'',
+      date: this.getCurrentDate(),
       user:'',
       payment_method:1,
       total_received:0,
@@ -58,21 +58,24 @@ export class SalesFormComponent  implements OnInit {
       sale:0  ,
       isFinalized:false,
       bill:null
-     },
-  ];
+    },
+  ]
 
   activeSale:Sales = this.sales[0];
 
   constructor(private alertController:AlertController, private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
 
-  ngOnInit() {
+   ngOnInit() {
+    this.getCurrentDate();
     this.getDisplayStock();
     this.getClients();
     this.getPaymentMethods();
-
+    console.log(this.sales[0].date)
 
   }
 
+  ngAfterViewInit(): void {
+  }
 
   // Método para manejar el envío del formulario
   createSale(){
@@ -106,7 +109,7 @@ export class SalesFormComponent  implements OnInit {
   };
   newSale(){
     const newSale = {
-      date:'',
+      date: '',
       user:'',
       payment_method:1,
       total_received:0,
@@ -126,7 +129,7 @@ export class SalesFormComponent  implements OnInit {
       this.activeSale = this.sales[this.sales.length - 1]
     } else{
       this.activeSale = {
-        date:'',
+        date: '',
         user:'',
         payment_method:1,
         total_received:0,
@@ -280,7 +283,20 @@ export class SalesFormComponent  implements OnInit {
     this.router.navigateByUrl('/ticket')
   }
 
+  getCurrentDate() {
 
+    const currentDate = new Date();
+
+    // Formateamos la fecha en el formato deseado: día/mes/año
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+    const year = currentDate.getFullYear();
+
+    setTimeout(() => {
+      this.activeSale.date = `${year}-${month}-${day}`
+    }, 2000);
+
+  }
 
 
 }

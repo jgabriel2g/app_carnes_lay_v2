@@ -32,12 +32,13 @@ export class ClientsFormComponent  implements OnInit {
     this.getDocTypes();
     this.getDepartments();
     if (this.clientData !== undefined) {
+      console.log(this.clientData)
         this.clientsForm.get('first_name')?.setValue(this.clientData.first_name)
         this.clientsForm.get('last_name')?.setValue(this.clientData.last_name)
         this.clientsForm.get('email')?.setValue(this.clientData.email)
         this.clientsForm.get('phone')?.setValue(this.clientData.phone)
         this.clientsForm.get('identification_number')?.setValue(this.clientData.identification_number)
-        this.clientsForm.get('identification_type')?.setValue(this.clientData.identification_type)
+        this.clientsForm.get('identification_type')?.setValue(this.clientData.identification_type.id)
         this.clientsForm.get('address')?.setValue(this.clientData.address)
         this.clientsForm.get('municipality')?.setValue(this.clientData.municipality);
         this.getDepartments();
