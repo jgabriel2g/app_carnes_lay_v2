@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -48,6 +48,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   public showTicket:boolean = false;
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
+   @ViewChild('productInput') productInput!: ElementRef;
   public sales:Sales[] = [
     {
       date: this.getCurrentDate(),
@@ -95,7 +96,6 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
           .subscribe({
             error:(err:any) => {
               this.handleError(err);
-              console.log(err);
             },
             next:(resp:any) => {
               console.log(resp);
@@ -107,6 +107,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
             }
           });
   };
+
   newSale(){
     const newSale = {
       date: '',
@@ -120,7 +121,6 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     }
 
     this.sales.push(newSale);
-    console.log(this.sales)
   };
 
   deleteTab(i:number){
@@ -231,7 +231,16 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     this.activeSale.products.push(productToAdd);
     this.selectedProduct = null
 
-    console.log( this.activeSale);
+
+    // Usar setTimeout para asegurarse de que el DOM esté completamente renderizado antes de intentar enfocar
+    setTimeout(() => {
+      if (this.productInput) {
+        this.productInput.nativeElement.focus();
+      } else{
+        console.log('no entre')
+      }
+    }, 200); // Retraso mínimo para esperar a que el DOM se actualice
+
   };
 
   updateTotalSaleValue(){
@@ -246,14 +255,15 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
 
   onlyNumbers(event: KeyboardEvent) {
     const pressKey = event.key;
-    // Permitir solo números (0-9), teclas de control (como Backspace) y signos como "-" y "."
-    const isNumber = /^[0-9]$/.test(pressKey);
+    // Permitir números (0-9), ".", "," y teclas de control como Backspace, ArrowLeft, ArrowRight, Delete, Tab
+    const isNumberOrSymbol = /^[0-9.,]$/.test(pressKey);
     const controlKey = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
 
-    if (!isNumber && !controlKey.includes(pressKey)) {
+    if (!isNumberOrSymbol && !controlKey.includes(pressKey)) {
       event.preventDefault(); // Bloquear la tecla si no es válida
     }
   }
+
   selectTab( data:any) {
     this.activeSale = data;
   };

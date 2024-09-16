@@ -74,6 +74,22 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
 
   };
 
+  deleteStockDetail(id:any){
+    this.isLoading = !this.isLoading;
+    this.inventorySvc.deleteStockDetail(id)
+        .subscribe({
+          error:(err:any) => {
+            console.log(err);
+            this.handleError(err)
+            this.isLoading = !this.isLoading;
+          },
+          next:(resp:any) => {
+            this.getStockDetail()
+            this.isLoading = !this.isLoading;
+          }
+        })
+  }
+
   getStockDetail(){
       this.inventorySvc.getStockDetail(this.stockId)
           .subscribe({

@@ -20,6 +20,8 @@ export class ListComponent  implements OnInit {
   pageNumbers: number[] = [];
   Products: any[] = [];
   selectedProduct:any;
+  disable:boolean  = false;
+  public isActive:boolean = true;
   constructor(private inventorySvc:InventoryService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
@@ -28,7 +30,7 @@ export class ListComponent  implements OnInit {
 
 
   getProducts(){
-      this.inventorySvc.getProducts(this.limit, this.offset)
+      this.inventorySvc.getProducts(this.limit, this.offset, this.isActive)
           .subscribe({
             error:(err:any) => {
               console.log(err);
@@ -70,16 +72,18 @@ export class ListComponent  implements OnInit {
     }
   };
 
-  onDelete(id:any){
+  onDelete(id:any, isDisable:boolean){
     this.selectedProduct = id;
     this.showDeleteAlert = !this.showDeleteAlert;
+    this.disable = isDisable;
   };
 
   delete(event:boolean){
     if (event) {
       this.deleteProduct()
     } else {
-      this.alertSvc.presentAlert('Éxito', 'No eliminamos el producto')
+      this.alertSvc.presentAlert('Éxito', 'No eliminamos el producto');
+      this.showDeleteAlert = !this.showDeleteAlert;
     }
   };
 
@@ -90,7 +94,10 @@ export class ListComponent  implements OnInit {
 
   deleteProduct(){
     this.isLoading = !this.isLoading;
-    this.inventorySvc.deleteProduct(this.selectedProduct)
+    const data = {
+      is_active: this.disable
+    };
+    this.inventorySvc.disableProduct(this.selectedProduct, data)
     .subscribe({
       error:(err:any) => {
         this.alertSvc.presentAlert('Ooops',err.error.message)
@@ -100,7 +107,7 @@ export class ListComponent  implements OnInit {
       next:(resp:any) => {
         this.getProducts();
         this.showDeleteAlert = !this.showDeleteAlert;
-        this.alertSvc.presentAlert('Éxito','Producto eliminado');
+        this.alertSvc.presentAlert('Éxito','Producto actualizado');
         this.isLoading = !this.isLoading;
       }
         })

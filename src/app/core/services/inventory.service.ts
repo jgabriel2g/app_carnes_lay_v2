@@ -10,11 +10,15 @@ export class InventoryService {
   constructor(private http:HttpClient, private authSvc:AuthService) { }
 
   /* PRODUCTS ENDPOINTS */
-  getProducts(limit:number, offset:number){
-    const url = `${this.authSvc.baseUrl}/inventory/product/?limit=${limit}&offset=${offset}`;
+  getProducts(limit:number, offset:number, isActive:boolean){
+    const url = `${this.authSvc.baseUrl}/inventory/product/?limit=${limit}&offset=${offset}&is_active=${isActive}`;
     return this.http.get(url, this.authSvc.header);
   };
 
+  getProductById(id:any) {
+    const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
+    return this.http.get(url, this.authSvc.header);
+  }
   newProduct(data:{}){
     const url = `${this.authSvc.baseUrl}/inventory/product/`;
     return this.http.post(url, data, this.authSvc.header);
@@ -25,9 +29,9 @@ export class InventoryService {
     return this.http.patch(url, data, this.authSvc.header);
   };
 
-  deleteProduct( id:any){
+  disableProduct( id:any, data:{}){
     const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
-    return this.http.delete(url, this.authSvc.header);
+    return this.http.patch(url, data,  this.authSvc.header);
   };
 
   getUnitTypes(){
@@ -66,6 +70,11 @@ export class InventoryService {
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/`;
     return this.http.post(url, data, this.authSvc.header);
   };
+
+  deleteStockDetail(id:any){
+    const url = `${this.authSvc.baseUrl}/inventory/stock-detail/${id}/`;
+    return this.http.delete(url, this.authSvc.header);
+  }
 
   purchaseStockDetail(data:{}){
     const url = `${this.authSvc.baseUrl}/inventory/purchase/`;

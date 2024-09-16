@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import {  AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
 import { MerchandiseEntryProductDetailComponent } from '../merchandise-entry-product-detail/merchandise-entry-product-detail.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { InventoryService } from '../../core/services/inventory.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
@@ -26,7 +26,8 @@ interface AutoCompleteCompleteEvent {
     FormsModule,
     CommonModule,
     MerchandiseEntryProductDetailComponent,
-    IonicModule
+    IonicModule,
+    RouterModule
   ]
 })
 export class MerchandiseEntryFormComponent  implements OnInit {
@@ -162,7 +163,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   };
 
   getProducts(){
-    this.inventorySvc.getProducts(1000, 0)
+    this.inventorySvc.getProducts(1000, 0, true)
           .subscribe({
             error:(err:any) => {
             this.handleError(err);
