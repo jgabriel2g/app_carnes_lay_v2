@@ -3,19 +3,32 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
+import { RoleGuard } from 'src/app/core/guards/role.guard';
 
 const routes: Routes = [
   {
     path:'list',
-    component:ListComponent
+    component:ListComponent,
+    canActivate:[RoleGuard],
+      data: {
+        permissions: ['manage-providers']
+      }
   },
   {
     path:'create',
-    component:CreateComponent
+    component:CreateComponent,
+    canActivate:[RoleGuard],
+      data: {
+        permissions: ['manage-providers']
+      }
   },
   {
     path:'update/:id',
-    component:UpdateComponent
+    component:UpdateComponent,
+    canActivate:[RoleGuard],
+      data: {
+        permissions: ['manage-providers']
+      }
   },
   {
     path:'**',

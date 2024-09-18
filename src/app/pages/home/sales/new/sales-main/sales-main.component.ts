@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { SalesService } from '../../../../../core/services/sales.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 
 
@@ -12,15 +13,11 @@ import { AlertsService } from '../../../../../core/services/alerts.service';
   styleUrls: ['./sales-main.component.scss'],
 })
 export class SalesMainComponent  implements OnInit {
-
-
   public windowWith:any;
   public isColapsed:boolean = false
-
   public boxInfo:any;
 
-
-  constructor(private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) {
+  constructor(public authSvc:AuthService, private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) {
     this.checkScreenWidth(); // Verifica el ancho inicial
   }
 

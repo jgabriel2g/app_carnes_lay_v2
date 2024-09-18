@@ -17,9 +17,12 @@ import { MobileMenuComponent } from '../mobile-menu/mobile-menu.component';
 export class HeaderComponent  implements OnInit {
   public showMobileMenu:boolean = false;
   public showProfileMenu:boolean = false;
+  public userName:string = '';
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userName = sessionStorage.getItem('userName') || '';
+  }
 
 
   closeMobileMenu(event:any) {

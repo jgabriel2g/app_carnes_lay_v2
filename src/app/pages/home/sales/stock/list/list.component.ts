@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SalesService } from '../../../../../core/services/sales.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -20,7 +21,7 @@ export class ListComponent  implements OnInit {
   displayStocks:any[] = [];
   public isLoading:boolean = false;
   public displayId:any
-  constructor(private salesSvc:SalesService, private router:Router, private alertSvc:AlertsService) { }
+  constructor(public authSvc:AuthService, private salesSvc:SalesService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
     this.getDisplayStock();

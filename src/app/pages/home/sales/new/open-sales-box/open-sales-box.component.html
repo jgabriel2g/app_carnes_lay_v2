@@ -16,7 +16,7 @@
         </div>
 
       </div>
-      <button *ngIf="!isLoading" (click)="openSalesBox()"  class="btn-primary">
+      <button *ngIf="!isLoading && authSvc.hasPermission('open-sales-box')" (click)="openSalesBox()"  class="btn-primary">
         Abrir caja
       </button>
     </div>

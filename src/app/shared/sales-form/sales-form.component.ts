@@ -7,6 +7,7 @@ import { AlertController, IonicModule } from '@ionic/angular';
 import { SalesService } from '../../core/services/sales.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
+import { AuthService } from '../../core/services/auth.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -64,7 +65,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
 
   activeSale:Sales = this.sales[0];
 
-  constructor(private alertController:AlertController, private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
+  constructor(public authSvc:AuthService , private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
 
    ngOnInit() {
     this.getCurrentDate();

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SalesService } from '../../../../../core/services/sales.service';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AlertController } from '@ionic/angular';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -19,7 +20,7 @@ export class ListComponent  implements OnInit {
   pageNumbers: number[] = [];
   Bills:any[] = [];
   public isLoading:boolean = false;
-  constructor(private salesSvc:SalesService, private alertSvc:AlertsService, private alertController: AlertController) { }
+  constructor(public authSvc:AuthService, private salesSvc:SalesService, private alertSvc:AlertsService, private alertController: AlertController) { }
 
   ngOnInit() {
     this.getBill();

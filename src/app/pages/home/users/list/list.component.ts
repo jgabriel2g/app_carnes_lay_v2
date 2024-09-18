@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../../../core/services/users.service';
 import { AlertsService } from '../../../../core/services/alerts.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -18,7 +19,7 @@ export class ListComponent  implements OnInit {
   currentPage = 1;
   totalPages = 1;
   pageNumbers: number[] = [];
-  constructor(private usersSvc:UsersService, private alertSvc:AlertsService, private router:Router) { }
+  constructor(public authSvc:AuthService, private usersSvc:UsersService, private alertSvc:AlertsService, private router:Router) { }
 
 
   ngOnInit() {

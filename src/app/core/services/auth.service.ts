@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
+import { rolesPermissions } from '../utils/roles';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,11 @@ export class AuthService {
   refreshToken(data:{}){
     const url = `${this.baseUrl}/auth/token/refresh/`;
     return this.http.post(url, data)
+  };
+
+  hasPermission(permission: string): boolean {
+    const userRoles = JSON.parse(sessionStorage.getItem('userGroup') ||  '');
+    return userRoles.some((role:any) => rolesPermissions[role].permissions.includes(permission));
   };
 
 }

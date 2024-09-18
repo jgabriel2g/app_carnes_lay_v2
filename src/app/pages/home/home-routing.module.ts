@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { MainComponent } from './main/main.component';
+import { RoleGuard } from '../../core/guards/role.guard';
 
 const routes: Routes = [
   {
@@ -10,32 +11,46 @@ const routes: Routes = [
       {
         path: 'users',
         loadChildren: () => import('../../pages/home/users/users.module').then( m => m.UsersModule),
-        data: {route:'1'}
+        canActivate:[RoleGuard],
+        data: {
+          permissions: ['view-users']
+        }
       },
       {
         path: 'sales',
         loadChildren: () => import('../../pages/home/sales/sales.module').then( m => m.SalesModule),
-        data: {route:'2'}
+        canActivate:[RoleGuard],
+        data: {
+          permissions: ['view-sales-module']
+        }
       },
       {
         path: 'inventory',
         loadChildren: () => import('../../pages/home/inventory/inventory.module').then( m => m.InventoryModule),
-        data: {route:'3'}
+        canActivate:[RoleGuard],
+        data: {
+          permissions: ['view-module-inventory']
+        }
       },
       {
         path: 'profile',
         loadChildren: () => import('../../pages/home/profile/profile.module').then( m => m.ProfileModule),
-        data: {route:'4'}
       },
       {
         path: 'providers',
         loadChildren: () => import('../../pages/home/providers/providers.module').then( m => m.ProvidersModule),
-        data: {route:'4'}
+        canActivate:[RoleGuard],
+        data: {
+          permissions: ['manage-providers']
+        }
       },
       {
         path: 'clients',
         loadChildren: () => import('../../pages/home/clients/clients.module').then( m => m.ClientsModule),
-        data: {route:'4'}
+        canActivate:[RoleGuard],
+        data: {
+          permissions: ['manage-clients']
+        }
       },
       {
         path:'**',

@@ -8,6 +8,7 @@ import { InventoryService } from '../../core/services/inventory.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
 import { IonicModule } from '@ionic/angular';
+import { AuthService } from '../../core/services/auth.service';
 
 
 interface AutoCompleteCompleteEvent {
@@ -51,7 +52,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   public productPrice:number = 0;
   public purchaseId:any;
   public purchaseInfo:any;
-  constructor(private activatedRoute:ActivatedRoute, private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, ) { }
+  constructor(public authSvc:AuthService, private activatedRoute:ActivatedRoute, private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(({id}) => {

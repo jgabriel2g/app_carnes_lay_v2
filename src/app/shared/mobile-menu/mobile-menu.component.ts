@@ -4,6 +4,7 @@ import { Subscription, filter, map } from 'rxjs';
 import { IonTabs } from "@ionic/angular/standalone";
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-mobile-menu',
@@ -18,10 +19,10 @@ import { CommonModule } from '@angular/common';
 })
 export class MobileMenuComponent    {
   @Output() close = new EventEmitter<boolean>();
-  constructor() { }
   public showInventoryMenu:boolean = false;
   public showSalesMenu:boolean = false;
 
+  constructor(public authSvc:AuthService){}
 
   actionResponse(value:boolean) {
     this.close.emit(value);

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { InventoryService } from '../../../../../core/services/inventory.service';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AlertController } from '@ionic/angular';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -22,7 +23,7 @@ export class ListComponent  implements OnInit {
   public isLoading:boolean = false;
   public rejectionReason:string = '';
   updateData:any;
-  constructor(private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, private alertController: AlertController) { }
+  constructor(public authSvc:AuthService, private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, private alertController: AlertController) { }
 
   ngOnInit() {
     this.getPurchaseStocks()

@@ -5,7 +5,7 @@
       <p class="mt-2 text-sm text-gray-700">Una lista de todos los ingresos de la plataforma incluyendo su proveedor, producto, total de kgs y total de unidades </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <button [disabled]="isLoading" type="button" (click)="openNewMerchEntryModal  = !openNewMerchEntryModal" class="btn-primary px-6">Nuevo ingreso</button>
+      <button *ngIf="authSvc.hasPermission('create-merchandise-entry')" [disabled]="isLoading" type="button" (click)="openNewMerchEntryModal  = !openNewMerchEntryModal" class="btn-primary px-6">Nuevo ingreso</button>
     </div>
   </div>
   <div class="mt-8 flow-root">
@@ -27,7 +27,7 @@
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Proveedor </th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Estado</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-center text-primary">Razón de rechazo</th>
+              <th scope="col" class="px-3 py-3.5  text-sm font-semibold text-center text-primary">Razón de rechazo</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                 <span class="sr-only">Edit</span>
               </th>
@@ -56,32 +56,31 @@
               </td>
               <td class="relative whitespace-nowrap py-4 flex justify-end gap-x-3">
                 <!-- Botón de reabrir solicitud: visible cuando está rechazado (5) o pendiente de aprobación (2) -->
-                <button [disabled]="isLoading" [routerLink]="['/home/inventory/merchandiseEntry/create/', p.id]"   *ngIf="p.status === 1 ">
+                <button  *ngIf="authSvc.hasPermission('view-detail-merchandise-entry') && p.status === 1" [disabled]="isLoading" [routerLink]="['/home/inventory/merchandiseEntry/create/', p.id]"   >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-blue-500 hover:text-blue-600">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                   </svg>
                 </button>
                 <!-- Botón de reabrir solicitud: visible cuando está rechazado (5) o pendiente de aprobación (2) -->
-                <button [disabled]="isLoading" (click)="updatePurchaseStatus(p.provider.id, 3, p.id)" *ngIf="p.status === 5 || p.status === 2 || p.status === 3 ">
+                <button [disabled]="isLoading" (click)="updatePurchaseStatus(p.provider.id, 3, p.id)" *ngIf="p.status === 5 && authSvc.hasPermission('update-merchandise-entry') || p.status === 2 && authSvc.hasPermission('update-merchandise-entry') || p.status === 3 && authSvc.hasPermission('update-merchandise-entry')">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-blue-500 hover:text-blue-600">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                   </svg>
                 </button>
 
                 <!-- Botón de aprobar solicitud: visible cuando está pendiente de aprobación (2) -->
-                <button [disabled]="isLoading" (click)="updatePurchaseStatus(p.provider.id, 4, p.id)" *ngIf="p.status === 2">
+                <button [disabled]="isLoading" (click)="updatePurchaseStatus(p.provider.id, 4, p.id)" *ngIf="authSvc.hasPermission('approve-merchandise-entry') && p.status === 2">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z" />
                   </svg>
                 </button>
 
                 <!-- Botón de rechazar solicitud: visible cuando está pendiente de aprobación (2) -->
-                <button [disabled]="isLoading" (click)="rejectRequest(p.provider.id,  p.id)"*ngIf="p.status === 2 ">
+                <button [disabled]="isLoading" (click)="rejectRequest(p.provider.id,  p.id)" *ngIf="authSvc.hasPermission('reject-merchandise-entry') && p.status === 2 ">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7.498 15.25H4.372c-1.026 0-1.945-.694-2.054-1.715a12.137 12.137 0 0 1-.068-1.285c0-2.848.992-5.464 2.649-7.521C5.287 4.247 5.886 4 6.504 4h4.016a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23h1.294M7.498 15.25c.618 0 .991.724.725 1.282A7.471 7.471 0 0 0 7.5 19.75 2.25 2.25 0 0 0 9.75 22a.75.75 0 0 0 .75-.75v-.633c0-.573.11-1.14.322-1.672.304-.76.93-1.33 1.653-1.715a9.04 9.04 0 0 0 2.86-2.4c.498-.634 1.226-1.08 2.032-1.08h.384m-10.253 1.5H9.7m8.075-9.75c.01.05.027.1.05.148.593 1.2.925 2.55.925 3.977 0 1.487-.36 2.89-.999 4.125m.023-8.25c-.076-.365.183-.75.575-.75h.908c.889 0 1.713.518 1.972 1.368.339 1.11.521 2.287.521 3.507 0 1.553-.295 3.036-.831 4.398-.306.774-1.086 1.227-1.918 1.227h-1.053c-.472 0-.745-.556-.5-.96a8.95 8.95 0 0 0 .303-.54" />
                   </svg>
                 </button>
-
               </td>
             </tr>
 

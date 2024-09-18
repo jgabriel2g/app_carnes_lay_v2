@@ -42,7 +42,7 @@
         <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Ingreso de mercancía</h2>
       </div>
       <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
-        <button [disabled]="isLoading" (click)="createPurchaseStockEntry()" type="button" class="btn-primary px-6">Guardar</button>
+        <button *ngIf="authSvc.hasPermission('update-merchandise-entry')" [disabled]="isLoading" (click)="createPurchaseStockEntry()" type="button" class="btn-primary px-6">Guardar</button>
       </div>
     </div>
   </div>
@@ -129,7 +129,7 @@
 
     <div class="lg:col-span-3 flex justify-end">
       <div class="mt-4 flex justify-end  md:ml-4 md:mt-0">
-        <button (click)="createStock()" [disabled]="isLoading" type="button" class="btn-primary px-6">Agregar producto</button>
+        <button (click)="createStock()" *ngIf="authSvc.hasPermission('update-merchandise-entry')" [disabled]="isLoading" type="button" class="btn-primary px-6">Agregar producto</button>
       </div>
     </div>
 

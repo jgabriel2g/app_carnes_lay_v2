@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -24,7 +25,7 @@ export class SideBarComponent  implements OnInit {
     public isColapsed:boolean = false
 
 
-    constructor() {
+    constructor(public authSvc:AuthService) {
       this.checkScreenWidth(); // Verifica el ancho inicial
     }
 

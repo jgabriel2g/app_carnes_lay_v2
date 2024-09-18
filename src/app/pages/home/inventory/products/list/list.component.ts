@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../../../../../core/services/inventory.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -22,7 +23,7 @@ export class ListComponent  implements OnInit {
   selectedProduct:any;
   disable:boolean  = false;
   public isActive:boolean = true;
-  constructor(private inventorySvc:InventoryService, private router:Router, private alertSvc:AlertsService) { }
+  constructor(private authSvc:AuthService, private inventorySvc:InventoryService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
     this.getProducts();

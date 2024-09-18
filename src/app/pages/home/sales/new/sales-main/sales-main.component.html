@@ -27,7 +27,7 @@
         </ol>
         <div class="mt-4 md:flex md:items-center md:justify-end">
           <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
-            <button (click)="closeBox()" type="button" class="btn-primary px-6">Cerrar caja</button>
+            <button *ngIf=" authSvc.hasPermission('close-sales-box')" (click)="closeBox()" type="button" class="btn-primary px-6">Cerrar caja</button>
           </div>
         </div>
       </nav>

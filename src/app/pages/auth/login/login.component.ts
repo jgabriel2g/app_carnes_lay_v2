@@ -34,8 +34,9 @@ export class LoginComponent  implements OnInit {
           next:(resp:any) => {
             sessionStorage.setItem('accessToken', resp.access);
             sessionStorage.setItem('refreshToken', resp.refresh);
-            sessionStorage.setItem('userGroup', resp.user.groups);
-            this.router.navigateByUrl('/home');
+            sessionStorage.setItem('userName', resp.user.first_name);
+            sessionStorage.setItem('userGroup', JSON.stringify(resp.user.groups));
+            this.router.navigateByUrl('/home/profile/userInfo');
           }
         })
   };

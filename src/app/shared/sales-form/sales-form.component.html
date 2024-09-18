@@ -14,7 +14,7 @@
               </svg>
             </button>
           </a>
-          <a (click)="newSale()" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium " aria-current="page">Nueva venta</a>
+          <a (click)="newSale()" *ngIf=" authSvc.hasPermission('create-sales')" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium " aria-current="page">Nueva venta</a>
         </nav>
       </div>
     </div>
@@ -136,8 +136,8 @@
           <dt class="truncate text-sm font-medium text-gray-500">Total Pagado</dt>
           <input [disabled]="activeSale.isFinalized" [(ngModel)]="activeSale.total_received" (keydown)="onlyNumbers($event)" type="number" name="sale-value-pay" id="sale-value-pay" class="inputs mt-2" placeholder="Ingresa el valor pagado por el cliente">
         </div>
-        <button (click)="createSale()"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized" >Registrar</button>
-        <button (click)="printBill()"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized" >Ver Factura</button>
+        <button (click)="createSale()"  *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized" >Registrar</button>
+        <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized" >Ver Factura</button>
       </dl>
     </div>
   </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SalesService } from '../../../../../core/services/sales.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-open-sales-box',
@@ -11,7 +12,7 @@ import { AlertsService } from '../../../../../core/services/alerts.service';
 export class OpenSalesBoxComponent  implements OnInit {
   public isLoading:boolean = true;
   public boxInitMoney:number = 0;
-  constructor(private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) { }
+  constructor(public authSvc:AuthService, private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) { }
 
   ngOnInit() {
     this.getSalesBox();
