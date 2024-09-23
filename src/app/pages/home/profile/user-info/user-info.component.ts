@@ -8,13 +8,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 export class UserInfoComponent  implements OnInit {
 
   public windowWith:any;
+  public isColapsed:boolean = false
 
   ngOnInit() {
     this.checkScreenWidth();
 
   }
-  public isColapsed:boolean = false
-
 
   constructor() {
     this.checkScreenWidth(); // Verifica el ancho inicial
@@ -26,7 +25,6 @@ export class UserInfoComponent  implements OnInit {
   }
 
   checkScreenWidth() {
-
     this.windowWith = window.innerWidth
   }
 

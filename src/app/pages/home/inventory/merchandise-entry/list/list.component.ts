@@ -16,13 +16,13 @@ export class ListComponent  implements OnInit {
   public offset:number = 0;
   public search:string = '';
   public totalItems:number = 0;
-  currentPage = 1;
-  totalPages = 1;
-  pageNumbers: number[] = [];
-  Purchases: any[] = [];
+  public currentPage = 1;
+  public totalPages = 1;
+  public pageNumbers: number[] = [];
+  public Purchases: any[] = [];
   public isLoading:boolean = false;
   public rejectionReason:string = '';
-  updateData:any;
+  public updateData:any;
   constructor(public authSvc:AuthService, private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, private alertController: AlertController) { }
 
   ngOnInit() {
@@ -37,15 +37,14 @@ export class ListComponent  implements OnInit {
               console.log(err);
             },
             next:(resp:any) => {
-              console.log(resp);
               this.Purchases = resp.results;
               this.totalItems = resp.count;
               this.totalPages = Math.ceil(this.totalItems / this.limit);
               this.isLoading = !this.isLoading;
               this.updatePageNumbers();
             }
-          })
-  }
+          });
+  };
 
   openNewMerchEntry(event:any) {
     if (event.value) {
@@ -62,7 +61,7 @@ export class ListComponent  implements OnInit {
         })
       } else {
         this.openNewMerchEntryModal = false;
-     }
+     };
   };
 
   updatePageNumbers(): void {
@@ -80,7 +79,7 @@ export class ListComponent  implements OnInit {
       this.currentPage++;
       this.offset += this.limit;
       this.getPurchaseStocks();
-    }
+    };
   };
 
   previousPage(): void {
@@ -88,25 +87,20 @@ export class ListComponent  implements OnInit {
       this.currentPage--;
       this.offset -= this.limit;
       this.getPurchaseStocks();
-    }
+    };
   };
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
   };
@@ -124,8 +118,8 @@ export class ListComponent  implements OnInit {
         "provider": providerId,
         "status":status ,
         "reason": this.rejectionReason
-      }
-    }
+      };
+    };
 
     this.inventorySvc.updatePurchase(this.updateData, purchaseId)
       .subscribe({
@@ -171,19 +165,16 @@ export class ListComponent  implements OnInit {
           text: 'Confirmar',
           handler: (data) => {
             this.rejectionReason = data.reason;
-            console.log('Razón de rechazo:', this.rejectionReason);
-            // Llamar a la función que envía la solicitud de rechazo
             this.updatePurchaseStatus(providerId, 5, purchaseId)
           },
         },
       ],
     });
 
-    console.log('Presentando alerta'); // Verifica si llega hasta aquí
     await alert.present();
   }
 
   reasonAlert(alert:string){
-    this.alertSvc.presentAlert('Cargue de mercancía rechazado', `Razón: ${alert}`)
-  }
+    this.alertSvc.presentAlert('Cargue de mercancía rechazado', `Razón: ${alert}`);
+  };
 }

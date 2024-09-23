@@ -14,18 +14,17 @@ export class FormComponent  implements OnInit{
   @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
   @Input() userData:any;
   userForm: FormGroup;
+  selectedGroups: number[] = [];
   availableGroups = [
     { value: 1, label: 'Owner' },
-    { value: 2, label: 'Admin' },
-    { value: 3, label: 'Cashier' },
-    { value: 4, label: 'Warehouse manager.' },
+    { value: 2, label: 'Administrador' },
+    { value: 3, label: 'Cajero' },
+    { value: 4, label: 'Bodeguero' },
   ];
-  selectedGroups: number[] = [];
 
   ngOnInit(): void {
 
     this.getDocTypes();
-    console.log(this.userData)
     if (this.userData !== undefined) {
         this.userForm.get('username')?.setValue(this.userData.username)
         this.userForm.get('first_name')?.setValue(this.userData.first_name)
@@ -83,18 +82,15 @@ export class FormComponent  implements OnInit{
     const isChecked = inputElement.checked;
 
     if (isChecked) {
-      // Si el checkbox está seleccionado, lo agregamos al array
       this.selectedGroups.push(groupValue);
     } else {
-      // Si el checkbox se deselecciona, lo quitamos
       const index = this.selectedGroups.indexOf(groupValue);
       if (index > -1) {
         this.selectedGroups.splice(index, 1);
       }
     }
-    // Actualizamos el control del formulario
     this.userForm.get('groups')?.setValue(this.selectedGroups);
-  }
+  };
 
 }
 

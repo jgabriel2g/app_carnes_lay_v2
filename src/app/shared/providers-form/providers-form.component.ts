@@ -25,14 +25,14 @@ export class ProvidersFormComponent  implements OnInit {
   public DocTypes:any[] = [];
   public Departments:any[] = [];
   public Municipalities:any[] = [];
+  public providersForm: FormGroup;
+  public isLoading:boolean = false;
   @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
   @Input() providerData:any;
-  providersForm: FormGroup;
-  public isLoading:boolean = false;
+
   async ngOnInit() {
     await this.getDocTypes();
     await this.getDepartments();
-    console.log(this.providerData)
     if (this.providerData !== undefined) {
         this.providersForm.get('first_name')?.setValue(this.providerData.first_name)
         this.providersForm.get('last_name')?.setValue(this.providerData.last_name)
@@ -43,9 +43,8 @@ export class ProvidersFormComponent  implements OnInit {
         this.providersForm.get('address')?.setValue(this.providerData.address)
         this.providersForm.get('department')?.setValue(this.providerData.municipality.department.id);
         this.providersForm.get('municipality')?.setValue(this.providerData.municipality.id);
-        console.log(this.providerData.municipality.department.id)
-    }
-  }
+    };
+  };
 
   constructor(private fb: FormBuilder, private globalSvc:GlobalService, private alertSvc:AlertsService) {
     this.providersForm = this.fb.group({
@@ -68,16 +67,14 @@ export class ProvidersFormComponent  implements OnInit {
       this.providersForm.get('department')?.disable();
       this.formSubmit.emit(this.providersForm.value);
     } else {
-      console.log('Formulario no válido', this.providersForm.value);
       this.alertSvc.presentAlert('Oooops', 'Revisa los campos')
-    }
-  }
+    };
+  };
 
   getDocTypes(){
     this.globalSvc.getDocTypes()
         .subscribe({
           error:(err:any) => {
-            console.log(err);
           },
           next:(resp:any) => {
             this.DocTypes = resp.results;
@@ -89,7 +86,6 @@ export class ProvidersFormComponent  implements OnInit {
     this.globalSvc.getDepartments()
         .subscribe({
           error:(err:any) => {
-            console.log(err);
           },
           next:(resp:any) => {
             this.Departments = resp.results;
@@ -103,5 +99,5 @@ export class ProvidersFormComponent  implements OnInit {
   catchMunicipalities(){
    let selectedDept =  this.Departments.find( d => d.id === this.providersForm.get('department')?.value)
    this.Municipalities = selectedDept.municipalities;
-  }
+  };
 }

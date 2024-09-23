@@ -21,22 +21,19 @@ export class ChangePasswordComponent  implements OnInit {
 
   ngOnInit() {}
 
-
   onSubmit() {
     this.passwordForm.markAllAsTouched();
     if (this.passwordForm.valid) {
      this.changePassword();
     } else {
       this.alertSvc.presentAlert('Ooops', 'Revisa los campos');
-
-    }
+    };
   };
 
   changePassword(){
     this.authSvc.changePassword(this.passwordForm.value)
         .subscribe({
           error:(err:any) =>{
-            console.log(err);
            this.handleError(err);
           },
           next:(resp:any) => {
@@ -45,24 +42,18 @@ export class ChangePasswordComponent  implements OnInit {
         });
   };
 
-
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    }
-  }
+    };
+  };
 }

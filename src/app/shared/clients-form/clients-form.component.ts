@@ -21,18 +21,18 @@ import { GlobalService } from 'src/app/core/services/global.service';
 })
 export class ClientsFormComponent  implements OnInit {
 
+  @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
+  @Input() clientData:any;
+  public clientsForm: FormGroup;
   public DocTypes:any[] = [];
   public Departments:any[] = [];
   public Municipalities:any[] = [];
-  @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
-  @Input() clientData:any;
-  clientsForm: FormGroup;
   public isLoading:boolean = false;
+
   ngOnInit(): void {
     this.getDocTypes();
     this.getDepartments();
     if (this.clientData !== undefined) {
-      console.log(this.clientData)
         this.clientsForm.get('first_name')?.setValue(this.clientData.first_name)
         this.clientsForm.get('last_name')?.setValue(this.clientData.last_name)
         this.clientsForm.get('email')?.setValue(this.clientData.email)
@@ -42,7 +42,7 @@ export class ClientsFormComponent  implements OnInit {
         this.clientsForm.get('address')?.setValue(this.clientData.address)
         this.clientsForm.get('municipality')?.setValue(this.clientData.municipality);
         this.getDepartments();
-    }
+    };
   }
 
   constructor(private fb: FormBuilder, private globalSvc:GlobalService, private alertSvc:AlertsService) {
@@ -74,7 +74,6 @@ export class ClientsFormComponent  implements OnInit {
     this.globalSvc.getDocTypes()
         .subscribe({
           error:(err:any) => {
-            console.log(err);
           },
           next:(resp:any) => {
             this.DocTypes = resp.results;
@@ -86,7 +85,6 @@ export class ClientsFormComponent  implements OnInit {
     this.globalSvc.getDepartments()
         .subscribe({
           error:(err:any) => {
-            console.log(err);
           },
           next:(resp:any) => {
             console.log(resp)

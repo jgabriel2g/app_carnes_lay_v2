@@ -16,16 +16,14 @@ export class ListComponent  implements OnInit {
   public offset:number = 0;
   public search:string = '';
   public totalItems:number = 0;
-  currentPage = 1;
-  totalPages = 1;
-  pageNumbers: number[] = [];
+  public currentPage = 1;
+  public totalPages = 1;
+  public pageNumbers: number[] = [];
   constructor(public authSvc:AuthService, private usersSvc:UsersService, private alertSvc:AlertsService, private router:Router) { }
 
 
   ngOnInit() {
-
     sessionStorage.removeItem('user');
-
     this.getUsers();
   }
 
@@ -42,7 +40,6 @@ export class ListComponent  implements OnInit {
         .subscribe({
           error:(err:any) => {
             this.isLoading = !this.isLoading
-            console.log(err);
           },
           next:(resp:any) => {
             this.Users = resp.results;
@@ -52,36 +49,37 @@ export class ListComponent  implements OnInit {
             this.updatePageNumbers();
             this.isLoading = !this.isLoading
           }
-        })
+        });
   };
 
   goToUpdate(data:any){
     sessionStorage.setItem('user', JSON.stringify(data));
     this.router.navigateByUrl(`/home/users/update/${data?.id}`)
   };
+
   updatePageNumbers(): void {
     this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
+  };
 
   goToPage(page: number): void {
     this.currentPage = page;
     this.offset = (page - 1) * this.limit;
     this.getUsers();
-  }
+  };
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.offset += this.limit;
       this.getUsers();
-    }
-  }
+    };
+  };
 
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.offset -= this.limit;
       this.getUsers();
-    }
-  }
+    };
+  };
 }

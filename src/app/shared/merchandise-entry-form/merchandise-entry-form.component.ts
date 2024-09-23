@@ -36,9 +36,9 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   public Products:any[] =[];
   public UnitTypes:any[] =[];
   public WeightTypes:any[] =[];
-  suggestions: string[] = [];
-  selectedItem: string = '';
-  selectedProducts: any[] = []; // Aquí almacenarás los productos seleccionados
+  public suggestions: string[] = [];
+  public selectedItem: string = '';
+  public selectedProducts: any[] = []; // Aquí almacenarás los productos seleccionados
   public openDetailMerchEntry:boolean = false;
   public isLoading:boolean = false;
   public unitType:any = 0;
@@ -76,7 +76,6 @@ export class MerchandiseEntryFormComponent  implements OnInit {
       this.inventorySvc.updatePurchase(data, this.purchaseId)
         .subscribe({
           error:(err:any) => {
-            console.log(err);
             this.handleError(err);
             this.isLoading = !this.isLoading;
           },
@@ -95,14 +94,14 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.suggestions = this.Products
       .filter(product => product.name.toLowerCase().includes(event.query.toLowerCase()))
       .map(product => product.name);
-  }
+  };
 
   onProductSelect(event: any) {
     const selectedProduct = this.Products.find(product => product.name === event.value);
     if (selectedProduct) {
       this.selectedProducts.push(selectedProduct);
-    }
-  }
+    };
+  };
 
   onOpenDetailMerchEntry(event:boolean) {
     this.openDetailMerchEntry = false;
@@ -110,7 +109,6 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   };
 
   loadStockDetailModal(s:any){
-    console.log(s)
      this.openDetailMerchEntry = !this.openDetailMerchEntry;
      this.productId = s?.product.id;
      this.stockId = s?.id
@@ -129,7 +127,6 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.inventorySvc.createStock(data)
       .subscribe({
         error:(err:any) => {
-          console.log(err)
           this.handleError(err);
           this.isLoading = !this.isLoading;
         },
@@ -154,10 +151,8 @@ export class MerchandiseEntryFormComponent  implements OnInit {
             this.handleError(err);
           },
           next:(resp:any) => {
-            console.log(resp)
             this.purchaseInfo =resp;
             this.providerId = this.purchaseInfo.provider.id;
-            console.log(this.providerId)
             this.Stock = resp.stocks;
           }
         });
@@ -172,7 +167,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
             next:(resp:any) => {
               this.Products = resp.results;
             }
-          })
+          });
   };
 
   getUnitTypes(){
@@ -196,28 +191,21 @@ export class MerchandiseEntryFormComponent  implements OnInit {
               this.handleError(err);
             },
             next:(resp:any) => {
-              console.log(resp);
               this.WeightTypes  = resp.results;
             }
-          })
-  }
+          });
+  };
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
-      this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
   };

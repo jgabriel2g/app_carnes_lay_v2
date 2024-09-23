@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent  implements OnInit {
   public windowWith:any;
-
+  public isCollapse:boolean  = false;
   ngOnInit() {
     this.checkScreenWidth();
   }
@@ -23,7 +23,14 @@ export class MainComponent  implements OnInit {
   }
 
   checkScreenWidth() {
+    this.windowWith = window.innerWidth;
+  };
 
-    this.windowWith = window.innerWidth
+  toCollapse(event:any){
+    if (event  === true) {
+      this.isCollapse  = true;
+    } else {
+      this.isCollapse = false;
+    }
   }
 }

@@ -14,21 +14,19 @@ export class LoadNewComponent  implements OnInit {
   public unitTypes:any[] = [];
   public products:any[] = [];
   public showInventoryMenu:boolean = false;
-  suggestions: string[] = [];
-  selectedItem: string = '';
-  productForm: FormGroup;
+  public suggestions: string[] = [];
+  public selectedItem: string = '';
+  public productForm: FormGroup;
   @Output() close = new EventEmitter<boolean>();
   @Input() displayStockId:any;
   ngOnInit(): void {
-
     if (this.displayStockId !== undefined) {
         this.getDisplayStock();
     } else {
       this.getUnitTypes();
       this.getProducts();
-    }
-    console.log(this.displayStockId)
-  }
+    };
+  };
 
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
     this.productForm = this.fb.group({
@@ -66,16 +64,14 @@ export class LoadNewComponent  implements OnInit {
                   this.close.emit(value);
                 }
               })
-
-        }
+        };
       } else {
         this.alertSvc.presentAlert('Ooops', 'Revisa los campos');
-
-      }
+      };
     } else {
       this.close.emit(value);
-    }
-  }
+    };
+  };
 
   getDisplayStock(){
     this.salesSvc.getDisplayStockById(this.displayStockId)
@@ -84,7 +80,6 @@ export class LoadNewComponent  implements OnInit {
               this.handleError(err);
             },
             next:(resp:any) => {
-              console.log(resp)
               this.getUnitTypes();
               this.getProducts();
               this.productForm.get('product')?.setValue(resp.product.id);
@@ -93,8 +88,8 @@ export class LoadNewComponent  implements OnInit {
               this.productForm.get('price')?.setValue(resp.price);
               this.selectedItem = resp.product.name;
             }
-          })
-  }
+          });
+  };
 
   getUnitTypes(){
     this.inventorySvc.getUnitTypes()
@@ -117,14 +112,14 @@ export class LoadNewComponent  implements OnInit {
             next:(resp:any) =>{
               this.products = resp.results;
             }
-          })
-  }
+          });
+  };
 
   search(event: AutoCompleteCompleteEvent) {
     this.suggestions = this.products
       .filter(product => product.name.toLowerCase().includes(event.query.toLowerCase()))
       .map(product => product.name);
-  }
+  };
 
   onProductSelect(event: any) {
     let selectedProduct = this.products.filter( (p:any) => p.name == event.value)
@@ -133,21 +128,16 @@ export class LoadNewComponent  implements OnInit {
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    }
+    };
   };
 }

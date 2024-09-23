@@ -23,16 +23,13 @@ export class RecoverPasswordComponent  implements OnInit {
     this.authSvc.resetPassword(data)
           .subscribe({
             error:(err:any) => {
-              console.log(err)
               this.alertSvc.presentAlert('Oooops', err?.error?.email);
             },
             next:(resp:any) =>{
-               this.alertSvc.presentAlert('Recupera tu contraseña', resp.detail);
-              console.log(resp)
-              //
+              this.alertSvc.presentAlert('Recupera tu contraseña', resp.detail);
               this.router.navigateByUrl('/auth/recoverPasswordCode')
              }
-          })
-  }
+          });
+  };
 
 }

@@ -15,9 +15,9 @@ export class ListComponent  implements OnInit {
   public offset:number = 0;
   public search:string = '';
   public totalItems:number = 0;
-  currentPage = 1;
-  totalPages = 1;
-  pageNumbers: number[] = [];
+  public currentPage = 1;
+  public totalPages = 1;
+  public pageNumbers: number[] = [];
   constructor(private thirdPartySvc:ThirdPartyService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
@@ -29,11 +29,9 @@ export class ListComponent  implements OnInit {
     this.thirdPartySvc.getProviders(this.limit, this.offset)
       .subscribe({
         error:(err:any) => {
-          console.log(err);
           this.isLoading = !this.isLoading;
         },
         next:(resp:any) => {
-          console.log(resp)
           this.Providers = resp.results;
           this.totalItems = resp.count;
           this.totalPages = Math.ceil(this.totalItems / this.limit);
@@ -62,32 +60,32 @@ export class ListComponent  implements OnInit {
           this.isLoading = !this.isLoading;
         }
       });
-  }
+  };
 
   updatePageNumbers(): void {
     this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
+  };
 
   goToPage(page: number): void {
     this.currentPage = page;
     this.offset = (page - 1) * this.limit;
     this.getProviders();
-  }
+  };
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.offset += this.limit;
       this.getProviders();
-    }
-  }
+    };
+  };
 
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.offset -= this.limit;
       this.getProviders();
-    }
-  }
+    };
+  };
 
 }

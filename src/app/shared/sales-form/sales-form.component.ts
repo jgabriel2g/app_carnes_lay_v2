@@ -24,6 +24,7 @@ export interface Sales  {
   isFinalized:boolean,
   bill:any
 }
+
 @Component({
   selector: 'app-sales-form',
   templateUrl: './sales-form.component.html',
@@ -38,10 +39,10 @@ export interface Sales  {
   ]
 })
 export class SalesFormComponent  implements OnInit ,AfterViewInit{
-  selectedClient: any;
-  selectedProduct: any;
-  productSuggestions: any[]= [];
-  clientSuggestions: any[]= [];
+  public selectedClient: any;
+  public selectedProduct: any;
+  public productSuggestions: any[]= [];
+  public clientSuggestions: any[]= [];
   public Clients:any[]= [];
   public PaymentMethods:any[]= [];
   public Products:any[]= [];
@@ -49,7 +50,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   public showTicket:boolean = false;
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
-   @ViewChild('productInput') productInput!: ElementRef;
+  @ViewChild('productInput') productInput!: ElementRef;
   public sales:Sales[] = [
     {
       date: this.getCurrentDate(),
@@ -61,9 +62,9 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
       isFinalized:false,
       bill:null
     },
-  ]
+  ];
+  public activeSale:Sales = this.sales[0];
 
-  activeSale:Sales = this.sales[0];
 
   constructor(public authSvc:AuthService , private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
 
@@ -72,14 +73,11 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     this.getDisplayStock();
     this.getClients();
     this.getPaymentMethods();
-    console.log(this.sales[0].date)
-
   }
 
   ngAfterViewInit(): void {
   }
 
-  // Método para manejar el envío del formulario
   createSale(){
      const data = {
        "date":this.activeSale.date,
@@ -87,9 +85,9 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
        "total_received": this.activeSale.total_received,
        "sale": this.registerBox,
        "display_products": this.activeSale.products.map( (product:any) => ({
-          product: product.product,
-          amount: product.amount.toString()
-        })
+            product: product.product,
+            amount: product.amount.toString()
+          })
         )
      };
 
@@ -140,7 +138,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
         bill:{}
       }
 
-    }
+    };
   };
 
   onOpenDetailMerchEntry(event:boolean) {
@@ -154,11 +152,9 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
             console.log(err);
           },
           next:(resp:any) => {
-            console.log(resp)
             this.Products = resp.results;
-
           }
-        })
+        });
   };
 
   getPaymentMethods(){
@@ -168,9 +164,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
             console.log(err);
           },
           next:(resp:any) => {
-            console.log(resp)
             this.PaymentMethods = resp.results;
-
           }
         });
   };
@@ -184,13 +178,11 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
           },
           next:(resp:any) => {
             this.Clients = resp.results;
-            console.log(this.Clients)
           }
         });
   };
 
   searchClients(event: any) {
-    console.log(event)
     let value = event.query
     this.clientSuggestions = this.Clients
       .filter(client => client.first_name.toLowerCase().includes(value.toLowerCase()) ||
@@ -199,7 +191,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
               client.email.toLowerCase().includes(value.toLowerCase())
               )
       .map(client => client.first_name || client.last_name || client.identification_number || client.email);
-  }
+  };
 
   searchProducts(event: AutoCompleteCompleteEvent) {
     this.productSuggestions = this.Products
@@ -208,18 +200,16 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
       // .map(product => `${ product.product.name} - ${product.product.code}` product.product.name );
       // || product.product.code
         // products.product?.code.toLowerCase().includes(event.query.toLowerCase())
-  }
+  };
 
   onClientSelect(event: any) {
     let selectedClient = this.Clients.filter( (p:any) =>  p.first_name || p.last_name || p.identification_number || p.email  == event.value)
     this.activeSale.user = selectedClient[0].id;
-
   };
 
   onProductSelect(event: any) {
     // || p.code
     let selectedProduct = this.Products.find((p: any) => p.product.name === event.value);
-    console.log(selectedProduct)
     const productToAdd = {
       product: selectedProduct.id ,
       productName: selectedProduct.product.name,
@@ -227,8 +217,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
       price: selectedProduct.price,
       type_of_unit_measurement: `Ingresa la cantidad en ${selectedProduct.type_of_unit_measurement}`,
       isFinalized:false,
-
-    }
+    };
     this.activeSale.products.push(productToAdd);
     this.selectedProduct = null
 
@@ -241,29 +230,26 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
         console.log('no entre')
       }
     }, 200); // Retraso mínimo para esperar a que el DOM se actualice
-
   };
 
   updateTotalSaleValue(){
-    this.activeSale.sale = this.activeSale.products.reduce((suma:any, producto:any) => suma + (producto.amount * Number(producto.price)), 0);
-  }
+    this.activeSale.sale = this.activeSale.products.reduce((sum:any, product:any) => sum + (product.amount * Number(product.price)), 0);
+  };
 
   removeProduct(index: number) {
-    this.activeSale.products.splice(index, 1);  // Elimina el producto del arreglo
-    this.updateTotalSaleValue();  // R
-
+    this.activeSale.products.splice(index, 1);
+    this.updateTotalSaleValue();
   }
 
   onlyNumbers(event: KeyboardEvent) {
     const pressKey = event.key;
-    // Permitir números (0-9), ".", "," y teclas de control como Backspace, ArrowLeft, ArrowRight, Delete, Tab
     const isNumberOrSymbol = /^[0-9.,]$/.test(pressKey);
     const controlKey = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
 
     if (!isNumberOrSymbol && !controlKey.includes(pressKey)) {
-      event.preventDefault(); // Bloquear la tecla si no es válida
-    }
-  }
+      event.preventDefault();
+    };
+  };
 
   selectTab( data:any) {
     this.activeSale = data;
@@ -271,31 +257,25 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
   };
 
   printBill(){
-    sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill))
-    this.router.navigateByUrl('/ticket')
-  }
+    sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill));
+    this.router.navigateByUrl('/ticket');
+  };
 
   getCurrentDate() {
-
     const currentDate = new Date();
 
     // Formateamos la fecha en el formato deseado: día/mes/año
@@ -306,8 +286,6 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     setTimeout(() => {
       this.activeSale.date = `${year}-${month}-${day}`
     }, 2000);
-
-  }
-
+  };
 
 }

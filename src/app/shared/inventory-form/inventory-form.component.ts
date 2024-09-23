@@ -18,10 +18,10 @@ import { AlertsService } from '../../core/services/alerts.service';
   ]
 })
 export class InventoryFormComponent  implements OnInit {
-  productForm: FormGroup;
-  public isLoading:boolean = false;
   @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
   @Input() productInfo:any;
+  public productForm: FormGroup;
+  public isLoading:boolean = false;
   public Categories:any[] =[];
   constructor(private inventorySvc:InventoryService, private fb: FormBuilder, private alertSvc:AlertsService) {
     this.productForm = this.fb.group({
@@ -62,10 +62,9 @@ export class InventoryFormComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            console.log(resp);
             this.Categories = resp.results
           }
-        })
-  }
+        });
+  };
 
 }

@@ -21,14 +21,14 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
   @Input() stockId:any;
   @Input() productId:any;
   @Output() close = new EventEmitter<boolean>();
-  stockDetail:any[] = [];
-  weightTypes:any[] = [];
-  unitTypes:any[] = [];
-  productForm!: FormGroup;
+  public stockDetail:any[] = [];
+  public weightTypes:any[] = [];
+  public unitTypes:any[] = [];
+  public productForm!: FormGroup;
   public isLoading:boolean = false;
+  public showInventoryMenu:boolean = false;
 
   ngOnInit(): void {
-    console.log(this.stockId, this.productId)
     this.getUnitTypes();
     this.getWeightTypes();
     this.getStockDetail();
@@ -41,8 +41,8 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
       type_of_weight: [0, [Validators.required, Validators.min(1)]],
     });
   }
+
   constructor(private fb: FormBuilder, private alertSvc:AlertsService, private inventorySvc:InventoryService, private thirdParySvc:ThirdPartyService) { }
-  public showInventoryMenu:boolean = false;
 
 
   actionResponse(value:boolean) {
@@ -60,18 +60,16 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
       "type_of_weight": this.productForm.get('type_of_weight')?.value,
     }
     this.inventorySvc.addStockDetail(data)
-    .subscribe({
-      error:(err:any) => {
-        console.log(err);
-        this.handleError(err)
-        this.isLoading = !this.isLoading;
-      },
-      next:(resp:any) => {
-        this.getStockDetail()
-        this.isLoading = !this.isLoading;
-      }
-    })
-
+      .subscribe({
+        error:(err:any) => {
+          this.handleError(err)
+          this.isLoading = !this.isLoading;
+        },
+        next:(resp:any) => {
+          this.getStockDetail()
+          this.isLoading = !this.isLoading;
+        }
+      });
   };
 
   deleteStockDetail(id:any){
@@ -79,7 +77,6 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
     this.inventorySvc.deleteStockDetail(id)
         .subscribe({
           error:(err:any) => {
-            console.log(err);
             this.handleError(err)
             this.isLoading = !this.isLoading;
           },
@@ -87,8 +84,8 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
             this.getStockDetail()
             this.isLoading = !this.isLoading;
           }
-        })
-  }
+        });
+  };
 
   getStockDetail(){
       this.inventorySvc.getStockDetail(this.stockId)
@@ -97,10 +94,9 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
              this.handleError(err);
             },
             next:(resp:any) => {
-              console.log(resp);
               this.stockDetail = resp.results;
             }
-          })
+          });
   };
 
   handleError(err: any) {
@@ -122,7 +118,6 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
   };
-
 
   getWeightTypes(){
     this.inventorySvc.getWeightTypes()

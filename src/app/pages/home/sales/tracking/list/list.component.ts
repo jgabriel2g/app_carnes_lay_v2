@@ -15,18 +15,16 @@ export class ListComponent  implements OnInit {
   public offset:number = 0;
   public search:string = '';
   public totalItems:number = 0;
-  currentPage = 1;
-  totalPages = 1;
-  pageNumbers: number[] = [];
-  Bills:any[] = [];
+  public currentPage = 1;
+  public totalPages = 1;
+  public pageNumbers: number[] = [];
+  public Bills:any[] = [];
   public isLoading:boolean = false;
   constructor(public authSvc:AuthService, private salesSvc:SalesService, private alertSvc:AlertsService, private alertController: AlertController) { }
 
   ngOnInit() {
     this.getBill();
   }
-
-
 
   getBill(){
     this.isLoading = !this.isLoading;
@@ -91,25 +89,19 @@ export class ListComponent  implements OnInit {
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     }
   };
 
-  // Función para mostrar la alerta
   async showBillDetail(products:any) {
     const messageContent = products.map((p:any) =>
       `Producto: ${p.product.product.name}, Cantidad: ${p.amount}, Costo: ${p.product.price}`).join('<br>');

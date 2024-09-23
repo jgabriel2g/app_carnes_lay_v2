@@ -20,17 +20,16 @@ import { ProfileService } from '../../core/services/profile.service';
 })
 export class UsersFormComponent  implements OnInit {
 
-  public DocTypes:any[] = [];
   @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
-
-  userForm: FormGroup;
-  availableGroups = [
+  public DocTypes:any[] = [];
+  public selectedGroups: number[] = [];
+  public userForm: FormGroup;
+  public availableGroups = [
     { value: 1, label: 'Owner' },
-    { value: 2, label: 'Admin' },
-    { value: 3, label: 'Cashier' },
-    { value: 4, label: 'Warehouse manager.' },
+    { value: 2, label: 'Administrador' },
+    { value: 3, label: 'Cajero' },
+    { value: 4, label: 'Bodeguero' },
   ];
-  selectedGroups: number[] = [];
 
   ngOnInit(): void {
     this.getDocTypes();
@@ -40,7 +39,6 @@ export class UsersFormComponent  implements OnInit {
   constructor(private fb: FormBuilder, private globalSvc:GlobalService, private alertSvc:AlertsService, private profileSvc:ProfileService) {
     this.userForm = this.fb.group({
       username: ['', [Validators.required]],
-
       first_name: ['', [Validators.required]],
       last_name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -49,17 +47,16 @@ export class UsersFormComponent  implements OnInit {
       identification_type: [0, [Validators.required, Validators.min(1)]],
       groups: [[], [Validators.required]]
     });
-  }
+  };
 
   onSubmit() {
     this.userForm.markAllAsTouched();
     if (this.userForm.valid) {
         this.updateUser();
     } else {
-      console.log('Formulario no válido', this.userForm.value);
       this.alertSvc.presentAlert('Oooops', 'Revisa los campos')
-    }
-  }
+    };
+  };
 
   getDocTypes(){
     this.globalSvc.getDocTypes()
@@ -73,22 +70,18 @@ export class UsersFormComponent  implements OnInit {
         });
   };
 
-
   toggleGroup(event: Event, groupValue: number) {
     const inputElement = event.target as HTMLInputElement;
     const isChecked = inputElement.checked;
 
     if (isChecked) {
-      // Si el checkbox está seleccionado, lo agregamos al array
       this.selectedGroups.push(groupValue);
     } else {
-      // Si el checkbox se deselecciona, lo quitamos
       const index = this.selectedGroups.indexOf(groupValue);
       if (index > -1) {
         this.selectedGroups.splice(index, 1);
       }
     }
-    // Actualizamos el control del formulario
     this.userForm.get('groups')?.setValue(this.selectedGroups);
   };
 
@@ -99,7 +92,6 @@ export class UsersFormComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            console.log(resp)
             this.userForm.get('username')?.setValue(resp.username)
             this.userForm.get('first_name')?.setValue(resp.first_name)
             this.userForm.get('last_name')?.setValue(resp.last_name)
@@ -128,22 +120,17 @@ export class UsersFormComponent  implements OnInit {
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    }
-  }
+    };
+  };
 
 }

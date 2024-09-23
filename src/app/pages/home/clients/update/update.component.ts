@@ -17,14 +17,13 @@ export class UpdateComponent  implements OnInit {
 
   ngOnInit() {
     this.checkScreenWidth();
-      this.checkScreenWidth();
-      this.activatedRoute.params.subscribe((params:any) => {
-        this.ClientId = params.id;
-      })
-      this.ClientInfo = JSON.parse(sessionStorage.getItem('client')|| '');
-    }
+    this.activatedRoute.params.subscribe((params:any) => {
+      this.ClientId = params.id;
+    });
+    this.ClientInfo = JSON.parse(sessionStorage.getItem('client')|| '');
+  };
 
-    constructor(private activatedRoute:ActivatedRoute,private alertSvc:AlertsService,  private thirdPartySvc:ThirdPartyService, private router:Router) {
+  constructor(private activatedRoute:ActivatedRoute,private alertSvc:AlertsService,  private thirdPartySvc:ThirdPartyService, private router:Router) {
     this.checkScreenWidth();
   }
 
@@ -45,7 +44,6 @@ export class UpdateComponent  implements OnInit {
             this.handleError(err)
           },
           next:(resp:any) => {
-            console.log(resp);
             this.alertSvc.presentAlert('Éxito', 'Cliente actualizado');
             this.router.navigateByUrl('/home/clients');
           }
@@ -55,22 +53,17 @@ export class UpdateComponent  implements OnInit {
 
   handleError(err: any) {
     if (err.error) {
-      // Obtenemos todas las claves (nombres de los campos)
       const errorKeys = Object.keys(err.error);
 
-      // Creamos un mensaje para la alerta con todos los errores
       let errorMessage = '';
       errorKeys.forEach(key => {
-        // Concatenamos el nombre del campo y el mensaje de error
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      // Mostrar alerta con el mensaje de error concatenado
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
-      // Si no hay errores específicos en err.error, mostrar un mensaje general
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    }
-  }
+    };
+  };
 
 }
