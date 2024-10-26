@@ -2,13 +2,13 @@
   <app-side-bar (close)="toCollapse($event)" ></app-side-bar>
   <app-header></app-header>
   <main class="h-full  " [ngClass]="{'lg:pl-60': !isCollapse, 'lg:pl-20':  isCollapse}" >
-    <div    class="h-max lg:h-screen px-5 py-6 sm:px-6 lg:px-8" >
-      <div  class=" bg-white h-full overflow-y-scroll  max-w-full lg:w-full px-4 sm:px-6 lg:px-8 rounded-2xl min-h-full shadow-lg ">
+    <div class="h-max lg:h-screen px-5 py-6 sm:px-6 lg:px-8" >
+      <div class=" bg-white h-full overflow-y-scroll  max-w-full lg:w-full px-4 sm:px-6 lg:px-8 rounded-2xl min-h-full shadow-lg ">
         <!-- Content goes here -->
-        <div   *ngIf="windowWith < 500">
+        <div *ngIf="windowWith < 500">
           <ion-router-outlet></ion-router-outlet>
         </div>
-        <div  *ngIf="windowWith > 500">
+        <div *ngIf="windowWith > 500">
           <router-outlet></router-outlet>
         </div>
       </div>

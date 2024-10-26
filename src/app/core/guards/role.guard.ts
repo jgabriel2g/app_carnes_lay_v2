@@ -16,13 +16,12 @@ export class RoleGuard implements CanActivate {
     state: RouterStateSnapshot): boolean {
 
     if (sessionStorage.getItem('userGroup') !== undefined) {
-      this.userRoles = JSON.parse(sessionStorage.getItem('userGroup') || ''); // Obtener roles del usuario logueado
-      console.log(this.userRoles)
+      this.userRoles = JSON.parse(sessionStorage.getItem('userGroup') || '');
     } else {
       this.router.navigateByUrl('')
     }
 
-    const requiredPermissions = route.data['permissions']; // Obtener los permisos requeridos para esta ruta
+    const requiredPermissions = route.data['permissions'];
 
     const hasPermission = this.userRoles.some((role:any) => {
       const rolePermissions = this.rolesPermissions[role].permissions;
@@ -30,7 +29,7 @@ export class RoleGuard implements CanActivate {
     });
 
     if (!hasPermission) {
-      this.router.navigate(['']); // Navegar a una página "forbidden" si no tiene permiso
+      this.router.navigate(['']);
       return false;
     }
 

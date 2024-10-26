@@ -24,7 +24,6 @@ export class HeaderComponent  implements OnInit {
     this.userName = sessionStorage.getItem('userName') || '';
   }
 
-
   closeMobileMenu(event:any) {
     this.showMobileMenu = !this.showMobileMenu;
   }

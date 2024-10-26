@@ -26,7 +26,7 @@ export class GlobalService {
   };
 
   getDepartments(){
-    const url = `${this.authSvc.baseUrl}/department/`;
+    const url = `${this.authSvc.baseUrl}/department/?limit=33&offset=0`;
     return this.http.get(url, this.authSvc.header);
   };
 }

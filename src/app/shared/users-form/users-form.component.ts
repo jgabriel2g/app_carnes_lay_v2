@@ -75,7 +75,9 @@ export class UsersFormComponent  implements OnInit {
     const isChecked = inputElement.checked;
 
     if (isChecked) {
-      this.selectedGroups.push(groupValue);
+      if (!this.selectedGroups.includes(groupValue)) {
+        this.selectedGroups.push(groupValue);
+      }
     } else {
       const index = this.selectedGroups.indexOf(groupValue);
       if (index > -1) {
@@ -83,7 +85,8 @@ export class UsersFormComponent  implements OnInit {
       }
     }
     this.userForm.get('groups')?.setValue(this.selectedGroups);
-  };
+  }
+
 
   getProfileInfo(){
     this.profileSvc.getProfileInfo()

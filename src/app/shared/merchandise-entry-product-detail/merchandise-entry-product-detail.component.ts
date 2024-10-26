@@ -37,7 +37,7 @@ export class MerchandiseEntryProductDetailComponent  implements OnInit {
       stock: [this.stockId],      // stockId assigned to stock field
       unit: [0, [Validators.required, Validators.min(1)]],
       type_of_unit: [0 , [Validators.required, Validators.min(1)]],
-      weight: ['', [Validators.required, Validators.min(.5)]],
+      weight: ['0', [Validators.required, Validators.min(.5)]],
       type_of_weight: [0, [Validators.required, Validators.min(1)]],
     });
   }

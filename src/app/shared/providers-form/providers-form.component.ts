@@ -31,8 +31,8 @@ export class ProvidersFormComponent  implements OnInit {
   @Input() providerData:any;
 
   async ngOnInit() {
-    await this.getDocTypes();
-    await this.getDepartments();
+    this.getDocTypes();
+    this.getDepartments();
     if (this.providerData !== undefined) {
         this.providersForm.get('first_name')?.setValue(this.providerData.first_name)
         this.providersForm.get('last_name')?.setValue(this.providerData.last_name)
@@ -90,7 +90,7 @@ export class ProvidersFormComponent  implements OnInit {
           next:(resp:any) => {
             this.Departments = resp.results;
             if (this.providerData !== undefined) {
-                  this.catchMunicipalities();
+              this.catchMunicipalities();
             }
           }
         });

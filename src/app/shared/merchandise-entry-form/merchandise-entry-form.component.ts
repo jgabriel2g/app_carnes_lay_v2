@@ -32,19 +32,16 @@ interface AutoCompleteCompleteEvent {
   ]
 })
 export class MerchandiseEntryFormComponent  implements OnInit {
-  public Providers:any[] =[];
   public Products:any[] =[];
   public UnitTypes:any[] =[];
   public WeightTypes:any[] =[];
   public suggestions: string[] = [];
   public selectedItem: string = '';
-  public selectedProducts: any[] = []; // Aquí almacenarás los productos seleccionados
+  public selectedProducts: any[] = [];
   public openDetailMerchEntry:boolean = false;
   public isLoading:boolean = false;
   public unitType:any = 0;
   public Stock:any[] = [];
-  public stockLimit:number = 10;
-  public stockOffset:number = 0;
   public productId:any;
   public stockId:any;
   public providerId:any = "";
@@ -52,7 +49,14 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   public productPrice:number = 0;
   public purchaseId:any;
   public purchaseInfo:any;
-  constructor(public authSvc:AuthService, private activatedRoute:ActivatedRoute, private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, ) { }
+
+  constructor(
+    public authSvc:AuthService,
+    private activatedRoute:ActivatedRoute,
+    private router:Router,
+    private inventorySvc:InventoryService,
+    private alertSvc:AlertsService
+  ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(({id}) => {
@@ -64,7 +68,6 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.getTypeWeight();
   }
 
-
   createPurchaseStockEntry(){
     if (this.providerId > 0 && this.Stock.length ) {
       this.isLoading = !this.isLoading;
@@ -75,19 +78,19 @@ export class MerchandiseEntryFormComponent  implements OnInit {
 
       this.inventorySvc.updatePurchase(data, this.purchaseId)
         .subscribe({
-          error:(err:any) => {
+          error: (err:any) => {
             this.handleError(err);
             this.isLoading = !this.isLoading;
           },
-          next:(resp:any) =>{
-            this.alertSvc.presentAlert('Éxito', 'Cargue de mercancía guardado');
-            this.router.navigateByUrl('/home/inventory/merchandiseEntry')
+          next: (resp:any) =>{
+            this.alertSvc.presentAlert('Éxito', 'Cargue de mercancía guardado').then();
+            this.router.navigateByUrl('/home/inventory/merchandiseEntry').then();
             this.isLoading = !this.isLoading;
           }
         })
     } else {
-      this.alertSvc.presentAlert('Oooops', 'Debes seleccionar un proveedor y al menos cargar un producto y su detalle')
-    };
+      this.alertSvc.presentAlert('Oooops', 'Debes seleccionar un proveedor y al menos cargar un producto y su detalle').then()
+    }
   };
 
   search(event: AutoCompleteCompleteEvent) {
@@ -100,7 +103,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     const selectedProduct = this.Products.find(product => product.name === event.value);
     if (selectedProduct) {
       this.selectedProducts.push(selectedProduct);
-    };
+    }
   };
 
   onOpenDetailMerchEntry(event:boolean) {
@@ -151,7 +154,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
             this.handleError(err);
           },
           next:(resp:any) => {
-            this.purchaseInfo =resp;
+            this.purchaseInfo = resp;
             this.providerId = this.purchaseInfo.provider.id;
             this.Stock = resp.stocks;
           }
@@ -162,7 +165,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.inventorySvc.getProducts(1000, 0, true)
           .subscribe({
             error:(err:any) => {
-            this.handleError(err);
+              this.handleError(err);
             },
             next:(resp:any) => {
               this.Products = resp.results;
@@ -174,7 +177,6 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.inventorySvc.getUnitTypes()
         .subscribe({
           error:(err:any) => {
-            console.log(err);
             this.handleError(err);
           },
           next:(resp:any) => {
@@ -187,7 +189,6 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.inventorySvc.getWeightTypes()
           .subscribe({
             error:(err:any) => {
-              console.log(err);
               this.handleError(err);
             },
             next:(resp:any) => {
@@ -199,14 +200,12 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   handleError(err: any) {
     if (err.error) {
       const errorKeys = Object.keys(err.error);
-
       let errorMessage = '';
       errorKeys.forEach(key => {
         errorMessage += ` ${err.error[key]}\n`;
       });
-
     } else {
-      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    };
+      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.').then()
+    }
   };
 }

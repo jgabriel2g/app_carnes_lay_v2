@@ -28,8 +28,8 @@ export class InventoryFormComponent  implements OnInit {
       code: ['', [Validators.required]],
       name: ['', Validators.required],
       category: [0, [Validators.required, Validators.min(0)]],
-      is_inventory: [true],
-      is_tax: [true]
+      is_inventory: [false],
+      is_tax: [false]
     });
   }
 
@@ -50,9 +50,9 @@ export class InventoryFormComponent  implements OnInit {
       this.formSubmit.emit(this.productForm.value);
       this.isLoading = !this.isLoading
     } else {
-      this.alertSvc.presentAlert('Ooops', 'Revisa los campos')
+      this.alertSvc.presentAlert('Ooops', 'Revisa los campos').then()
       this.isLoading = !this.isLoading
-    };
+    }
   };
 
   getCategories(){

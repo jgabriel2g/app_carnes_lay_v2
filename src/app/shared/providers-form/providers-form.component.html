@@ -50,13 +50,8 @@
 
     <!-- first name input field -->
     <div class="mb-2 w-full">
-      <label for="names" >Nombres</label>
+      <label for="names">Nombres</label>
       <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
-        </div>
         <input formControlName="first_name" type="text" name="names" id="names" class="inputs" placeholder="Ingresa el nombre">
       </div>
       <div *ngIf="providersForm.get('first_name')?.invalid && providersForm.get('first_name')?.touched">
@@ -66,13 +61,8 @@
 
     <!-- last name input field -->
     <div class="mb-2 w-full">
-      <label for="last-names" >Apellidos</label>
+      <label for="last-names">Apellidos</label>
       <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
-        </div>
         <input formControlName="last_name" type="text" name="last-names" id="last-names" class="inputs" placeholder="Ingresa el apellido">
       </div>
       <div *ngIf="providersForm.get('last_name')?.invalid && providersForm.get('last_name')?.touched">
@@ -84,11 +74,6 @@
     <div class="mb-2 w-full">
       <label for="email" >Correo electrónico</label>
       <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
-        </div>
         <input formControlName="email" type="email" name="email" id="email" class="inputs" placeholder="Ingresa el correo electrónico">
       </div>
       <div *ngIf="providersForm.get('email')?.invalid && providersForm.get('email')?.touched">
@@ -101,11 +86,6 @@
     <div class="mb-2 w-full">
       <label for="phone" >Teléfono</label>
       <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
-        </div>
         <input formControlName="phone" type="text" name="phone" id="phone" class="inputs" placeholder="Ingresa el teléfono">
       </div>
       <div *ngIf="providersForm.get('phone')?.invalid && providersForm.get('phone')?.touched">
@@ -129,11 +109,6 @@
     <div class="mb-2 w-full">
       <label for="id" >Número de identificación</label>
       <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
-        </div>
         <input formControlName="identification_number" type="text" name="id" id="id" class="inputs" placeholder="Ingresa el número de identificación">
       </div>
       <div *ngIf="providersForm.get('identification_number')?.invalid && providersForm.get('identification_number')?.touched">
@@ -145,11 +120,6 @@
     <div class="mb-2 w-full">
       <label for="id" >Dirección de residencia</label>
       <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
-        </div>
         <input formControlName="address" type="text" name="id" id="id" class="inputs" placeholder="Ingresa la dirección de residencia">
       </div>
       <div *ngIf="providersForm.get('address')?.invalid && providersForm.get('address')?.touched">
