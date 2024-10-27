@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import {Observable} from "rxjs";
+import {Product} from "../interfaces/product";
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +12,18 @@ export class InventoryService {
   constructor(private http:HttpClient, private authSvc:AuthService) { }
 
   /* PRODUCTS ENDPOINTS */
-  getProducts(limit:number, offset:number, isActive:boolean){
+  getProducts(
+    limit:number,
+    offset:number,
+    isActive:boolean
+  ) {
     const url = `${this.authSvc.baseUrl}/inventory/product/?limit=${limit}&offset=${offset}&is_active=${isActive}`;
     return this.http.get(url, this.authSvc.header);
   };
 
-  getProductById(id:any) {
+  getProductById(id: string): Observable<Product> {
     const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
-    return this.http.get(url, this.authSvc.header);
+    return this.http.get<Product>(url, this.authSvc.header);
   }
   newProduct(data:{}){
     const url = `${this.authSvc.baseUrl}/inventory/product/`;
@@ -95,7 +101,24 @@ export class InventoryService {
   getPurchaseById(id:any){
     const url = `${this.authSvc.baseUrl}/inventory/purchase/${id}/`;
     return this.http.get(url,  this.authSvc.header);
-  }
+  };
+
+  getStockDetailsByStock(stockId:string){
+    const url = `${this.authSvc.baseUrl}/inventory/stock-detail/?stock_id=${stockId}`;
+    return this.http.get(url, this.authSvc.header);
+  };
+
+  getStockByProduct(productId:string){
+    const url = `${this.authSvc.baseUrl}/inventory/stock/?product_id=${productId}`;
+    return this.http.get(url, this.authSvc.header);
+  };
+
+  updateStockDetail(stockDetailId:string, data:{}){
+    const url = `${this.authSvc.baseUrl}/inventory/stock-detail/${stockDetailId}/`;
+    return this.http.patch(url, data ,this.authSvc.header);
+  };
+
+
 
 
 }

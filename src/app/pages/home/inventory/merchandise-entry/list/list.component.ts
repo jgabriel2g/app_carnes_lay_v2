@@ -23,7 +23,14 @@ export class ListComponent  implements OnInit {
   public isLoading:boolean = false;
   public rejectionReason:string = '';
   public updateData:any;
-  constructor(public authSvc:AuthService, private router:Router, private inventorySvc:InventoryService, private alertSvc:AlertsService, private alertController: AlertController) { }
+
+  constructor(
+    public authSvc:AuthService,
+    private router:Router,
+    private inventorySvc:InventoryService,
+    private alertSvc:AlertsService,
+    private alertController: AlertController
+  ) {}
 
   ngOnInit() {
     this.getPurchaseStocks()
@@ -37,6 +44,8 @@ export class ListComponent  implements OnInit {
               console.log(err);
             },
             next:(resp:any) => {
+              console.log("resp")
+              console.log(resp);
               this.Purchases = resp.results;
               this.totalItems = resp.count;
               this.totalPages = Math.ceil(this.totalItems / this.limit);
@@ -48,20 +57,21 @@ export class ListComponent  implements OnInit {
 
   openNewMerchEntry(event:any) {
     if (event.value) {
-      this.inventorySvc.purchaseStockDetail({provider:Number(event.providerId)})
+      console.log(event)
+      this.inventorySvc.purchaseStockDetail({provider:event.providerId})
         .subscribe({
           error:(err:any) =>{
             this.handleError(err);
           },
           next:(resp:any) => {
             console.log(resp)
-            this.router.navigateByUrl('/home/inventory/merchandiseEntry/create/' + resp.id)
+            this.router.navigateByUrl('/home/inventory/merchandiseEntry/create/' + resp.id).then()
              this.openNewMerchEntryModal = false;
           }
         })
       } else {
         this.openNewMerchEntryModal = false;
-     };
+     }
   };
 
   updatePageNumbers(): void {
@@ -79,7 +89,7 @@ export class ListComponent  implements OnInit {
       this.currentPage++;
       this.offset += this.limit;
       this.getPurchaseStocks();
-    };
+    }
   };
 
   previousPage(): void {
@@ -102,7 +112,7 @@ export class ListComponent  implements OnInit {
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    };
+    }
   };
 
   updatePurchaseStatus(providerId:any, status:any, purchaseId:any){
@@ -111,7 +121,10 @@ export class ListComponent  implements OnInit {
     if (this.rejectionReason == null) {
       this.updateData = {
         "provider": providerId,
-        "status":status ,
+        "status": status,
+      }
+      if (status === 4) {
+        this.updateData["is_approved"] = true;
       }
     } else {
       this.updateData = {
@@ -119,7 +132,7 @@ export class ListComponent  implements OnInit {
         "status":status ,
         "reason": this.rejectionReason
       };
-    };
+    }
 
     this.inventorySvc.updatePurchase(this.updateData, purchaseId)
       .subscribe({
@@ -132,7 +145,7 @@ export class ListComponent  implements OnInit {
           this.isLoading = !this.isLoading;
           this.alertSvc.presentAlert('Éxito', 'Cargue de mercancía actualizado');
           if (status === 3) {
-            this.router.navigateByUrl('/home/inventory/merchandiseEntry/create/' + purchaseId)
+            this.router.navigateByUrl('/home/inventory/merchandiseEntry/create/' + purchaseId).then()
           } else {
             this.getPurchaseStocks();
           }
@@ -175,6 +188,6 @@ export class ListComponent  implements OnInit {
   }
 
   reasonAlert(alert:string){
-    this.alertSvc.presentAlert('Cargue de mercancía rechazado', `Razón: ${alert}`);
+    this.alertSvc.presentAlert('Cargue de mercancía rechazado', `Razón: ${alert}`).then();
   };
 }

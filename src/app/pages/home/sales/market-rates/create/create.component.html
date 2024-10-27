@@ -1,0 +1,7 @@
+<ion-content *ngIf="windowWith < 500" >
+  <app-market-rates-form (formSubmit)="newMarketRate($event)"></app-market-rates-form>
+</ion-content>
+
+<div *ngIf="windowWith >  500">
+ <app-market-rates-form (formSubmit)="newMarketRate($event)"></app-market-rates-form>
+</div>

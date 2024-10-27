@@ -53,6 +53,14 @@ const routes: Routes = [
         }
       },
       {
+        path: 'pay-roll',
+        loadChildren: () => import('../../pages/home/pay-roll/pay-roll.module').then( m => m.PayRollModule),
+        canActivate:[RoleGuard],
+        data: {
+          permissions: ['manage-employees']
+        }
+      },
+      {
         path:'**',
         pathMatch:'full',
         redirectTo:'users'

@@ -27,11 +27,17 @@ export class ClientsFormComponent  implements OnInit {
   public DocTypes:any[] = [];
   public Departments:any[] = [];
   public Municipalities:any[] = [];
+  public PersonTypes:any[] = [];
+  public RegimeTypes:any[] = [];
+  public Responsibilities:any[] = [];
   public isLoading:boolean = false;
 
   ngOnInit(): void {
     this.getDocTypes();
     this.getDepartments();
+    this.getPersonTypes();
+    this.getRegimeType();
+    this.getResponsibilities();
     if (this.clientData !== undefined) {
         this.clientsForm.get('first_name')?.setValue(this.clientData.first_name)
         this.clientsForm.get('last_name')?.setValue(this.clientData.last_name)
@@ -43,6 +49,7 @@ export class ClientsFormComponent  implements OnInit {
         this.clientsForm.get('municipality')?.setValue(this.clientData.municipality);
         this.getDepartments();
     };
+    this.clientsForm.get('digit_check')?.disable()
   }
 
   constructor(private fb: FormBuilder, private globalSvc:GlobalService, private alertSvc:AlertsService) {
@@ -56,6 +63,11 @@ export class ClientsFormComponent  implements OnInit {
       address: ['', [Validators.required]],
       municipality: ['', [Validators.required]],
       department: ['', [Validators.required]],
+      digit_check: [1, [Validators.required, Validators.maxLength(1), Validators.minLength(1)]],
+      regime_type: ['', [Validators.required]],
+      responsibilities: ['', [Validators.required]],
+      person_type: ['', [Validators.required]],
+      companyName: ['', [Validators.required]],
     });
   }
 
@@ -92,6 +104,47 @@ export class ClientsFormComponent  implements OnInit {
           }
         });
   };
+
+  getPersonTypes(){
+    this.globalSvc.getPersonType()
+        .subscribe({
+          error:(err:any) => {
+            console.log(err);
+          },
+          next:(resp:any) => {
+            console.log(resp);
+            this.PersonTypes = resp.results
+          }
+        });
+  };
+
+  getRegimeType(){
+    this.globalSvc.getRegimeType()
+        .subscribe({
+          error:(err:any) => {
+            console.log(err);
+          },
+          next:(resp:any) => {
+             console.log(resp);
+             this.RegimeTypes = resp.results;
+          }
+        });
+  };
+
+  getResponsibilities(){
+     this.globalSvc.getResponsibilities()
+          .subscribe({
+            error:(err:any) => {
+              console.log(err);
+            },
+            next:(resp:any) => {
+              console.log(resp)
+              this.Responsibilities = resp.results;
+            }
+          });
+  }
+
+
 
   catchMunicipalities(){
    let selectedDept =  this.Departments.find( d => d.id === this.clientsForm.get('department')?.value)

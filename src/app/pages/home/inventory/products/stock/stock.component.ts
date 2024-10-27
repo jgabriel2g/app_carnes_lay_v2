@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryService } from '../../../../../core/services/inventory.service';
+import {Product, Stock} from "../../../../../core/interfaces/product";
 
 @Component({
   selector: 'app-stock',
@@ -8,40 +9,49 @@ import { InventoryService } from '../../../../../core/services/inventory.service
   styleUrls: ['./stock.component.scss'],
 })
 export class StockComponent  implements OnInit {
-  public productId:any;
-  public showDeleteAlert:boolean = false;
-  public productInfo:any;
+  public productId: string =  '';
+  public productName: string =  '';
+  public productPresentation: string =  '';
+  public showDeleteAlert: boolean = false;
+  public product!: Product;
+  public stocks!: Stock[];
+  public showStockDetailModal:boolean = false;
   constructor(private activatedRoute:ActivatedRoute, private inventorySvc:InventoryService) { }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params:any) => {
-      console.log(params);
-      this.productId = params.id;
+    this.activatedRoute.params.subscribe((params: any) => {
+      this.productId = params['id'];
       this.getStocksDetail();
-    })
+    });
   }
 
-
-  getStocksDetail(){
-    this.inventorySvc.getProductById(this.productId)
-    .subscribe({
-      error:(err:any) => {
-        console.log(err);
+  getStocksDetail(): void {
+    /* TODO INTERFAZ STOCK */
+    this.inventorySvc.getStockByProduct(this.productId).subscribe({
+      next: (resp: any) => {
+        this.stocks = resp.results;
+         console.log(this.stocks)
       },
-      next:(resp:any) => {
-        console.log(resp);
-        this.productInfo = resp;
+      error: (err: any) => {
+        console.error('Error al obtener el producto:', err);
       }
-    })
+    });
   }
 
-  onDelete(){
-    this.showDeleteAlert = !this.showDeleteAlert;
-  }
 
   delete(event:boolean){
     this.showDeleteAlert = !this.showDeleteAlert;
+  };
 
-  }
+  showStockDetail(productId:string, productName:string, productPresentationUnit:string){
+      this.productId = productId;
+      this.productName = productName;
+      this.productPresentation = productPresentationUnit;
+      this.showStockDetailModal = true;
+  };
+
+  closeModal(event:boolean){
+    this.showStockDetailModal = false;
+  };
 
 }

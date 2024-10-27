@@ -16,7 +16,6 @@ export class FormComponent  implements OnInit{
   userForm: FormGroup;
   selectedGroups: number[] = [];
   availableGroups = [
-    { value: 1, label: 'Owner' },
     { value: 2, label: 'Administrador' },
     { value: 3, label: 'Cajero' },
     { value: 4, label: 'Bodeguero' },

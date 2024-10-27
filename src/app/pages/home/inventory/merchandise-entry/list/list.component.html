@@ -2,7 +2,7 @@
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
       <h1 class="text-base font-semibold leading-6 text-primary">Ingresos de mercancía</h1>
-      <p class="mt-2 text-sm text-gray-700">Una lista de todos los ingresos de la plataforma incluyendo su proveedor, producto, total de kgs y total de unidades </p>
+      <p class="mt-2 text-sm text-gray-700">Una lista de los ingresos de mercancia recibida a un proveedor, total de kgs y total de unidades </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
       <button *ngIf="authSvc.hasPermission('create-merchandise-entry')" [disabled]="isLoading" type="button" (click)="openNewMerchEntryModal  = !openNewMerchEntryModal" class="btn-primary px-6">Nuevo ingreso</button>
@@ -23,14 +23,14 @@
         <table class="min-w-full divide-y divide-gray-300 overflow-y-auto">
           <thead>
             <tr>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Fecha de creación</th>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Proveedor </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Fecha</th>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Proveedor</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Estado</th>
-              <th scope="col" class="px-3 py-3.5  text-sm font-semibold text-center text-primary">Razón de rechazo</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                 <span class="sr-only">Edit</span>
               </th>
+              <th scope="col" class="px-3 py-3.5  text-sm font-semibold text-center text-primary">Razón de rechazo</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
@@ -39,20 +39,11 @@
               <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{p.provider.first_name}} {{p.provider.last_name}} </td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{p.total_cost | currency}} </td>
               <td class="whitespace-nowrap px-3 py-4 text-sm ">
-                  <span *ngIf="p.status_display.id == 1" class="text-gray-500">Inicializado </span>
-                  <span *ngIf="p.status_display.id == 2" class="text-blue-500">Pendiente de aprobación </span>
-                  <span *ngIf="p.status_display.id == 3" class="text-orange-500">Re abierto </span>
-                  <span *ngIf="p.status_display.id == 4" class="text-green-500">Aceptado </span>
-                  <span *ngIf="p.status_display.id == 5" class="text-red-500">Rechazada </span>
-              </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
-                <svg *ngIf="p.reason.length"  (click)="reasonAlert(p.reason)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-500 cursor-pointer mx-auto" >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                <span *ngIf="!p.reason.length">
-                  No aplica
-                </span>
+                  <span *ngIf="p.status_display.id === 1" class="text-green-500">Inicializado</span>
+                  <span *ngIf="p.status_display.id === 2" class="text-blue-500">Pendiente de aprobación </span>
+                  <span *ngIf="p.status_display.id === 3" class="text-green-500">Re abierto </span>
+                  <span *ngIf="p.status_display.id === 4" class="text-green-500">Aceptado </span>
+                  <span *ngIf="p.status_display.id === 5" class="text-red-500">Rechazada </span>
               </td>
               <td class="relative whitespace-nowrap py-4 flex justify-end gap-x-3">
                 <!-- Botón de reabrir solicitud: visible cuando está rechazado (5) o pendiente de aprobación (2) -->
@@ -82,14 +73,22 @@
                   </svg>
                 </button>
               </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
+                <svg *ngIf="p.reason.length"  (click)="reasonAlert(p.reason)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-500 cursor-pointer mx-auto" >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                <span *ngIf="!p.reason.length">
+                  No aplica
+                </span>
+              </td>
             </tr>
-
             <!-- More people... -->
           </tbody>
         </table>
       </div>
     </div>
-    <nav class="flex justify-center mt-10" aria-label="Page navigation example">
+    <nav class="flex justify-center my-10" aria-label="Page navigation example">
       <ul class="flex items-center gap-x-2 -space-x-px h-10 text-base">
         <li>
           <button [disabled]="isLoading" (click)="previousPage()" [disabled]="currentPage === 1" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border-e-0   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
