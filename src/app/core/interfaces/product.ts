@@ -37,6 +37,7 @@ export interface Stock {
   weight: string;
   is_approved?: boolean;
   stock_details: StockDetail[];
+  created:string;
 }
 
 export interface Category {

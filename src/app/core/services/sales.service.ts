@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -42,9 +42,14 @@ export class SalesService {
 
   // DISPLAY STOCK MANAGE
 
-  getDisplayStock(limit:number, offset:number){
+  getDisplayStock(limit:number, offset:number, search:string = ''){
+    let params = new HttpParams();
+    console.log(search)
+    if (search) {
+      params = params.set('search', search);
+    };
     const url =  `${this.authSvc.baseUrl}/sale/display-stock/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url, this.authSvc.header);
+    return this.http.get(url, { headers: this.authSvc.header.headers, params });
   };
 
   createDisplayStock(data:{}){
@@ -64,10 +69,19 @@ export class SalesService {
 
   // BILLS MANAGE
 
-  getBills(limit:number, offset:number){
+  getBillsBySale(limit:number, offset:number, sale:string = '', client:string = ''){
+    let params = new HttpParams();
+
+    if (sale) {
+      params = params.set('sale_id', sale);
+    };
+    if (client) {
+      params = params.set('client_name', client);
+    };
+
     const url =  `${this.authSvc.baseUrl}/sale/bill/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url, this.authSvc.header);
-  }
+    return this.http.get(url, { headers: this.authSvc.header.headers, params });
+  };
 
   createBill(data:{}){
     const url =  `${this.authSvc.baseUrl}/sale/bill/`;
@@ -77,11 +91,21 @@ export class SalesService {
   getSaleById(id:any){
     const url =  `${this.authSvc.baseUrl}/sale/bill/${id}/`;
     return this.http.get(url, this.authSvc.header);
-  }
+  };
 
   deleteBillSale(id:any){
     const url =  `${this.authSvc.baseUrl}/sale/bill/${id}/`;
     return this.http.delete(url, this.authSvc.header);
-  }
+  };
+
+  getSales(limit:number, offset:number){
+    const url =  `${this.authSvc.baseUrl}/sale/?limit=${limit}&offset=${offset}`;
+    return this.http.get(url, this.authSvc.header);
+  };
+
+  deleteSale(id:string){
+    const url =  `${this.authSvc.baseUrl}/sale/${id}/`;
+    return this.http.delete(url, this.authSvc.header);
+  };
 
 }

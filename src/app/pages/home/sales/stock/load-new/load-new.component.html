@@ -26,7 +26,7 @@
             <h3 class="text-center text-xl font-semibold leading-6 text-gray-900 mb-5" id="modal-title">Ingresar producto a vitrina</h3>
 
             <!-- Products finder input field -->
-            <div class="mb-3" >
+            <div class="mb-3" *ngIf="displayStockId == undefined" >
               <label for="products-finder">Buscador de producto</label>
               <p-autoComplete
                 [disabled]="displayStockId !== undefined"
@@ -43,12 +43,12 @@
 
 
             <!-- Presentation unit input field -->
-            <div  class="mb-3">
+            <div  class="mb-3" *ngIf="displayStockId == undefined" >
               <label for="unit-type" >Unidad de presentación</label>
               <select  formControlName="type_of_unit_measurement" id="unit-type" name="location" class="inputs">
                 <option value="">Selecciona la unidad de presentación</option>
-                <option  value="kg" > Kilogramos</option>
-                <option  value="Und" > Unidades</option>
+                <option  *ngFor="let ut of unitTypes" [value]="ut.id" > {{ut.name}}</option>
+
               </select>
               <div class="error-message" *ngIf="productForm.get('type_of_unit_measurement')?.invalid && productForm.get('type_of_unit_measurement')?.touched">
                 Unidad de presentación es requerida
@@ -70,6 +70,23 @@
                 <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['required']">Cantidad es requerida.</div>
                 <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['min']">Cantidad debe ser mayor a 1 </div>
                 <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['pattern']">Cantidad debe ser un número.</div>
+              </div>
+            </div>
+            <!-- Product quantity field -->
+            <div class="mb-3" *ngIf="displayStockId !== undefined">
+              <label for="product-quantity-to-add" >Cantidad del producto a agregar</label>
+              <div class="relative shadow-md rounded-lg">
+                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z" />
+                  </svg>
+                </div>
+                <input formControlName="quantityToAdd" type="text" id="product-quantity-to-add" class="inputs" placeholder="Ingresa las cantidad a ingresar del producto">
+              </div>
+              <div *ngIf="productForm.get('quantityToAdd')?.invalid && productForm.get('quantityToAdd')?.touched">
+                <div class="error-message" *ngIf="productForm.get('quantityToAdd')?.errors?.['required']">Cantidad es requerida.</div>
+                <div class="error-message" *ngIf="productForm.get('quantityToAdd')?.errors?.['min']">Cantidad debe ser mayor a 1 </div>
+                <div class="error-message" *ngIf="productForm.get('quantityToAdd')?.errors?.['pattern']">Cantidad debe ser un número.</div>
               </div>
             </div>
 

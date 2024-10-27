@@ -1,4 +1,4 @@
-<div class="px-8 pt-20 sm:px-6 lg:px-8 block">
+<div class="px-8 pt-20 sm:px-6 lg:px-8 block h-full">
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
       <p class="text-base font-semibold leading-6 text-black mt-4">Listado de mercancia disponible por producto</p>
@@ -10,6 +10,7 @@
         <table class="min-w-full divide-y divide-gray-300 overflow-y-auto">
           <thead>
             <tr>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Fecha de entrada</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Código</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Unidades</th>
@@ -19,6 +20,7 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr *ngFor="let s of stocks">
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.created | date:'short'}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.product.code}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.product.name}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.total_unit}}</td>

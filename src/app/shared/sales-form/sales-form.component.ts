@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ interface AutoCompleteCompleteEvent {
 export interface Sales  {
   date:any,
   user:string,
-  payment_method:number,
+  payment_method:string,
   total_received:number,
   products:any,
   sale:number,
@@ -51,11 +51,12 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
   @ViewChild('productInput') productInput!: ElementRef;
+  @ViewChildren('amountInput') amountInputs!: QueryList<ElementRef>;
   public sales:Sales[] = [
     {
       date: this.getCurrentDate(),
       user:'',
-      payment_method:1,
+      payment_method:'00000000-0000-0000-0000-000000000001',
       total_received:0,
       products:[],
       sale:0  ,
@@ -64,7 +65,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     },
   ];
   public activeSale:Sales = this.sales[0];
-
+  public isLoading:boolean = false;
 
   constructor(public authSvc:AuthService , private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
 
@@ -90,28 +91,35 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
           })
         )
      };
+     if (this.activeSale.total_received >= this.activeSale.sale &&  this.activeSale.sale && this.activeSale.products.length) {
+       this.isLoading = !this.isLoading;
+       this.salesSvc.createBill(data)
+       .subscribe({
+         error:(err:any) => {
+           this.handleError(err);
+           this.isLoading = !this.isLoading;
+          },
+          next:(resp:any) => {
+            console.log(resp);
+            this.activeSale.isFinalized = true;
+            this.reloadBoxInfo.emit(true)
+            this.alertSvc.presentAlert('Éxito', 'Venta completada');
+            this.selectedClient = null
+            this.activeSale.bill = resp;
+            this.isLoading = !this.isLoading;
+          }
+        });
 
-     this.salesSvc.createBill(data)
-          .subscribe({
-            error:(err:any) => {
-              this.handleError(err);
-            },
-            next:(resp:any) => {
-              console.log(resp);
-              this.activeSale.isFinalized = true;
-              this.reloadBoxInfo.emit(true)
-              this.alertSvc.presentAlert('Éxito', 'Venta completada');
-              this.selectedClient = null
-              this.activeSale.bill = resp;
-            }
-          });
+     } else {
+      this.alertSvc.presentAlert('Ooops', 'Formulario de venta incompleto')
+     }
   };
 
   newSale(){
     const newSale = {
-      date: '',
+      date:  this.getCurrentDate(),
       user:'',
-      payment_method:1,
+      payment_method:'00000000-0000-0000-0000-000000000001',
       total_received:0,
       products:[],
       sale:0,
@@ -128,9 +136,9 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
       this.activeSale = this.sales[this.sales.length - 1]
     } else{
       this.activeSale = {
-        date: '',
+        date:  this.getCurrentDate(),
         user:'',
-        payment_method:1,
+        payment_method:'00000000-0000-0000-0000-000000000001',
         total_received:0,
         products:[],
         sale:0,
@@ -215,21 +223,24 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
       productName: selectedProduct.product.name,
       amount: null,
       price: selectedProduct.price,
-      type_of_unit_measurement: `Ingresa la cantidad en ${selectedProduct.type_of_unit_measurement}`,
+      type_of_unit_measurement: `Ingresa la cantidad en ${selectedProduct.type_of_unit_measurement.name}`,
       isFinalized:false,
     };
     this.activeSale.products.push(productToAdd);
     this.selectedProduct = null
 
-
+    console.log(this.activeSale.products)
     // Usar setTimeout para asegurarse de que el DOM esté completamente renderizado antes de intentar enfocar
-    setTimeout(() => {
-      if (this.productInput) {
-        this.productInput.nativeElement.focus();
-      } else{
-        console.log('no entre')
+   // Usar setTimeout para asegurar el renderizado y enfocar el último input
+   setTimeout(() => {
+      const amountInputsArray = this.amountInputs.toArray();
+      const lastAmountInput = amountInputsArray[amountInputsArray.length - 1];
+      if (lastAmountInput) {
+        lastAmountInput.nativeElement.focus();
+      } else {
+        console.log('No se encontró el input de cantidad para enfocar');
       }
-    }, 200); // Retraso mínimo para esperar a que el DOM se actualice
+    }, 200);
   };
 
   updateTotalSaleValue(){
@@ -272,8 +283,21 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
 
   printBill(){
     sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill));
-    this.router.navigateByUrl('/ticket');
+    window.open('/ticket', '_blank');
   };
+
+  clearSale(){
+    this.activeSale = {
+      date:  this.getCurrentDate(),
+      user:'',
+      payment_method:'00000000-0000-0000-0000-000000000001',
+      total_received:0,
+      products:[],
+      sale:0,
+      isFinalized:false,
+      bill:{}
+    }
+  }
 
   getCurrentDate() {
     const currentDate = new Date();
