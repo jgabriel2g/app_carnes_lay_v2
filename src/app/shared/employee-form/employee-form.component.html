@@ -1,0 +1,232 @@
+<div class="container mx-auto pb-4 px-6 sm:px-6 lg:px-8  max-w-full ">
+  <div class="py-4">
+    <div>
+      <nav class="mb-10" aria-label="Back">
+        <a routerLink="/home/pay-roll" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
+          <svg class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+          </svg>
+          Retroceder
+        </a>
+      </nav>
+      <nav class="hidden sm:flex" aria-label="Breadcrumb">
+        <ol role="list" class="flex items-center space-x-4">
+          <li>
+            <div class="flex">
+              <a class="text-sm font-medium text-gray-500 hover:text-gray-700">Home</a>
+            </div>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              </svg>
+              <a routerLink="/home/pay-roll" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Empleados</a>
+            </div>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              </svg>
+              <a  aria-current="page" class="ml-4 text-sm font-medium text-red-500 hover:text-red-700">Formulario</a>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="mt-4 md:flex md:items-center md:justify-between">
+      <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Empleados</h2>
+      </div>
+      <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
+        <button [disabled]="isLoading" (click)="onSubmit()" type="button" class="btn-primary px-6">Guardar</button>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
+    <div>
+      <label for="first_name">Nombres</label>
+      <input class="inputs" id="first_name" formControlName="first_name" />
+      <div *ngIf="employeeForm.get('first_name')?.invalid && employeeForm.get('first_name')?.touched" class="error-message">
+        {{ getErrorMessage('first_name') }}
+      </div>
+    </div>
+
+    <div>
+      <label for="last_name">Apellidos</label>
+      <input class="inputs" id="last_name" formControlName="last_name" />
+      <div *ngIf="employeeForm.get('last_name')?.invalid && employeeForm.get('last_name')?.touched" class="error-message">
+        {{ getErrorMessage('last_name') }}
+      </div>
+    </div>
+    <div>
+      <label for="email">Correo electrónico</label>
+      <input class="inputs" id="email" formControlName="email" />
+      <div *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched" class="error-message">
+        {{ getErrorMessage('email') }}
+      </div>
+    </div>
+    <div>
+      <label for="phone">Teléfono</label>
+      <input class="inputs" id="phone" formControlName="phone" />
+      <div *ngIf="employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched" class="error-message">
+        {{ getErrorMessage('phone') }}
+      </div>
+    </div>
+    <div>
+      <label for="residence_address">Dirección</label>
+      <input class="inputs" id="residence_address" formControlName="residence_address" />
+      <div *ngIf="employeeForm.get('residence_address')?.invalid && employeeForm.get('residence_address')?.touched" class="error-message">
+        {{ getErrorMessage('residence_address') }}
+      </div>
+    </div>
+
+    <div>
+      <label for="department">Departamento</label>
+      <select (change)="catchMunicipalities()" class="inputs" id="department" formControlName="department">
+        <option value="" disabled>Selecciona el departamento</option>
+        <option *ngFor="let type of Departments" [value]="type.id">{{ type.name }}</option>
+      </select>
+      <div *ngIf="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched" class="error-message">
+        {{ getErrorMessage('department') }}
+      </div>
+    </div>
+
+    <div *ngIf="Municipalities.length">
+      <label for="municipality">Municipio</label>
+      <select  class="inputs" id="municipality" formControlName="municipality">
+        <option value="" disabled>Selecciona el departamento</option>
+        <option *ngFor="let type of Municipalities" [value]="type.id">{{ type.name }}</option>
+      </select>
+      <div *ngIf="employeeForm.get('municipality')?.invalid && employeeForm.get('municipality')?.touched" class="error-message">
+        {{ getErrorMessage('municipality') }}
+      </div>
+    </div>
+
+    <div>
+      <label for="identification_type">Tipo de identificación</label>
+      <select class="inputs" id="identification_type" formControlName="identification_type">
+        <option value="" disabled>Selecciona el tipo de identificación</option>
+        <option *ngFor="let type of DocTypes" [value]="type.id">{{ type.name }}</option>
+      </select>
+      <div *ngIf="employeeForm.get('identification_type')?.invalid && employeeForm.get('identification_type')?.touched" class="error-message">
+        {{ getErrorMessage('identification_type') }}
+      </div>
+    </div>
+
+    <div>
+      <label for="identification_number">Número de identificación</label>
+      <input class="inputs" id="identification_number" formControlName="identification_number" />
+      <div *ngIf="employeeForm.get('identification_number')?.invalid && employeeForm.get('identification_number')?.touched" class="error-message">
+        {{ getErrorMessage('identification_number') }}
+      </div>
+    </div>
+
+    <!-- Similar structure for other fields -->
+    <div class="lg:col-span-3 md:col-span-2 my-5">
+      <h3 class="text-base font-medium text-gray-600 mb-3">Información de contrato</h3>
+      <hr>
+    </div>
+    <div class="lg:col-span-3 md:col-span-2 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5" formGroupName="contract">
+      <div>
+        <label for="start_date_contract">Fecha de inicio de contrato</label>
+        <input class="inputs" type="date" id="start_date_contract" formControlName="start_date_contract" />
+        <div *ngIf="employeeForm.get('contract.start_date_contract')?.invalid && employeeForm.get('contract.start_date_contract')?.touched" class="error-message">
+          {{ getErrorMessage('contract.start_date_contract') }}
+        </div>
+      </div>
+      <div>
+        <label for="end_date_contract">Fecha de fin de contrato</label>
+        <input class="inputs" type="date" id="end_date_contract" formControlName="end_date_contract" />
+        <div *ngIf="employeeForm.get('contract.end_date_contract')?.invalid && employeeForm.get('contract.end_date_contract')?.touched" class="error-message">
+          {{ getErrorMessage('contract.end_date_contract') }}
+        </div>
+      </div>
+      <div>
+        <label for="salary">Salario</label>
+        <input class="inputs" type="text" id="salary" formControlName="salary" />
+        <div *ngIf="employeeForm.get('contract.salary')?.invalid && employeeForm.get('contract.salary')?.touched" class="error-message">
+          {{ getErrorMessage('contract.salary') }}
+        </div>
+      </div>
+      <div>
+        <label for="contract_type">Tipo de contrato</label>
+        <select class="inputs" id="contract_type" formControlName="contract_type">
+          <option value="" disabled>Selecciona el  tipo de contrato</option>
+          <option *ngFor="let type of ContractTypes" [value]="type.id">{{ type.name }}</option>
+        </select>
+        <div *ngIf="employeeForm.get('contract.contract_type')?.invalid && employeeForm.get('contract.contract_type')?.touched" class="error-message">
+          {{ getErrorMessage('contract.contract_type') }}
+        </div>
+      </div>
+      <div>
+        <label for="period">Periodo</label>
+        <select class="inputs" id="period" formControlName="period">
+          <option value="" disabled>Selecciona el periodo</option>
+          <option *ngFor="let period of Periods" [value]="period.id">{{ period.name }}</option>
+        </select>
+        <div *ngIf="employeeForm.get('contract.period')?.invalid && employeeForm.get('contract.period')?.touched" class="error-message">
+          {{ getErrorMessage('contract.period') }}
+        </div>
+      </div>
+      <div>
+        <label for="payment_method">Método de pago</label>
+        <select class="inputs" id="payment_method" formControlName="payment_method">
+          <option value="" disabled>Selecciona el  método de pago</option>
+          <option *ngFor="let method of PaymentMethods" [value]="method.id">{{ method.name }}</option>
+        </select>
+        <div *ngIf="employeeForm.get('contract.payment_method')?.invalid && employeeForm.get('contract.payment_method')?.touched" class="error-message">
+          {{ getErrorMessage('contract.payment_method') }}
+        </div>
+      </div>
+      <div class="flex items-center  flex-wrap gap-x-6 gap-y-4 w-full lg:col-span-3 md:col-span-2">
+            <!-- Only for inventory field  -->
+        <label class=" flex flex-col justify-center items-center cursor-pointer mb-2 w-32   ">
+          <span class="mb-3 text-sm font-medium text-gray-900 dark:text-gray-300">Riesgo alto</span>
+          <input formControlName="high_risk" type="checkbox" value=true class="sr-only peer">
+          <div class="relative w-20 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600"></div>
+        </label>
+
+        <label class=" flex flex-col justify-center items-center cursor-pointer mb-2 w-32   ">
+          <span class="mb-3 text-sm block font-medium text-gray-900 dark:text-gray-300">Salario integral</span>
+          <input formControlName="integral_salary" type="checkbox" value=true class="sr-only peer">
+          <div class="relative w-20 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600"></div>
+        </label>
+
+        <label class=" flex flex-col justify-center items-center cursor-pointer mb-2 w-32   ">
+          <span class="mb-3 text-sm font-medium text-gray-900 dark:text-gray-300">Aux transporte</span>
+          <input formControlName="transportation_allowance" type="checkbox" value=true class="sr-only peer">
+          <div class="relative w-20 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3 md:col-span-2 my-5">
+      <h3 class="text-base font-medium text-gray-600 mb-3">Información bancaria</h3>
+      <hr>
+    </div>
+    <div  class="lg:col-span-3 md:col-span-2 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5" formGroupName="bank_information">
+      <div>
+        <label for="account_type">Tipo de cuenta</label>
+        <select class="inputs" id="account_type" formControlName="account_type">
+          <option value="" disabled>Selecciona el tipo de cuenta</option>
+          <option *ngFor="let type of AccountTypes" [value]="type.id">{{ type.name }}</option>
+        </select>
+        <div *ngIf="employeeForm.get('bank_information.account_type')?.invalid && employeeForm.get('bank_information.account_type')?.touched" class="error-message">
+          {{ getErrorMessage('bank_information.account_type') }}
+        </div>
+      </div>
+      <div>
+        <label for="number_account">Número de cuenta</label>
+        <input class="inputs" type="text" id="number_account" formControlName="number_account" />
+        <div *ngIf="employeeForm.get('bank_information.number_account')?.invalid && employeeForm.get('bank_information.number_account')?.touched" class="error-message">
+          {{ getErrorMessage('bank_information.number_account') }}
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-3 md:col-span-2">
+      <button class="btn-primary" type="submit">Guardar</button>
+    </div>
+  </form>
+</div>

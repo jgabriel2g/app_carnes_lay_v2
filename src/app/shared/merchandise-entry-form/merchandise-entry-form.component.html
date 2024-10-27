@@ -1,5 +1,5 @@
 <div class="container mx-auto pb-4 px-8 sm:px-6 lg:px-8 max-w-full">
-  <div class="py-10">
+  <div class="py-6">
     <div>
       <nav class="mb-10" aria-label="Back">
         <a routerLink="/home/inventory/merchandiseEntry" class="cursor-pointer flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
@@ -45,30 +45,30 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1  lg:grid-cols-3 gap-6 h-full pt-10  mx-auto ">
+  <div class="grid grid-cols-1  lg:grid-cols-3 gap-6 h-full   mx-auto ">
     <div class="bg-primary rounded-3xl lg:col-span-3 ">
       <div class="mx-auto max-w-7xl">
         <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4">
           <div class="bg-primary rounded-l-3xl px-4 py-2 sm:px-6 lg:px-8">
-            <p class="text-sm font-medium leading-6 text-gray-200">Fecha de creación</p>
+            <p class="text-xs font-medium leading-6 text-white">Fecha de creación</p>
             <p class="mt-2 flex items-baseline gap-x-2">
               <span class="text-xl font-semibold tracking-tight text-white">{{purchaseInfo?.purchase_date}}</span>
             </p>
           </div>
           <div class="bg-primary px-4 py-2 sm:px-6 lg:px-8">
-            <p class="text-sm font-medium leading-6 text-gray-200">Proveedor</p>
+            <p class="text-xs font-medium leading-6 text-white">Proveedor</p>
             <p class="mt-2 flex items-baseline gap-x-2">
               <span class="text-xl font-semibold tracking-tight text-white">{{purchaseInfo?.provider?.first_name}}</span>
             </p>
           </div>
           <div class="bg-primary px-4 py-2 sm:px-6 lg:px-8">
-            <p class="text-sm font-medium leading-6 text-gray-200">Costo</p>
+            <p class="text-xs font-medium leading-6 text-white">Costo</p>
             <p class="mt-2 flex items-baseline gap-x-2">
               <span class="text-xl font-semibold tracking-tight text-white">{{purchaseInfo?.total_cost | currency}}</span>
             </p>
           </div>
           <div class="bg-primary rounded-r-3xl px-4 py-2 sm:px-6 lg:px-8">
-            <p class="text-sm font-medium leading-6 text-gray-200">Estado</p>
+            <p class="text-xs font-medium leading-6 text-white">Estado</p>
             <p class="mt-2 flex items-baseline gap-x-2">
               <span class="text-xl font-semibold tracking-tight text-white">
                 <span *ngIf="purchaseInfo?.status_display.id === 1" class="text-gray-200">Inicializado </span>
@@ -85,7 +85,7 @@
 
     <!-- Products finder input field -->
     <div class="lg:col-span-3">
-      <label>Buscador de productos</label>
+      <label class="mb-3">Buscador de productos</label>
       <p-autoComplete
         placeholder="Esribe el nombre del producto"
         [(ngModel)]="selectedItem"
@@ -186,7 +186,7 @@
                   </td>
                   <!-- Detalle -->
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-blue-500 hover:text-blue-700 cursor-pointer" (click)="loadStockDetailModal(s)">
-                    Ver
+                    Ingresar
                   </td>
                   <!-- Botón de editar -->
                   <td class="relative whitespace-nowrap py-4 flex justify-end gap-x-3">

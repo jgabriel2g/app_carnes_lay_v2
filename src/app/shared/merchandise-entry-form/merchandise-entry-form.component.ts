@@ -6,7 +6,6 @@ import { MerchandiseEntryProductDetailComponent } from '../merchandise-entry-pro
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { InventoryService } from '../../core/services/inventory.service';
 import { AlertsService } from '../../core/services/alerts.service';
-import { ThirdPartyService } from '../../core/services/third-party.service';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -69,7 +68,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   }
 
   createPurchaseStockEntry(){
-    if (this.providerId > 0 && this.Stock.length ) {
+    if (this.providerId.length && this.Stock.length ) {
       this.isLoading = !this.isLoading;
       const data = {
         "provider": this.providerId,
@@ -121,10 +120,10 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     this.isLoading = !this.isLoading;
     const data = {
       "product": this.selectedProducts[0].id,
-      "presentation_unit":Number( this.unitType),
+      "presentation_unit":this.unitType,
       "price": this.productPrice.toString(),
-      "purchase": Number(this.purchaseId),
-      "type_of_weight": Number(this.weightType)
+      "purchase": this.purchaseId,
+      "type_of_weight": this.weightType
     };
 
     this.inventorySvc.createStock(data)

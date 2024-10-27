@@ -47,7 +47,20 @@
 
   <form [formGroup]="providersForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-full pt-10  mx-auto ">
 
-
+    <div class="mb-2 w-full">
+      <label for="names" >Razón social</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input formControlName="companyName" type="text" name="names" id="names" class="inputs" placeholder="Ingresa la razón social">
+      </div>
+      <div *ngIf="providersForm.get('companyName')?.invalid && providersForm.get('companyName')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('companyName')?.errors?.['required']">La razón social es requerida</small>
+      </div>
+    </div>
     <!-- first name input field -->
     <div class="mb-2 w-full">
       <label for="names">Nombres</label>
@@ -116,6 +129,23 @@
       </div>
     </div>
 
+     <!-- Verification digit  -->
+     <div class="mb-2 w-full" *ngIf="providersForm.get('identification_type')?.value == 'f75e85c8-cf51-41db-b3fa-acbd0412647a'">
+      <label for="id" >Dígito de identificación</label>
+      <div class="relative mt-1s rounded-2xl shadow-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <input  formControlName="digit_check" type="number" name="id" id="id" class="inputs" placeholder="Ingresa el número de identificación">
+      </div>
+      <div *ngIf="providersForm.get('digit_check')?.invalid && providersForm.get('digit_check')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('digit_check')?.errors?.['required']">El Dígito de seguridad es requerido</small>
+      </div>
+    </div>
+
+
     <!-- department field -->
     <div class="mb-2 w-full">
       <label for="id" >Dirección de residencia</label>
@@ -150,6 +180,41 @@
       </div>
     </div>
 
+    <!-- Person types input field -->
+    <div class="mb-2 w-full"  >
+      <label for="id-type" >Tipo de persona</label>
+      <select formControlName="person_type" id="id-type" name="id-type" class="inputs">
+        <option value="">Selecciona el tipo de persona</option>
+        <option [value]="d.id" *ngFor="let d of PersonTypes">{{d.name}}</option>
+      </select>
+      <div *ngIf="providersForm.get('person_type')?.invalid && providersForm.get('person_type')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('person_type')?.errors">El tipo de persona es requerido</small>
+      </div>
+    </div>
+
+    <!-- Regime types input field -->
+    <div class="mb-2 w-full"  >
+      <label for="id-type" >Tipo de régimen</label>
+      <select formControlName="regime_type" id="id-type" name="id-type" class="inputs">
+        <option value="">Selecciona el régimen</option>
+        <option [value]="d.id" *ngFor="let d of RegimeTypes">{{d.name}}</option>
+      </select>
+      <div *ngIf="providersForm.get('regime')?.invalid && providersForm.get('regime')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('regime')?.errors">El régimen es requerido</small>
+      </div>
+    </div>
+
+    <!-- Responsibilities input field -->
+    <div class="mb-2 w-full"  >
+      <label for="id-type" >Responsabilidades</label>
+      <select formControlName="responsibilities" id="id-type" name="id-type" class="inputs">
+        <option value="">Selecciona la responsabilidad</option>
+        <option [value]="d.id" *ngFor="let d of Responsibilities">{{d.name}}</option>
+      </select>
+      <div *ngIf="providersForm.get('responsibilities')?.invalid && providersForm.get('responsibilities')?.touched">
+        <small class="error-message" *ngIf="providersForm.get('responsibilities')?.errors">La responsabilidad es requerido</small>
+      </div>
+    </div>
   </form>
 </div>
 

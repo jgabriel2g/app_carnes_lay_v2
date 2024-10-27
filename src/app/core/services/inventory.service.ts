@@ -21,7 +21,7 @@ export class InventoryService {
     return this.http.get(url, this.authSvc.header);
   };
 
-  getProductById(id: number): Observable<Product> {
+  getProductById(id: string): Observable<Product> {
     const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
     return this.http.get<Product>(url, this.authSvc.header);
   }
@@ -101,7 +101,24 @@ export class InventoryService {
   getPurchaseById(id:any){
     const url = `${this.authSvc.baseUrl}/inventory/purchase/${id}/`;
     return this.http.get(url,  this.authSvc.header);
-  }
+  };
+
+  getStockDetailsByStock(stockId:string){
+    const url = `${this.authSvc.baseUrl}/inventory/stock-detail/?stock_id=${stockId}`;
+    return this.http.get(url, this.authSvc.header);
+  };
+
+  getStockByProduct(productId:string){
+    const url = `${this.authSvc.baseUrl}/inventory/stock/?product_id=${productId}`;
+    return this.http.get(url, this.authSvc.header);
+  };
+
+  updateStockDetail(stockDetailId:string, data:{}){
+    const url = `${this.authSvc.baseUrl}/inventory/stock-detail/${stockDetailId}/`;
+    return this.http.patch(url, data ,this.authSvc.header);
+  };
+
+
 
 
 }

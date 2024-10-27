@@ -131,12 +131,13 @@
     <!-- Roles fields -->
     <div class="mb-2 w-full lg:grid-cols-3">
       <label class="mb-2">Roles</label>
-      <div *ngFor="let group of availableGroups">
+      <div *ngFor="let group of availableGroups; let i = index">
         <label class="flex items-center mb-3 gap-x-3">
           <input type="checkbox"
                  [value]="group.value"
                  [checked]="selectedGroups.includes(group.value)"
                  class="rounded-lg"
+                 [disabled]="group.value === i + 1"
                  (change)="toggleGroup($event, group.value)">
           {{ group.label }}
         </label>

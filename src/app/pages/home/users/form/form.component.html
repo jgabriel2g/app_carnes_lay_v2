@@ -196,6 +196,7 @@
         <label class="flex items-center mb-3 gap-x-3">
           <input type="checkbox"
                  [value]="group.value"
+                 [disabled]=""
                  class=" rounded-lg"
                  (change)="toggleGroup($event, group.value)">
           {{ group.label }}

@@ -57,7 +57,8 @@ export class ListComponent  implements OnInit {
 
   openNewMerchEntry(event:any) {
     if (event.value) {
-      this.inventorySvc.purchaseStockDetail({provider:Number(event.providerId)})
+      console.log(event)
+      this.inventorySvc.purchaseStockDetail({provider:event.providerId})
         .subscribe({
           error:(err:any) =>{
             this.handleError(err);

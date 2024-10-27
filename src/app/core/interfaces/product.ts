@@ -1,17 +1,17 @@
 export interface PresentationUnit {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface TypeOfWeight {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface StockDetail {
-  id: number;
+  id: string;
   product: {
-    id: number;
+    id: string;
     name: string;
     code: string;
   };
@@ -23,9 +23,9 @@ export interface StockDetail {
 }
 
 export interface Stock {
-  id: number;
+  id: string;
   product: {
-    id: number;
+    id: string;
     name: string;
     code: string;
   };
@@ -40,12 +40,12 @@ export interface Stock {
 }
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface Product {
-  id: number;
+  id: string;
   code: string;
   name: string;
   is_inventory: boolean;

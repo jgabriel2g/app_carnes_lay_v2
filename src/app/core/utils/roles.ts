@@ -2,6 +2,7 @@ export const rolesPermissions : { [key: number]: { name: string; permissions: st
   1: {
        name: 'OWNER',
        permissions: [
+        'manage-employees',
         'view-users',
         'edit-users',
         'delete-users',
@@ -27,13 +28,19 @@ export const rolesPermissions : { [key: number]: { name: string; permissions: st
         'create-sales',
         'print-bill',
         'manage-providers',
-        'manage-clients'
+        'manage-clients',
+        'view-product-detail',
+        'change-product-availability',
+        'view-market-rates',
+        'delete-market-rates',
+        'create-market-rates',
 
       ]
      },
   2: {
        name: 'ADMIN',
        permissions: [
+        'manage-employees',
         'view-users',
         'edit-users',
         'delete-users',
@@ -59,7 +66,12 @@ export const rolesPermissions : { [key: number]: { name: string; permissions: st
         'view-tracking-sales',
         'print-bill',
         'manage-providers',
-        'manage-clients'
+        'manage-clients',
+        'change-product-availability',
+        'view-market-rates',
+        'delete-market-rates',
+        'create-market-rates',
+
        ]
      },
   3: {
@@ -68,7 +80,8 @@ export const rolesPermissions : { [key: number]: { name: string; permissions: st
           'view-sales-module',
           'open-sales-box',
           'create-sales',
-          'print-bill'
+          'print-bill',
+          'view-market-rates',
         ]
      },
   4: {

@@ -1,0 +1,7 @@
+<ion-content *ngIf="windowWith < 500" >
+  <app-employee-form (formSubmit)="updateEmployee($event)"></app-employee-form>
+</ion-content>
+
+<div *ngIf="windowWith >  500">
+ <app-employee-form (formSubmit)="updateEmployee($event)"></app-employee-form>
+</div>

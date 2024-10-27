@@ -10,6 +10,7 @@ import { ListComponent } from './list/list.component';
 import { UpdateComponent } from './update/update.component';
 import { CreateComponent } from './create/create.component';
 import { StockComponent } from './stock/stock.component';
+import { DetailsComponent } from './details/details.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { StockComponent } from './stock/stock.component';
     ListComponent,
     UpdateComponent,
     CreateComponent,
-    StockComponent
+    StockComponent,
+    DetailsComponent
   ],
   imports: [
     CommonModule,
