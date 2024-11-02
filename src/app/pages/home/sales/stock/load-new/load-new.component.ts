@@ -22,7 +22,11 @@ export class LoadNewComponent  implements OnInit {
   ngOnInit(): void {
     if (this.displayStockId !== undefined) {
         this.getDisplayStock();
+        this.productForm.get('quantityToAdd')?.enable();
+        this.productForm.get('quantity')?.disable();
+
     } else {
+      this.productForm.get('quantityToAdd')?.disable();
       this.getUnitTypes();
       this.getProducts();
     };
@@ -31,7 +35,8 @@ export class LoadNewComponent  implements OnInit {
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
     this.productForm = this.fb.group({
       product: [0, Validators.required],
-      quantity: ['', [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
+      quantity: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
+      quantityToAdd: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
       type_of_unit_measurement: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*\.?[0-9]+$')]]
     });
@@ -43,7 +48,11 @@ export class LoadNewComponent  implements OnInit {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
         if (this.displayStockId !== undefined) {
-          this.salesSvc.updateDisplayStock(this.productForm.value, this.displayStockId)
+          const data = {
+            quantity: Number(this.productForm.get('quantity')?.value) + Number(this.productForm.get('quantityToAdd')?.value),
+            price: this.productForm.get('price')?.value
+          }
+          this.salesSvc.updateDisplayStock(data, this.displayStockId)
           .subscribe({
             error:(err:any) => {
              this.handleError(err)
@@ -84,7 +93,7 @@ export class LoadNewComponent  implements OnInit {
               this.getProducts();
               this.productForm.get('product')?.setValue(resp.product.id);
               this.productForm.get('quantity')?.setValue(Number(resp.quantity));
-              this.productForm.get('type_of_unit_measurement')?.setValue(resp.type_of_unit_measurement);
+              this.productForm.get('type_of_unit_measurement')?.setValue(resp.type_of_unit_measurement.id);
               this.productForm.get('price')?.setValue(resp.price);
               this.selectedItem = resp.product.name;
             }
@@ -98,7 +107,8 @@ export class LoadNewComponent  implements OnInit {
          this.handleError(err);
         },
          next:(resp:any) => {
-          this.unitTypes = resp.results;
+           this.unitTypes = resp.results;
+           console.log(this.unitTypes)
          }
       });
   };

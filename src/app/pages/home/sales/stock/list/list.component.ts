@@ -21,6 +21,7 @@ export class ListComponent  implements OnInit {
   public displayStocks:any[] = [];
   public isLoading:boolean = false;
   public displayId:any
+
   constructor(public authSvc:AuthService, private salesSvc:SalesService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
@@ -30,17 +31,17 @@ export class ListComponent  implements OnInit {
   closeLoadStockDialog( displayId?:any){
     if (displayId == false) {
       this.loadMoreStock = !this.loadMoreStock;
-      this.getDisplayStock();
     } else {
       this.loadMoreStock = !this.loadMoreStock;
       this.displayId =displayId
     };
+    this.getDisplayStock();
   };
 
 
   getDisplayStock(){
     this.isLoading = !this.isLoading;
-    this.salesSvc.getDisplayStock(this.limit, this.offset)
+    this.salesSvc.getDisplayStock(this.limit, this.offset, this.search)
       .subscribe({
         error:(err:any) => {
           this.handleError(err);
@@ -48,6 +49,7 @@ export class ListComponent  implements OnInit {
         },
         next:(resp:any) => {
           this.displayStocks = resp.results;
+          console.log(this.displayStocks)
           this.totalItems = resp.count;
           this.totalPages = Math.ceil(this.totalItems / this.limit);
           this.isLoading = !this.isLoading;

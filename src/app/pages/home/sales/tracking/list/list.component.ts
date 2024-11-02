@@ -14,46 +14,48 @@ export class ListComponent  implements OnInit {
   public limit:number = 10;
   public offset:number = 0;
   public search:string = '';
+  public saleId:string = '';
   public totalItems:number = 0;
   public currentPage = 1;
   public totalPages = 1;
   public pageNumbers: number[] = [];
-  public Bills:any[] = [];
+  public Sales:any[] = [];
   public isLoading:boolean = false;
+  public showDetailBills:boolean = false;
   constructor(public authSvc:AuthService, private salesSvc:SalesService, private alertSvc:AlertsService, private alertController: AlertController) { }
 
   ngOnInit() {
-    this.getBill();
-  }
-
-  getBill(){
-    this.isLoading = !this.isLoading;
-    this.salesSvc.getBills(this.limit, this.offset)
-      .subscribe({
-        error:(err:any) => {
-          this.handleError(err);
-          this.isLoading = !this.isLoading;
-        },
-        next:(resp:any) => {
-          this.Bills = resp.results;
-          this.totalItems = resp.count;
-          this.totalPages = Math.ceil(this.totalItems / this.limit);
-          this.isLoading = !this.isLoading;
-          this.updatePageNumbers();
-        }
-      });
+    this.getSales();
   };
 
-  deleteBill(id:any){
-      this.salesSvc.deleteBillSale(id)
+  getSales(){
+    this.salesSvc.getSales(this.limit, this.offset)
+        .subscribe({
+          error:(err:any) => {
+            console.log(err)
+          },
+          next:(resp:any) => {
+            console.log(resp)
+            this.Sales = resp.results;
+            this.totalItems = resp.count;
+            this.totalPages = Math.ceil(this.totalItems / this.limit);
+            this.isLoading = !this.isLoading;
+            this.updatePageNumbers();
+          }
+        });
+  };
+
+
+  deleSale(id:any){
+      this.salesSvc.deleteSale(id)
           .subscribe({
             error:(err:any) =>{
               console.log(err);
               this.handleError(err);
             },
             next:(resp:any) => {
-              this.getBill()
-              this.alertSvc.presentAlert('Éxito', 'Factura eliminada');
+              this.alertSvc.presentAlert('Éxito', 'Venta eliminada');
+              this.getSales()
             }
           });
   };
@@ -68,14 +70,14 @@ export class ListComponent  implements OnInit {
   goToPage(page: number): void {
     this.currentPage = page;
     this.offset = (page - 1) * this.limit;
-    this.getBill();
+    this.getSales();
   };
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.offset += this.limit;
-      this.getBill();
+      this.getSales();
     };
   };
 
@@ -83,7 +85,7 @@ export class ListComponent  implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.offset -= this.limit;
-      this.getBill();
+      this.getSales();
     };
   };
 
@@ -102,17 +104,15 @@ export class ListComponent  implements OnInit {
     }
   };
 
-  async showBillDetail(products:any) {
-    const messageContent = products.map((p:any) =>
-      `Producto: ${p.product.product.name}, Cantidad: ${p.amount}, Costo: ${p.product.price}`).join('<br>');
-
-    const alert = await this.alertController.create({
-      header: 'Detalle de compra',
-      message: messageContent,
-      buttons: ['OK']
-    });
-
-    await alert.present();
+  showSalesDetail(data:string){
+    this.saleId = data;
+    this.showDetailBills = !this.showDetailBills;
   };
+
+  closeDetailModal(event:boolean){
+    this.showDetailBills = false;
+    this.getSales();
+  }
+
 
 }

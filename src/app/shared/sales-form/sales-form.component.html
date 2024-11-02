@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-5  gap-x-4 h-[60vh] " >
+  <div class="grid grid-cols-5  gap-x-4  " >
     <div class="col-span-3 xl:col-span-4  grid grid-cols-2  h-full overflow-y-auto gap-3 sales-wrapper">
 
       <!-- Sale date input field -->
@@ -70,15 +70,15 @@
       <!-- Product table -->
       <div class="lg:col-span-3 col-span-2 overflow-x-auto max-h-28 lg:max-h-80">
         <div class=" flow-root">
-          <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div class="">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-4">
               <table class="min-w-full divide-y divide-gray-300">
                 <thead>
                   <tr>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Cantidad</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Precio</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
+                   <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Cantidad</th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Precio</th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                       <span class="sr-only">Edit</span>
                     </th>
@@ -86,29 +86,32 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                   <tr *ngFor="let sP of activeSale.products; let i = index" >
-                    <td class="whitespace-nowrap py-2.5 px-3 text-sm font-medium text-primary sm:pl-0">
+                    <td class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0">
                       {{ sP.productName}}
                     </td>
-                    <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500">
+                    <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <input
                         [disabled]="activeSale.isFinalized" [(ngModel)]="sP.amount"
                         type="number"
                         id="product-price"
-                        class="inputs bg-gray-100 "
-                        [placeholder]="sP.type_of_unit_measurement"
+                        class="inputs bg-gray-100 max-w-24 "
+                        [placeholder]=""
                         (keyup)="updateTotalSaleValue()"
                         (keydown)="onlyNumbers($event)"
+                        min="0"
+                        #amountInput
                       >
+                      <small class="text-gray-400 font-medium text-xs mt-1">{{sP.type_of_unit_measurement}}</small>
                     </td>
-                    <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500">
+                    <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <!-- Product price field -->
                       {{sP.price | currency}}
                     </td>
-                    <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500">
+                    <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <!-- Product cost field -->
                       {{sP.amount * sP.price | currency}}
                     </td>
-                    <td class="relative whitespace-nowrap py-2.5 flex justify-end gap-x-3">
+                    <td class="relative whitespace-nowrap py-2.5 flex justify-center gap-x-3">
                       <button (click)="removeProduct(i)">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 hover:text-red-700">
                           <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -136,7 +139,8 @@
           <dt class="truncate text-sm font-medium text-gray-500">Total Pagado</dt>
           <input [disabled]="activeSale.isFinalized" [(ngModel)]="activeSale.total_received" (keydown)="onlyNumbers($event)" type="number" name="sale-value-pay" id="sale-value-pay" class="inputs mt-2" placeholder="Ingresa el valor pagado por el cliente">
         </div>
-        <button (click)="createSale()"  *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized" >Registrar</button>
+        <button (click)="createSale()"   *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized || isLoading" >Registrar</button>
+        <button (click)="clearSale()"     class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="activeSale.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
         <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized" >Ver Factura</button>
       </dl>
     </div>
