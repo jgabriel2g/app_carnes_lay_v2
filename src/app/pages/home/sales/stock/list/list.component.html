@@ -2,10 +2,10 @@
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
       <h1 class="text-base font-semibold leading-6 text-primary">Stock de productos</h1>
-      <p class="mt-2 text-sm text-gray-700">Una lista de todos los productos disponibles en el punto de venta seleccionado  </p>
+      <p class="mt-2 text-sm text-gray-700">Una lista de todos los productos disponibles en el punto de venta seleccionado</p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <button type="button" *ngIf="authSvc.hasPermission('view-sales-stock')" (click)="loadMoreStock = !loadMoreStock" class="btn-primary px-6">Agregar stock</button>
+      <button type="button" *ngIf="authSvc.hasPermission('view-sales-stock')" (click)="loadMoreStock = !loadMoreStock" class="btn-primary px-6">Agregar a vitrina</button>
     </div>
   </div>
   <div class="mt-8 flow-root">

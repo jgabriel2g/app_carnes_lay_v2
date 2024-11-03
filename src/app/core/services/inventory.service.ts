@@ -67,6 +67,11 @@ export class InventoryService {
     return this.http.post(url, data, this.authSvc.header);
   };
 
+  deleteStockById(id:string){
+    const url = `${this.authSvc.baseUrl}/inventory/stock/${id}/`;
+    return this.http.delete(url, this.authSvc.header);
+  }
+
   getStockDetail( stockId:any){
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/?stock_id=${stockId}`;
     return this.http.get(url, this.authSvc.header);

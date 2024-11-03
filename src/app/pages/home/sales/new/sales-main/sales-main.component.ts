@@ -15,7 +15,7 @@ export class SalesMainComponent  implements OnInit {
   public boxInfo:any;
 
   constructor(public authSvc:AuthService, private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) {
-    this.checkScreenWidth(); // Verifica el ancho inicial
+    this.checkScreenWidth();
   }
 
   ngOnInit() {
@@ -23,8 +23,6 @@ export class SalesMainComponent  implements OnInit {
       setTimeout(() => this.checkScreenWidth(), 0);
       this.getBoxSalesById();
   };
-
-
 
   getBoxSalesById(){
     this.boxInfo = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '')
@@ -47,7 +45,8 @@ export class SalesMainComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            this.router.navigateByUrl('/home/sales/new/');
+            this.router.navigateByUrl('/home/sales/new/').then();
+            sessionStorage.removeItem('saleBoxInfo');
           }
         });
   };

@@ -6,8 +6,9 @@ import { MerchandiseEntryProductDetailComponent } from '../merchandise-entry-pro
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { InventoryService } from '../../core/services/inventory.service';
 import { AlertsService } from '../../core/services/alerts.service';
-import { IonicModule } from '@ionic/angular';
+import {AlertController, IonicModule} from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
+import {Stock} from "../../core/interfaces/product";
 
 
 interface AutoCompleteCompleteEvent {
@@ -40,7 +41,7 @@ export class MerchandiseEntryFormComponent  implements OnInit {
   public openDetailMerchEntry:boolean = false;
   public isLoading:boolean = false;
   public unitType:any = 0;
-  public Stock:any[] = [];
+  public Stock: Stock[] = [];
   public productId:any;
   public stockId:any;
   public providerId:any = "";
@@ -54,7 +55,8 @@ export class MerchandiseEntryFormComponent  implements OnInit {
     private activatedRoute:ActivatedRoute,
     private router:Router,
     private inventorySvc:InventoryService,
-    private alertSvc:AlertsService
+    private alertSvc:AlertsService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -115,6 +117,40 @@ export class MerchandiseEntryFormComponent  implements OnInit {
      this.productId = s?.product.id;
      this.stockId = s?.id
   };
+
+  async deleteStock(id: string) {
+    const alert = await this.alertController.create({
+      header: '¿Esta usted seguro de eliminar producto de la lista de mercancias recibidas?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Rechazo cancelado');
+          },
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.inventorySvc.deleteStockById(id).subscribe(
+              {
+                next: () => {
+                  this.getStock();
+                }
+              }
+            );
+          },
+        },
+      ],
+    })
+
+    await alert.present();
+  }
+
+  cancelCreateStock(){
+    this.selectedProducts = []
+    this.selectedItem = ''
+  }
 
   createStock(){
     this.isLoading = !this.isLoading;

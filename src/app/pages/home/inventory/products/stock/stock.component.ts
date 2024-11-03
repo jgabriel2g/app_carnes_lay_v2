@@ -19,6 +19,9 @@ export class StockComponent  implements OnInit {
   constructor(private activatedRoute:ActivatedRoute, private inventorySvc:InventoryService) { }
 
   ngOnInit() {
+    this.refreshStocks()
+  }
+  refreshStocks(): void {
     this.activatedRoute.params.subscribe((params: any) => {
       this.productId = params['id'];
       this.getStocksDetail();
@@ -52,6 +55,7 @@ export class StockComponent  implements OnInit {
 
   closeModal(event:boolean){
     this.showStockDetailModal = false;
+    this.refreshStocks();
   };
 
 }

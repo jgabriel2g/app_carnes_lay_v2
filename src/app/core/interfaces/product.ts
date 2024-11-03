@@ -29,7 +29,9 @@ export interface Stock {
     name: string;
     code: string;
   };
+  quantity_of_unit: number;
   presentation_unit: PresentationUnit;
+  quantity_available: number;
   type_of_weight: TypeOfWeight;
   price: string;
   purchase: number;

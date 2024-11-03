@@ -15,12 +15,10 @@
         <table class="min-w-full divide-y divide-gray-300 overflow-y-auto">
           <thead>
             <tr>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre Completo</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Razon social</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Email</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Teléfono</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary"># De identificación</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Dirección</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Municipio</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                 <span class="sr-only">Edit</span>
               </th>
@@ -28,12 +26,10 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr *ngFor="let u of Providers">
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.first_name}} {{u.last_name}} </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.company_name}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.email}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.phone}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.identification_number}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.address}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{u.municipality.name}}</td>
               <td class="relative whitespace-nowrap py-4 flex justify-end gap-x-3">
                 <button (click)="goToUpdate(u)" >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-blue-500 hover:text-blue-700">

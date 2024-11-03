@@ -33,8 +33,8 @@ export class ListComponent  implements OnInit {
       this.loadMoreStock = !this.loadMoreStock;
     } else {
       this.loadMoreStock = !this.loadMoreStock;
-      this.displayId =displayId
-    };
+      this.displayId = displayId
+    }
     this.getDisplayStock();
   };
 

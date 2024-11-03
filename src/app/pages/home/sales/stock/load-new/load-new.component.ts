@@ -13,7 +13,6 @@ import { AlertsService } from '../../../../../core/services/alerts.service';
 export class LoadNewComponent  implements OnInit {
   public unitTypes:any[] = [];
   public products:any[] = [];
-  public showInventoryMenu:boolean = false;
   public suggestions: string[] = [];
   public selectedItem: string = '';
   public productForm: FormGroup;
@@ -36,7 +35,7 @@ export class LoadNewComponent  implements OnInit {
     this.productForm = this.fb.group({
       product: [0, Validators.required],
       quantity: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
-      quantityToAdd: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
+      quantityToAdd: [0, [Validators.required, Validators.min(0), Validators.pattern('^[0-9]*$')]],
       type_of_unit_measurement: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*\.?[0-9]+$')]]
     });

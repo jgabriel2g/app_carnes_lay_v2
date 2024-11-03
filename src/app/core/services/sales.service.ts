@@ -22,6 +22,11 @@ export class SalesService {
     return this.http.get(url, this.authSvc.header);
   };
 
+  getMyBoxSales(){
+    const url = `${this.authSvc.baseUrl}/sale/get_my_sales/`;
+    return this.http.get(url, this.authSvc.header);
+  };
+
   getBoxSaleById(id:any){
     const url = `${this.authSvc.baseUrl}/sale/${id}/`;
     return this.http.get(url, this.authSvc.header);
@@ -44,10 +49,9 @@ export class SalesService {
 
   getDisplayStock(limit:number, offset:number, search:string = ''){
     let params = new HttpParams();
-    console.log(search)
     if (search) {
       params = params.set('search', search);
-    };
+    }
     const url =  `${this.authSvc.baseUrl}/sale/display-stock/?limit=${limit}&offset=${offset}`;
     return this.http.get(url, { headers: this.authSvc.header.headers, params });
   };

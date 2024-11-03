@@ -11,31 +11,33 @@ import { filter } from 'rxjs';
 })
 export class TicketComponent  implements OnInit {
   public isPrinting:boolean = false;
-  bill :any;
-  public previousUrl!: string;
-  public currentUrl!: string;
+  bill: any;
+
   constructor(private router: Router) { }
+
   ngOnInit(): void {
     this.bill = JSON.parse(sessionStorage.getItem('bill') ||'')
+    console.log(this.bill)
+
+    /*
     setTimeout(() => {
       this.print()
-
     }, 2000);
-
+    */
   }
-
   print(){
     this.isPrinting  = !this.isPrinting;
     window.print();
     this.isPrinting  = !this.isPrinting;
   }
-
   convertToNumber(value:string) {
-    return Number(value); // O puedes usar parseInt(this.inputValue) o parseFloat(this.inputValue)
+    return Number(value);
   }
 
-
-  return(){
-    this.router.navigateByUrl('/home/sales/new')
+  getTotalUnitMeasurementsKeys(totalUnitMeasurements: any): string[] {
+    return Object.keys(totalUnitMeasurements).filter(
+      key => totalUnitMeasurements[key].total > 0
+    );
   }
+
 }

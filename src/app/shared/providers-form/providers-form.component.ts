@@ -49,6 +49,7 @@ export class ProvidersFormComponent  implements OnInit {
         this.providersForm.get('address')?.setValue(this.providerData.address)
         this.providersForm.get('department')?.setValue(this.providerData.municipality.department.id);
         this.providersForm.get('municipality')?.setValue(this.providerData.municipality.id);
+        this.providersForm.get('companyName')?.setValue(this.providerData.company_name);
     };
   };
 

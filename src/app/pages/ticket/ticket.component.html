@@ -1,28 +1,18 @@
 <div class="bg-white flex-col justify-center items-center h-full w-full">
   <div class="grid  md:grid-cols-3  lg:grid-cols-4 " >
     <div class="lg:col-span-4 md:col-span-3 col-span-0"></div>
-    <div class="lg:col-span-4 md:col-span-6 col-span-12" >
-      <button  (click)="return()" class="p-4"  *ngIf="!isPrinting">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-        </svg>
-      </button>
+    <div class="lg:col-span-4 md:col-span-6 col-span-12">
       <div id="ticket" style="max-width: 300px;" class="mx-auto">
 
         <div class="ticket-header mb-1 text-center w-full">
           <img src="assets/images/logo.png" alt="logo" class="h-20 w-auto object-cover px-4 mx-auto">
-          <h4 class="text-xs">ARIEL GARCIA HERNANDEZ</h4>
           <h4 class="text-xs">CARNES LAY</h4>
-          <h6 class="text-xs">RESPONSABLE DE IVA</h6>
-          <h6 class="text-xs">TEL. 3013134776</h6>
-          <p class="text-xs">arielgarciahernandez2020&#64;gmail.com</p>
           <h6 class="text-xs">CL 5A MERCADO PÚBLICO, FUNDACIÓN</h6>
-          <h6 class="text-xs">(MAGDALENA)</h6>
         </div>
         <div class="ticket-body">
           <div class="ticket-info mb-2">
             <h5 class="mx-auto text-center font-bold">Sistema POS</h5>
-            <table class="text-center w-full  mb-0">
+            <table class="text-center w-full mb-0 mt-2">
                 <thead>
                     <tr>
                         <th></th>
@@ -30,10 +20,11 @@
                     </tr>
                 </thead>
                 <tbody class="w-full">
+                <!--
                     <tr class="w-full flex justify-between items-center" >
-                        <td class="text-left font-medium ">Número</td>
+                        <td class="text-left font-medium"></td>
                         <td class="text-right">{{bill.id}}</td>
-                    </tr>
+                    </tr> -->
                     <tr class="w-full flex justify-between items-center" >
                         <td class="text-left font-medium ">Fecha de Generación</td>
                         <td class="text-right">{{bill.date}}</td>
@@ -45,7 +36,8 @@
                 </tbody>
             </table>
           </div>
-          <div class="client-info mb-2">
+
+          <div class="client-info mb-2" *ngIf="bill.client.first_name !== ''">
             <table class="table table-centered table-borderless w-full mb-0">
                 <thead>
                     <tr>
@@ -55,81 +47,73 @@
                 </thead>
                 <tbody class="w-full">
                     <tr class="flex justify-between items-center w-full ">
-                        <td class="text-left font-medium ">CLIENTE</td>
-                        <td class="text-right">{{bill.user.first_name}} {{bill.user.last_name}} </td>
+                        <td class="text-left font-medium">CLIENTE</td>
+                        <td class="text-right">{{bill.client.first_name}} {{bill.client.last_name}} </td>
                     </tr>
                     <tr class="flex justify-between items-center w-full ">
                         <td class="text-left font-medium ">NIT/CC</td>
-                        <td class="text-right">{{bill.user.identification_number}}</td>
+                        <td class="text-right">{{bill.client.identification_number}}</td>
                     </tr>
                     <tr class="flex justify-between items-center w-full ">
                         <td class="text-left font-medium ">EMAIL</td>
-                        <td class="text-right">{{bill.user.email}}</td>
+                        <td class="text-right">{{bill.client.email}}</td>
                     </tr>
                     <tr class="flex justify-between items-center w-full ">
                         <td class="text-left font-medium ">TELÉFONO</td>
-                        <td class="text-right">{{bill.user.phone}}</td>
+                        <td class="text-right">{{bill.client.phone}}</td>
                     </tr>
                     <tr class="flex justify-between items-center w-full ">
                         <td class="text-left font-medium ">DIRECCIÓN</td>
-                        <td class="text-right">{{bill.user.address || 'No ingresada'}}</td>
+                        <td class="text-right">{{bill.client.address || 'No ingresada'}}</td>
                     </tr>
-                    <!-- <tr>
-                        <td>CIUDAD, DEP</td>
-                        <td class="text-right">{{bill.user.Address.City.Name}}, {{bill.client.Address.City.Department.Name}} ({{bill.client.Address.City.Department.Country.Name}})</td>
-                    </tr> -->
-
                 </tbody>
             </table>
           </div>
+
           <div class="ticket-description mb-1">
               <div class="flex justify-between"  >
-                <h6 class="text-xs font-bold" >DESCRIPCIÓN</h6>
+                <h6 class="text-xs font-bold">DESCRIPCIÓN</h6>
                 <h6 class="text-xs font-bold">VALOR</h6>
               </div>
               <div class="flex w-full justify-between items-start" *ngFor="let p of bill.display_products">
                 <div class="text-xs text-left ">
-                  <p>({{p.product.product.code}}) {{p.product.product.name}}</p>
-                  <small>{{p.amount}} {{p.product.type_of_unit_measurement}} x {{p.product.price}}</small>
+                  <p class="text-sm">{{p.product.product.name}}</p>
+                  <small>{{p.amount}}{{p.product.type_of_unit_measurement.name}} x ${{p.product.price}}</small>
                 </div>
                 <div class="price text-xs text-end">
-                  <p>{{convertToNumber(p.amount)  * convertToNumber(p.product.price) | currency }}</p>
+                  <p class="text-sm">{{convertToNumber(p.amount)  * convertToNumber(p.product.price) | currency }}</p>
                 </div>
               </div>
           </div>
           <div class="ticket-total">
-                <div class="flex justify-between ">
-                      <h5 class="pb-1 text-[12px] font-semibold">TOTAL COBRADO</h5>
-                      <h5 class="text-xs">{{bill.total_cost | currency}}</h5>
-                </div>
+            <div *ngFor="let unit of getTotalUnitMeasurementsKeys(bill.total_unit_measurements)" class="inline">
+              <h5 *ngIf="bill.total_unit_measurements[unit].total > 0" class="pb-1 text-[12px] font-semibold">
+                {{ bill.total_unit_measurements[unit].total }} {{ bill.total_unit_measurements[unit].name }} totales
+              </h5>
+            </div>
           </div>
           <div class="ticket-total">
-                <div class="flex justify-between ">
-                      <h5 class="pb-1 text-[12px] font-semibold">TOTAL RECIBIDO</h5>
-                      <h5 class="text-xs">{{bill.total_received | currency}}</h5>
-                </div>
+            <div class="flex justify-between ">
+              <h5 class="pb-1 text-[12px] font-semibold">TOTAL COBRADO</h5>
+              <h5 class="text-xs">{{bill.total_cost | currency}}</h5>
+            </div>
           </div>
           <div class="ticket-total">
-                <div class="flex justify-between ">
-                      <h5 class="pb-1 text-[12px] font-semibold">TOTAL CAMBIO</h5>
-                      <h5 class="text-xs">{{bill.total_sent | currency}}</h5>
-                </div>
+            <div class="flex justify-between ">
+              <h5 class="pb-1 text-[12px] font-semibold">TOTAL RECIBIDO</h5>
+              <h5 class="text-xs">{{bill.total_received | currency}}</h5>
+            </div>
+          </div>
+          <div class="ticket-total">
+            <div class="flex justify-between ">
+              <h5 class="pb-1 text-[12px] font-semibold">TOTAL CAMBIO</h5>
+              <h5 class="text-xs">{{bill.total_sent | currency}}</h5>
+            </div>
           </div>
         </div>
         <div class="ticket-footer">
-          <!-- <small class="text-left">Unidades de medida: KGM = Kilogramo</small> -->
-
-          <!-- <p class="text-center ticket-auth">
-              Autorización Numeración de Facturación
-              <br>
-              No. 18764038133612 de 20/10/2022 - 20/04/2023
-              <br>
-              autoriza FPP-6001 a FPP-10000
-          </p> -->
         </div>
-
-
-  </div>
+      </div>
     </div>
     <div class="lg:col-span-4 md:col-span-3 col-span-0"></div>
   </div>

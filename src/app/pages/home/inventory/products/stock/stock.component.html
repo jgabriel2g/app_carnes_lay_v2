@@ -1,7 +1,17 @@
 <div class="px-8 pt-20 sm:px-6 lg:px-8 block h-full">
+  <nav class="mb-10" aria-label="Back">
+    <a routerLink="/home/inventory/products" class="cursor-pointer flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
+      <svg class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+      </svg>
+      Retroceder
+    </a>
+  </nav>
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
-      <p class="text-base font-semibold leading-6 text-black mt-4">Listado de mercancia disponible por producto</p>
+      <p *ngIf="stocks.length > 0" class="text-base font-semibold leading-6 text-black mt-4">
+        Listado de {{ stocks[0].presentation_unit.name }} de {{ stocks[0].product.name }} disponible
+      </p>
     </div>
   </div>
   <div class="mt-8 flow-root">
@@ -10,19 +20,19 @@
         <table class="min-w-full divide-y divide-gray-300 overflow-y-auto">
           <thead>
             <tr>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">#</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Fecha de entrada</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Código</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Unidades</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Peso</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">{{ stocks[0].presentation_unit.name }} recibidos</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">{{ stocks[0].presentation_unit.name }} disponibles</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">{{ stocks[0].type_of_weight.name }} disponible</th>
               <th></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
-            <tr *ngFor="let s of stocks">
+          <tr *ngFor="let s of stocks; let index = index">
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ index + 1 }}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.created | date:'short'}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.product.code}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.product.name}}</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.quantity_available}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.total_unit}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{s.weight}} {{s.type_of_weight.name}}</td>
               <td>

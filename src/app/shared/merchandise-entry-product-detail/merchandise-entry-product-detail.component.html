@@ -1,28 +1,8 @@
 <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <!--
-    Background backdrop, show/hide based on modal state.
-
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-  -->
   <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
   <div class="fixed inset-0 z-10 w-full overflow-y-auto">
     <div class="flex min-h-full  justify-end md:justify-center p-4 text-center items-center sm:p-0">
-      <!--
-        Modal panel, show/hide based on modal state.
-
-        Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-        Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      -->
       <div class="relative transform overflow-hidden rounded-lg bg-white mx-4 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
         <div class=" w-full">
           <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -37,14 +17,14 @@
               <div class="mb-2 w-full">
                 <label for="unit">Unidades</label>
                 <div class="relative mt-1s rounded-2xl shadow-md">
-                  <input formControlName="unit" type="text" name="unit" id="unit" class="inputs" placeholder="Ingresa el Unidades">
+                  <input formControlName="unit" type="number" name="unit" id="unit" class="inputs" placeholder="Ingresa el Unidades">
                 </div>
               </div>
               <!-- Weight input field -->
               <div class="mb-2 w-full">
                 <label for="weight">Peso</label>
                 <div class="relative mt-1s rounded-2xl shadow-md">
-                  <input formControlName="weight" type="text" name="weight" id="weight" class="inputs" placeholder="Ingresa el peso">
+                  <input formControlName="weight" type="number" name="weight" id="weight" class="inputs" placeholder="Ingresa el peso">
                 </div>
               </div>
               <!-- Unit type field -->
@@ -74,15 +54,14 @@
                     <thead>
                       <tr>
                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">#</th>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Nombre</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Unidades</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Peso</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                       <tr *ngFor="let sD of stockDetail; let i = index">
                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{i + 1}}</td>
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{sD.product.name}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{sD.unit}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{sD.weight}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500" >

@@ -32,39 +32,37 @@
         </div>
       </nav>
     </div>
-
-
   </div>
 
   <!-- Sales stats -->
   <div class="bg-primary rounded-3xl lg:col-span-3 ">
     <div class="mx-auto max-w-7xl">
       <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="bg-primary rounded-l-3xl text-center px-4 py-2 sm:px-6 lg:px-8 lg:col-span-4 md:col-span-2 col-span-1" >
+        <div class="bg-primary rounded-l-3xl text-center px-4 py-1 sm:px-6 lg:px-8 lg:col-span-4 md:col-span-2 col-span-1" >
           <p class="text-sm font-medium leading-6 text-gray-200">Fecha de apertura</p>
           <p class=" flex justify-center items-baseline gap-x-2">
             <span class="text-xl font-semibold tracking-tight text-white">{{boxInfo?.start_time | date:"short"}}</span>
           </p>
         </div>
-        <div class="bg-primary px-4 py-2 sm:px-6 lg:px-8">
+        <div class="bg-primary px-4 py-1 sm:px-6 lg:px-8">
           <p class="text-sm font-medium leading-6 text-gray-200">Dinero base</p>
           <p class=" flex items-baseline gap-x-2">
             <span class="text-xl font-semibold tracking-tight text-white">{{boxInfo?.base_money | currency}} </span>
           </p>
         </div>
-        <div class="bg-primary px-4 py-2 sm:px-6 lg:px-8">
+        <div class="bg-primary px-4 py-1 sm:px-6 lg:px-8">
           <p class="text-sm font-medium leading-6 text-gray-200">Total Facturas</p>
           <p class=" flex items-baseline gap-x-2">
             <span class="text-xl font-semibold tracking-tight text-white">{{boxInfo?.total_bills}}</span>
           </p>
         </div>
-        <div class="bg-primary px-4 py-2 sm:px-6 lg:px-8">
+        <div class="bg-primary px-4 py-1 sm:px-6 lg:px-8">
           <p class="text-sm font-medium leading-6 text-gray-200">Total Dinero</p>
           <p class=" flex items-baseline gap-x-2">
             <span class="text-xl font-semibold tracking-tight text-white">{{boxInfo?.total_money | currency}}</span>
           </p>
         </div>
-        <div class=" bg-primary rounded-r-3xl px-4 py-2 sm:px-6 lg:px-8">
+        <div class="bg-primary rounded-r-3xl px-4 py-1 sm:px-6 lg:px-8">
           <p class="text-sm font-medium leading-6 text-gray-200">Total Vendido</p>
           <p class=" flex items-baseline gap-x-2">
             <span class="text-xl font-semibold tracking-tight text-white">{{boxInfo?.total_sold}}</span>
@@ -74,9 +72,7 @@
     </div>
   </div>
 
-
-
-  <div class=" block h-full">
+  <div class="block h-full">
       <div  *ngIf="windowWith < 1024; else desktopView" style="height: 5vh" class="ion-padding">
         <h1 class="text-primary font-bold text-2xl text-center">Abre el sistema en un computador para poder generar facturas de venta</h1>
       </div>
@@ -86,6 +82,5 @@
       </div>
     </ng-template>
   </div>
-
 </div>
 

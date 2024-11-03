@@ -10,8 +10,8 @@ import { AlertsService } from '../../../core/services/alerts.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent  implements OnInit {
-  public email:string = 'jesus';
-  public password:string = 'password123';
+  public email:string = '';
+  public password:string = '';
   public isLoading:boolean = false;
 
   constructor(private authSvc:AuthService, private router:Router, private alertSvc:AlertsService) { }

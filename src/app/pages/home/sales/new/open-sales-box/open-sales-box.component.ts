@@ -19,24 +19,25 @@ export class OpenSalesBoxComponent  implements OnInit {
   }
 
   getSalesBox(){
-    this.salesSvc.getBoxSales()
-        .subscribe({
-          error:(err:any) => {
-            this.isLoading = false;
-          },
-          next:(resp:any) => {
-            this.isLoading = false;
-            if (resp.results[0].is_open) {
-              sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp.results[0]));
-              this.router.navigateByUrl('/home/sales/new/salesMain/1');
-            }
-          }
-        });
+    const saleBox = sessionStorage.getItem('saleBoxInfo')
+    if (saleBox){
+      this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
+    }
+    this.salesSvc.getMyBoxSales().subscribe({
+      error:(err:any) => {this.isLoading = false},
+      next:(resp:any) => {
+        this.isLoading = false;
+        if (Array.isArray(resp) && resp.length > 0 && resp[0].is_open) {
+          sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp[0]));
+          this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
+        }
+      }
+    });
   };
 
   openSalesBox(){
     if (this.boxInitMoney <= 0 ) {
-      this.alertSvc.presentAlert('Ooops', 'Debes ingresar un monto de inicio');
+      this.alertSvc.presentAlert('Ooops', 'Debes ingresar un monto de inicio').then();
     } else {
       this.isLoading = true;
       const data = {
@@ -49,11 +50,11 @@ export class OpenSalesBoxComponent  implements OnInit {
         },
         next:(resp:any) => {
           sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp));
-          this.router.navigateByUrl('/home/sales/new/salesMain/1');
+          this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
           this.isLoading = false;
         }
       });
-    };
+    }
   };
 
   handleError(err: any) {
@@ -65,10 +66,11 @@ export class OpenSalesBoxComponent  implements OnInit {
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      this.alertSvc.presentAlert('Ooops', errorMessage);
+      this.alertSvc.presentAlert('Ooops', errorMessage).then();
+      return
     } else {
-      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    };
+      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.').then();
+    }
   };
 
 }

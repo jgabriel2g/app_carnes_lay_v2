@@ -44,8 +44,6 @@ export class ListComponent  implements OnInit {
               console.log(err);
             },
             next:(resp:any) => {
-              console.log("resp")
-              console.log(resp);
               this.Purchases = resp.results;
               this.totalItems = resp.count;
               this.totalPages = Math.ceil(this.totalItems / this.limit);
@@ -154,8 +152,6 @@ export class ListComponent  implements OnInit {
   };
 
   async rejectRequest(providerId:any, purchaseId:any) {
-    console.log('Presentando alerta'); // Verifica si llega hasta aquí
-
     const alert = await this.alertController.create({
       header: 'Rechazar solicitud',
       message: 'Por favor, ingresa la razón del rechazo:',

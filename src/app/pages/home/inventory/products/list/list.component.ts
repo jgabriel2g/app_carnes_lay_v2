@@ -83,7 +83,6 @@ export class ListComponent  implements OnInit {
     if (event) {
       this.deleteProduct()
     } else {
-      this.alertSvc.presentAlert('Éxito', 'No eliminamos el producto');
       this.showDeleteAlert = !this.showDeleteAlert;
     }
   };

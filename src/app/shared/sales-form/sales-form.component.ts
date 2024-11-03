@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import {  Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {  AutoCompleteModule } from 'primeng/autocomplete';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
+import {forkJoin, Observable} from 'rxjs';
 import { SalesService } from '../../core/services/sales.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
@@ -15,14 +16,21 @@ interface AutoCompleteCompleteEvent {
 }
 
 export interface Sales  {
-  date:any,
-  user:string,
-  payment_method:string,
-  total_received:number,
-  products:any,
-  sale:number,
-  isFinalized:boolean,
-  bill:any
+  date: any,
+  client: string,
+  payment_method: string,
+  total_received: number,
+  products: any,
+  sale: number,
+  isFinalized: boolean,
+  bill: any
+}
+
+interface Resp {
+  count: number,
+  next: any,
+  previous: any,
+  results: any[]
 }
 
 @Component({
@@ -38,7 +46,7 @@ export interface Sales  {
     IonicModule,
   ]
 })
-export class SalesFormComponent  implements OnInit ,AfterViewInit{
+export class SalesFormComponent  implements OnInit {
   public selectedClient: any;
   public selectedProduct: any;
   public productSuggestions: any[]= [];
@@ -47,7 +55,6 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   public PaymentMethods:any[]= [];
   public Products:any[]= [];
   public openDetailMerchEntry:boolean = false;
-  public showTicket:boolean = false;
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
   @ViewChild('productInput') productInput!: ElementRef;
@@ -55,9 +62,9 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   public sales:Sales[] = [
     {
       date: this.getCurrentDate(),
-      user:'',
-      payment_method:'00000000-0000-0000-0000-000000000001',
-      total_received:0,
+      client: '',
+      payment_method: '0b03af7e-60a1-4e1a-a269-0b1ff82b1ab1',
+      total_received: 0,
       products:[],
       sale:0  ,
       isFinalized:false,
@@ -67,68 +74,93 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   public activeSale:Sales = this.sales[0];
   public isLoading:boolean = false;
 
-  constructor(public authSvc:AuthService , private alertSvc:AlertsService, private thirdPartySvc:ThirdPartyService, private router:Router, private salesSvc:SalesService) { }
+  constructor(
+    public authSvc:AuthService,
+    private alertSvc:AlertsService,
+    private thirdPartySvc:ThirdPartyService,
+    private router:Router,
+    private salesSvc:SalesService
+  ) { }
 
-   ngOnInit() {
+  ngOnInit() {
     this.getCurrentDate();
-    this.getDisplayStock();
-    this.getClients();
-    this.getPaymentMethods();
+
+    forkJoin([
+      this.salesSvc.getDisplayStock(1000, 0) as Observable<Resp>,
+      this.salesSvc.getPaymentMethods() as Observable<Resp>,
+      this.thirdPartySvc.getClients(10000, 0) as Observable<Resp>
+    ]).subscribe({
+      next: ([stockResp, paymentResp, clientResp]: [Resp, Resp, Resp]) => {
+        this.Products = stockResp.results;
+        this.PaymentMethods = paymentResp.results;
+        this.Clients = clientResp.results;
+      },
+      error: (err) => {
+        console.error('Error loading data:', err);
+      }
+    });
   }
 
-  ngAfterViewInit(): void {
+  isSaleValid(): boolean {
+    return (
+      this.activeSale.total_received >= this.activeSale.sale &&
+      this.activeSale.sale > 0 &&
+      this.activeSale.products.length > 0
+    );
   }
 
-  createSale(){
-     const data = {
-       "date":this.activeSale.date,
-       "payment_method": this.activeSale.payment_method,
-       "total_received": this.activeSale.total_received,
-       "sale": this.registerBox,
-       "display_products": this.activeSale.products.map( (product:any) => ({
-            product: product.product,
-            amount: product.amount.toString()
-          })
-        )
-     };
-     if (this.activeSale.total_received >= this.activeSale.sale &&  this.activeSale.sale && this.activeSale.products.length) {
-       this.isLoading = !this.isLoading;
-       this.salesSvc.createBill(data)
-       .subscribe({
-         error:(err:any) => {
-           this.handleError(err);
-           this.isLoading = !this.isLoading;
-          },
-          next:(resp:any) => {
-            console.log(resp);
-            this.activeSale.isFinalized = true;
-            this.reloadBoxInfo.emit(true)
-            this.alertSvc.presentAlert('Éxito', 'Venta completada');
-            this.selectedClient = null
-            this.activeSale.bill = resp;
-            this.isLoading = !this.isLoading;
-          }
-        });
+  createSale() {
+    const data = {
+      date: this.activeSale.date,
+      payment_method: this.activeSale.payment_method,
+      total_received: this.activeSale.total_received,
+      sale: this.registerBox,
+      display_products: this.activeSale.products.map((product: any) => ({
+        product: product.product,
+        amount: product.amount.toString(),
+      })),
+    };
 
-     } else {
-      this.alertSvc.presentAlert('Ooops', 'Formulario de venta incompleto')
-     }
-  };
-
-  newSale(){
-    const newSale = {
-      date:  this.getCurrentDate(),
-      user:'',
-      payment_method:'00000000-0000-0000-0000-000000000001',
-      total_received:0,
-      products:[],
-      sale:0,
-      isFinalized:false,
-      bill:{}
+    if (this.isSaleValid()) {
+      this.isLoading = true;
+      this.salesSvc.createBill(data).subscribe({
+        error: (err: any) => {
+          this.handleError(err);
+          this.isLoading = false;
+        },
+        next: (resp: any) => {
+          console.log(resp);
+          this.activeSale.isFinalized = true;
+          this.reloadBoxInfo.emit(true);
+          this.alertSvc.presentAlert('Éxito', 'Venta completada').then();
+          this.selectedClient = null;
+          this.activeSale.bill = resp;
+          this.isLoading = false;
+        },
+      });
+    } else {
+      this.alertSvc.presentAlert('Ooops', 'Formulario de venta incompleto').then();
     }
+  }
+
+  newSale() {
+    if (this.sales.length >= 2) {
+      this.alertSvc.presentAlert('Advertencia', 'Solo puedes tener dos ventanas de ventas abiertas a la vez').then();
+      return;
+    }
+    const newSale = {
+      date: this.getCurrentDate(),
+      client: '',
+      payment_method:'0b03af7e-60a1-4e1a-a269-0b1ff82b1ab1',
+      total_received: 0,
+      products: [],
+      sale: 0,
+      isFinalized: false,
+      bill: {}
+    };
 
     this.sales.push(newSale);
-  };
+  }
 
   deleteTab(i:number){
     this.sales.splice(i, 1);
@@ -137,57 +169,15 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     } else{
       this.activeSale = {
         date:  this.getCurrentDate(),
-        user:'',
-        payment_method:'00000000-0000-0000-0000-000000000001',
+        client: '',
+        payment_method:'0b03af7e-60a1-4e1a-a269-0b1ff82b1ab1',
         total_received:0,
         products:[],
         sale:0,
         isFinalized:false,
         bill:{}
       }
-
-    };
-  };
-
-  onOpenDetailMerchEntry(event:boolean) {
-    this.openDetailMerchEntry = false;
-  };
-
-  getDisplayStock(){
-    this.salesSvc.getDisplayStock(1000, 0)
-        .subscribe({
-          error:(err:any) => {
-            console.log(err);
-          },
-          next:(resp:any) => {
-            this.Products = resp.results;
-          }
-        });
-  };
-
-  getPaymentMethods(){
-    this.salesSvc.getPaymentMethods()
-        .subscribe({
-          error:(err:any) => {
-            console.log(err);
-          },
-          next:(resp:any) => {
-            this.PaymentMethods = resp.results;
-          }
-        });
-  };
-
-  getClients(){
-    this.thirdPartySvc.getClients(10000, 0)
-        .subscribe({
-          error:(err:any) => {
-            console.log(err);
-
-          },
-          next:(resp:any) => {
-            this.Clients = resp.results;
-          }
-        });
+    }
   };
 
   searchClients(event: any) {
@@ -212,7 +202,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
 
   onClientSelect(event: any) {
     let selectedClient = this.Clients.filter( (p:any) =>  p.first_name || p.last_name || p.identification_number || p.email  == event.value)
-    this.activeSale.user = selectedClient[0].id;
+    this.activeSale.client = selectedClient[0].id;
   };
 
   onProductSelect(event: any) {
@@ -243,9 +233,13 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
     }, 200);
   };
 
-  updateTotalSaleValue(){
-    this.activeSale.sale = this.activeSale.products.reduce((sum:any, product:any) => sum + (product.amount * Number(product.price)), 0);
-  };
+  updateTotalSaleValue() {
+    this.activeSale.sale = this.activeSale.products.reduce((sum: any, product: any) => {
+      const amount = Number(product.amount || 0);
+      const price = Number(product.price || 0);
+      return sum + (amount * price);
+    }, 0);
+  }
 
   removeProduct(index: number) {
     this.activeSale.products.splice(index, 1);
@@ -259,7 +253,7 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
 
     if (!isNumberOrSymbol && !controlKey.includes(pressKey)) {
       event.preventDefault();
-    };
+    }
   };
 
   selectTab( data:any) {
@@ -275,10 +269,10 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
         errorMessage += ` ${err.error[key]}\n`;
       });
 
-      this.alertSvc.presentAlert('Ooops', errorMessage);
-    } else {
-      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    };
+      this.alertSvc.presentAlert('Ooops', errorMessage).then()
+      return;
+    }
+    this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.').then()
   };
 
   printBill(){
@@ -289,27 +283,34 @@ export class SalesFormComponent  implements OnInit ,AfterViewInit{
   clearSale(){
     this.activeSale = {
       date:  this.getCurrentDate(),
-      user:'',
-      payment_method:'00000000-0000-0000-0000-000000000001',
-      total_received:0,
-      products:[],
-      sale:0,
-      isFinalized:false,
-      bill:{}
+      client: '',
+      payment_method: '0b03af7e-60a1-4e1a-a269-0b1ff82b1ab1',
+      total_received: 0,
+      products: [],
+      sale: 0,
+      isFinalized: false,
+      bill: {}
     }
   }
 
   getCurrentDate() {
     const currentDate = new Date();
-
-    // Formateamos la fecha en el formato deseado: día/mes/año
     const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const year = currentDate.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
 
-    setTimeout(() => {
-      this.activeSale.date = `${year}-${month}-${day}`
-    }, 2000);
-  };
+  clearOnFocus() {
+    if (this.activeSale.total_received === 0) {
+      this.activeSale.total_received = '' as unknown as number;
+    }
+  }
+
+  resetIfEmpty() {
+    if (this.activeSale.total_received === '' as unknown as number) {
+      this.activeSale.total_received = 0;
+    }
+  }
 
 }

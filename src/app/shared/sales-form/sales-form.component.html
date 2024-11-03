@@ -1,10 +1,8 @@
-<div class=" sales-form-container">
+<div class="sales-form-container">
   <div class="mb-2">
-
     <div class="hidden sm:block">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <!-- Current: "border-red-500 text-red-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
           <a *ngFor="let sale of sales; let i = index"
           [class.border-red-500]="activeSale === sale"  [class.text-red-600]="activeSale === sale" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium  flex items-center gap-x-4" aria-current="page">
             <span (click)="selectTab(sale)">Venta {{i + 1}}</span>
@@ -19,11 +17,11 @@
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-5  gap-x-4  " >
-    <div class="col-span-3 xl:col-span-4  grid grid-cols-2  h-full overflow-y-auto gap-3 sales-wrapper">
 
+  <div class="grid grid-cols-5 gap-x-4">
+    <div class="col-span-3 xl:col-span-4  grid grid-cols-2  h-full overflow-y-auto gap-3 sales-wrapper">
       <!-- Sale date input field -->
-      <div class="  col-span-1">
+      <div class="col-span-1">
         <label for="sale-date">Fecha de venta</label>
         <div class="relative mt-1 rounded-2xl">
           <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -36,7 +34,7 @@
       </div>
 
       <!-- Payment method input field -->
-      <div class="  col-span-1">
+      <div class="col-span-2">
         <label for="id-type">Método de pago</label>
         <select [disabled]="activeSale.isFinalized" [(ngModel)]="activeSale.payment_method" id="id-type" name="id-type" class="inputs mt-1">
           <option [value]="pM.id" *ngFor="let pM of PaymentMethods">{{pM.name}}</option>
@@ -44,9 +42,9 @@
       </div>
 
       <!-- Sale client input field -->
-      <div class=" col-span-2">
+      <div class="col-span-2 -mt-16">
         <div>
-          <label for="clients-finder">Selecciona el cliente</label>
+          <label>Selecciona el cliente</label>
           <p-autoComplete placeholder="..."
             [(ngModel)]="selectedClient"
             [suggestions]="clientSuggestions"
@@ -57,8 +55,8 @@
       </div>
 
       <!-- Products finder -->
-      <div class=" col-span-2">
-        <label for="products-finder">Buscador de productos</label>
+      <div class="col-span-2 -mt-16">
+        <label>Buscador de productos</label>
         <p-autoComplete
           [disabled]="activeSale.isFinalized" [(ngModel)]="selectedProduct"
           [suggestions]="productSuggestions"
@@ -68,8 +66,8 @@
       </div>
 
       <!-- Product table -->
-      <div class="lg:col-span-3 col-span-2 overflow-x-auto max-h-28 lg:max-h-80">
-        <div class=" flow-root">
+      <div class="lg:col-span-3 col-span-2 -mt-20 overflow-x-auto max-h-28 lg:max-h-80">
+        <div class="flow-root">
           <div class="">
             <div class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-4">
               <table class="min-w-full divide-y divide-gray-300">
@@ -85,7 +83,7 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                  <tr *ngFor="let sP of activeSale.products; let i = index" >
+                  <tr *ngFor="let sP of activeSale.products; let i = index">
                     <td class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0">
                       {{ sP.productName}}
                     </td>
@@ -94,8 +92,7 @@
                         [disabled]="activeSale.isFinalized" [(ngModel)]="sP.amount"
                         type="number"
                         id="product-price"
-                        class="inputs bg-gray-100 max-w-24 "
-                        [placeholder]=""
+                        class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
                         (keyup)="updateTotalSaleValue()"
                         (keydown)="onlyNumbers($event)"
                         min="0"
@@ -105,13 +102,23 @@
                     </td>
                     <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <!-- Product price field -->
-                      {{sP.price | currency}}
+                      <input
+                        [disabled]="activeSale.isFinalized"
+                        [(ngModel)]="sP.price"
+                        type="number"
+                        id="pp"
+                        class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
+                        (keyup)="updateTotalSaleValue()"
+                        (keydown)="onlyNumbers($event)"
+                        min="0"
+                      >
+                      <small class="text-gray-400 font-medium text-xs mt-1"></small>
                     </td>
                     <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <!-- Product cost field -->
                       {{sP.amount * sP.price | currency}}
                     </td>
-                    <td class="relative whitespace-nowrap py-2.5 flex justify-center gap-x-3">
+                    <td class="relative whitespace-nowrap py-2.5 mt-3 flex justify-center gap-x-3">
                       <button (click)="removeProduct(i)">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 hover:text-red-700">
                           <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -126,21 +133,34 @@
         </div>
       </div>
 
-
     </div>
     <!-- Total Sale and Payment -->
     <div class="xl:col-span-1 col-span-2" >
-      <dl class="mt-5 w-full  ">
-        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-5 shadow w-full mb-3">
+      <dl class="mt-5 w-full">
+        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3">
           <dt class="truncate text-sm font-medium text-gray-500">Total Venta</dt>
           <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{activeSale.sale | currency}}</dd>
         </div>
-        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-5 shadow w-full">
-          <dt class="truncate text-sm font-medium text-gray-500">Total Pagado</dt>
-          <input [disabled]="activeSale.isFinalized" [(ngModel)]="activeSale.total_received" (keydown)="onlyNumbers($event)" type="number" name="sale-value-pay" id="sale-value-pay" class="inputs mt-2" placeholder="Ingresa el valor pagado por el cliente">
+        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3">
+          <dt class="truncate text-sm font-medium text-gray-500">Total de productos</dt>
+          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{activeSale.products.length}}</dd>
         </div>
-        <button (click)="createSale()"   *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized || isLoading" >Registrar</button>
-        <button (click)="clearSale()"     class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="activeSale.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
+        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full">
+          <dt class="truncate text-sm font-medium text-gray-500">Total recibido</dt>
+          <input
+            [disabled]="activeSale.isFinalized"
+            [(ngModel)]="activeSale.total_received"
+            (keydown)="onlyNumbers($event)"
+            (focus)="clearOnFocus()"
+            (blur)="resetIfEmpty()"
+            type="number"
+            name="sale-value-pay"
+            id="sale-value-pay"
+            class="bg-gray-50 block w-full rounded-xl py-2 pl-4 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 mt-2"
+            placeholder="0">
+        </div>
+        <button (click)="createSale()" *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized || isLoading" >Registrar</button>
+        <button (click)="clearSale()" class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="activeSale.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
         <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized" >Ver Factura</button>
       </dl>
     </div>
