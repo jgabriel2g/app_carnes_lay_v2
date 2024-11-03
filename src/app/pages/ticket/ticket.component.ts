@@ -17,13 +17,10 @@ export class TicketComponent  implements OnInit {
 
   ngOnInit(): void {
     this.bill = JSON.parse(sessionStorage.getItem('bill') ||'')
-    console.log(this.bill)
-
-    /*
     setTimeout(() => {
       this.print()
     }, 2000);
-    */
+
   }
   print(){
     this.isPrinting  = !this.isPrinting;

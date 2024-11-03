@@ -1,4 +1,4 @@
-import {  Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {  Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren, NgZone } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -54,7 +54,6 @@ export class SalesFormComponent  implements OnInit {
   public Clients:any[]= [];
   public PaymentMethods:any[]= [];
   public Products:any[]= [];
-  public openDetailMerchEntry:boolean = false;
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
   @ViewChild('productInput') productInput!: ElementRef;
@@ -73,13 +72,15 @@ export class SalesFormComponent  implements OnInit {
   ];
   public activeSale:Sales = this.sales[0];
   public isLoading:boolean = false;
+  public isCapturingWeight: boolean = false;
+  public activeInputIndex: number | null = null;
 
   constructor(
     public authSvc:AuthService,
     private alertSvc:AlertsService,
     private thirdPartySvc:ThirdPartyService,
-    private router:Router,
-    private salesSvc:SalesService
+    private salesSvc:SalesService,
+    private ngZone: NgZone,
   ) { }
 
   ngOnInit() {
@@ -99,6 +100,8 @@ export class SalesFormComponent  implements OnInit {
         console.error('Error loading data:', err);
       }
     });
+
+    this.writeWeightOnInput();
   }
 
   isSaleValid(): boolean {
@@ -310,6 +313,31 @@ export class SalesFormComponent  implements OnInit {
   resetIfEmpty() {
     if (this.activeSale.total_received === '' as unknown as number) {
       this.activeSale.total_received = 0;
+    }
+  }
+
+  writeWeightOnInput() {
+    if (window.electronAPI) {
+      window.electronAPI.receive('weight', (data: any) => {
+        this.ngZone.run(() => {
+          if (!this.isCapturingWeight || this.activeInputIndex === null) return;
+
+          const weight = parseFloat(data);
+          this.activeSale.products[this.activeInputIndex].amount = weight;
+
+          this.updateTotalSaleValue();
+        });
+      });
+    }
+  }
+
+  toggleWeightCapture(index: number) {
+    if (this.isCapturingWeight && this.activeInputIndex === index) {
+      this.isCapturingWeight = false;
+      this.activeInputIndex = null;
+    } else {
+      this.isCapturingWeight = true;
+      this.activeInputIndex = index;
     }
   }
 

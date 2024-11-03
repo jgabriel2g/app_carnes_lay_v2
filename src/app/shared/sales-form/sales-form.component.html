@@ -42,7 +42,7 @@
       </div>
 
       <!-- Sale client input field -->
-      <div class="col-span-2 -mt-16">
+      <div class="col-span-2">
         <div>
           <label>Selecciona el cliente</label>
           <p-autoComplete placeholder="..."
@@ -55,7 +55,7 @@
       </div>
 
       <!-- Products finder -->
-      <div class="col-span-2 -mt-16">
+      <div class="col-span-2">
         <label>Buscador de productos</label>
         <p-autoComplete
           [disabled]="activeSale.isFinalized" [(ngModel)]="selectedProduct"
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Product table -->
-      <div class="lg:col-span-3 col-span-2 -mt-20 overflow-x-auto max-h-28 lg:max-h-80">
+      <div class="lg:col-span-3 col-span-2 -mt-20 overflow-x-auto max-h-28 lg:max-h-80 mt-2">
         <div class="flow-root">
           <div class="">
             <div class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-4">
@@ -75,6 +75,7 @@
                   <tr>
                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
                     <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Cantidad</th>
+                    <th></th>
                     <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Precio</th>
                     <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
@@ -92,13 +93,22 @@
                         [disabled]="activeSale.isFinalized" [(ngModel)]="sP.amount"
                         type="number"
                         id="product-price"
-                        class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
+                        class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-2xl"
                         (keyup)="updateTotalSaleValue()"
                         (keydown)="onlyNumbers($event)"
                         min="0"
                         #amountInput
                       >
                       <small class="text-gray-400 font-medium text-xs mt-1">{{sP.type_of_unit_measurement}}</small>
+                    </td>
+                    <td>
+                      <button
+                        class="p-5 rounded-2xl bg-[#b3241c] text-white font-bold"
+                        type="button"
+                        (click)="toggleWeightCapture(i)"
+                      >
+                        {{ isCapturingWeight && activeInputIndex === i ? 'Dejar de Capturar' : 'Capturar Peso' }}
+                      </button>
                     </td>
                     <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <!-- Product price field -->

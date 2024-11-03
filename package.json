@@ -1,15 +1,17 @@
 {
   "name": "carnes-lay",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "Jesus Garcia",
   "homepage": "https://ionicframework.com/",
+  "main": "desktop/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "electron": "electron ."
   },
   "private": true,
   "dependencies": {
@@ -29,10 +31,12 @@
     "@capacitor/keyboard": "6.0.2",
     "@capacitor/status-bar": "6.0.1",
     "@ionic/angular": "^8.0.0",
+    "@serialport/parser-readline": "^12.0.0",
     "flowbite": "^2.5.1",
     "ionicons": "^7.0.0",
     "primeng": "^17.18.9",
     "rxjs": "~7.8.0",
+    "serialport": "^12.0.0",
     "sweetalert2": "^11.12.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
@@ -54,6 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.20",
+    "electron": "^33.0.2",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",
