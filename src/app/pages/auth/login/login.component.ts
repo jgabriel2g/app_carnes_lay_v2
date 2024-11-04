@@ -13,11 +13,16 @@ export class LoginComponent  implements OnInit {
   public email:string = '';
   public password:string = '';
   public isLoading:boolean = false;
+  public showPassword: boolean = false;
 
   constructor(private authSvc:AuthService, private router:Router, private alertSvc:AlertsService) { }
 
   ngOnInit() {
     sessionStorage.clear();
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   login(){
