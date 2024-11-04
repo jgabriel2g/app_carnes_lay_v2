@@ -40,10 +40,10 @@ export class LoadNewComponent  implements OnInit {
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
     this.productForm = this.fb.group({
       product: [0, Validators.required],
-      quantity: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
-      quantityToAdd: [0, [Validators.required, Validators.min(0), Validators.pattern('^[0-9]*$')]],
+      quantity: [0, [Validators.required, Validators.min(1)]],
+      quantityToAdd: [0, [Validators.required, Validators.min(0)]],
       type_of_unit_measurement: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*\.?[0-9]+$')]]
+      price: ['', [Validators.required, Validators.min(1)]]
     });
    }
 
