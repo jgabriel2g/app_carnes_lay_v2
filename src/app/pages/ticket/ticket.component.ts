@@ -24,7 +24,8 @@ export class TicketComponent  implements OnInit {
   }
   print(){
     this.isPrinting  = !this.isPrinting;
-    window.print();
+    // window.print();
+    window.electronAPI.triggerPrint();
     this.isPrinting  = !this.isPrinting;
   }
   convertToNumber(value:string) {
