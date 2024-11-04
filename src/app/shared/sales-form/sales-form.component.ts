@@ -9,6 +9,7 @@ import { SalesService } from '../../core/services/sales.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
 import { AuthService } from '../../core/services/auth.service';
+import {OtpService} from "../../core/services/otp.service";
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -81,6 +82,7 @@ export class SalesFormComponent  implements OnInit {
     private thirdPartySvc:ThirdPartyService,
     private salesSvc:SalesService,
     private ngZone: NgZone,
+    private otpService: OtpService
   ) { }
 
   ngOnInit() {
@@ -245,8 +247,10 @@ export class SalesFormComponent  implements OnInit {
   }
 
   removeProduct(index: number) {
-    this.activeSale.products.splice(index, 1);
-    this.updateTotalSaleValue();
+    this.otpService.verifyOtpAndExecute(() => {
+      this.activeSale.products.splice(index, 1);
+      this.updateTotalSaleValue();
+    }).then();
   }
 
   onlyNumbers(event: KeyboardEvent) {

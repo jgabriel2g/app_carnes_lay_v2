@@ -1,24 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
-import { filter } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-ticket',
-  templateUrl: './ticket.component.html',
-  styleUrls: ['./ticket.component.scss'],
+  selector: 'app-daily-ticket',
+  templateUrl: './daily-ticket.component.html',
+  styleUrls: ['./daily-ticket.component.scss'],
 })
-export class TicketComponent  implements OnInit {
+export class DailyTicketComponent implements OnInit {
   public isPrinting:boolean = false;
-  bill: any;
+  sale: any
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.bill = JSON.parse(sessionStorage.getItem('bill') ||'')
+    this.sale = JSON.parse(sessionStorage.getItem('saleSummary') ||'')
+    console.log(this.sale)
+    /*
     setTimeout(() => {
       this.print()
     }, 2000);
+    */
   }
 
   print() {

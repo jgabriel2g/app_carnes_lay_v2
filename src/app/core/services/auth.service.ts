@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { rolesPermissions } from '../utils/roles';
+import {data} from "autoprefixer";
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,10 @@ export class AuthService {
     const userRoles = JSON.parse(sessionStorage.getItem('userGroup') ||  '');
     return userRoles.some((role:any) => rolesPermissions[role].permissions.includes(permission));
   };
+
+  validateWithOtp(phone_number: string) {
+    const url = `${this.baseUrl}/auth/validate/?phone_number=${phone_number}`;
+    return this.http.get(url, this.header)
+  }
 
 }

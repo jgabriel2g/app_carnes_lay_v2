@@ -35,7 +35,6 @@ export class ListComponent  implements OnInit {
             console.log(err)
           },
           next:(resp:any) => {
-            console.log(resp)
             this.Sales = resp.results;
             this.totalItems = resp.count;
             this.totalPages = Math.ceil(this.totalItems / this.limit);
@@ -46,7 +45,7 @@ export class ListComponent  implements OnInit {
   };
 
 
-  deleSale(id:any){
+  deleteSale(id:any){
       this.salesSvc.deleteSale(id)
           .subscribe({
             error:(err:any) =>{
@@ -59,7 +58,6 @@ export class ListComponent  implements OnInit {
             }
           });
   };
-
 
   updatePageNumbers(): void {
     this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);

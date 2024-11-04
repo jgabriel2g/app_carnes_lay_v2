@@ -3,6 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { SalesService } from '../../../../../core/services/sales.service';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { ThirdPartyService } from '../../../../../core/services/third-party.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sale-bills',
@@ -11,7 +12,7 @@ import { ThirdPartyService } from '../../../../../core/services/third-party.serv
 })
 export class SaleBillsComponent  implements OnInit {
   @Input() sale: string = '';
-  bills:any[]=[]
+  bills: any[] = []
   @Output() close = new EventEmitter<boolean>();
   public limit:number = 10;
   public offset:number = 0;
@@ -20,29 +21,25 @@ export class SaleBillsComponent  implements OnInit {
   public currentPage = 1;
   public totalPages = 1;
   public pageNumbers: number[] = [];
-  public Clients: number[] = [];
-  public clientSelected:string = '';
-  public isLoading:boolean = false;
-  constructor(private alertController: AlertController,private clientSvc:ThirdPartyService , private alertSvc:AlertsService, private salesSvc:SalesService) { }
+  public clientSelected: string = '';
+  public isLoading: boolean = false;
+
+  constructor(
+    private alertSvc:AlertsService,
+    private salesSvc:SalesService,
+    private router:Router,
+  ) { }
 
   ngOnInit() {
     this.getSales();
   }
 
-  async showBillDetail(products:any) {
-    const messageContent = products.map((p:any) =>
-      `Producto: ${p.product.product.name}, Cantidad: ${p.amount}, Costo: ${p.product.price}`).join('<br>');
-
-    const alert = await this.alertController.create({
-      header: 'Detalle de compra',
-      message: messageContent,
-      buttons: ['OK']
-    });
-
-    await alert.present();
+  showBillDetail(bill: any) {
+    sessionStorage.setItem('bill', JSON.stringify(bill));
+    window.open('/ticket', '_blank');
   };
 
-  deleSale(id:any){
+  deleteSale(id:any){
     this.salesSvc.deleteBillSale(id)
         .subscribe({
           error:(err:any) =>{
@@ -55,7 +52,6 @@ export class SaleBillsComponent  implements OnInit {
           }
         });
   }
-
 
   handleError(err: any) {
     if (err.error) {
@@ -76,7 +72,6 @@ export class SaleBillsComponent  implements OnInit {
     this.close.emit(true);
   };
 
-
   getSales(){
     this.isLoading = !this.isLoading;
     this.salesSvc.getBillsBySale(this.limit, this.offset, this.sale, this.clientSelected)
@@ -86,7 +81,6 @@ export class SaleBillsComponent  implements OnInit {
             this.isLoading = !this.isLoading;
           },
           next:(resp:any) => {
-            console.log(resp)
             this.bills = resp.results;
             this.totalItems = resp.count;
             this.totalPages = Math.ceil(this.totalItems / this.limit);
@@ -99,8 +93,6 @@ export class SaleBillsComponent  implements OnInit {
   updatePageNumbers(): void {
     this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   };
-
-
 
   goToPage(page: number): void {
     this.currentPage = page;
@@ -124,7 +116,15 @@ export class SaleBillsComponent  implements OnInit {
     };
   };
 
-
-
-
+  printSaleDetails() {
+    this.salesSvc.getBoxSaleById(this.sale).subscribe({
+      error:(err:any) => {
+        console.log(err);
+      },
+      next:(resp:any) => {
+        sessionStorage.setItem('saleSummary', JSON.stringify(resp));
+        window.open('/daily-ticket', '_blank');
+      }
+    })
+  }
 }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { TicketComponent } from './pages/ticket/ticket.component';
+import {DailyTicketComponent} from "./pages/daily-ticket/daily-ticket.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,11 @@ const routes: Routes = [
   {
     path: 'ticket',
     component: TicketComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path: 'daily-ticket',
+    component: DailyTicketComponent,
     canActivate:[AuthGuard]
   },
   {

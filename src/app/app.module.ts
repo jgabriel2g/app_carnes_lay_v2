@@ -11,9 +11,10 @@ import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/refresh';
 import { TicketComponent } from './pages/ticket/ticket.component';
 import { CommonModule } from '@angular/common';
+import {DailyTicketComponent} from "./pages/daily-ticket/daily-ticket.component";
 
 @NgModule({
-  declarations: [AppComponent, TicketComponent],
+  declarations: [AppComponent, TicketComponent, DailyTicketComponent],
   imports: [BrowserModule,CommonModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
