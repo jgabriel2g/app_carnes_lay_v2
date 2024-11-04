@@ -56,7 +56,6 @@
               </div>
               <div *ngIf="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
                 <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['required']">Cantidad es requerida.</div>
-                <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['min']">Cantidad debe ser mayor a 1 </div>
               </div>
             </div>
             <!-- Product quantity field -->
