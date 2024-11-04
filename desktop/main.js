@@ -99,7 +99,7 @@ const createWindow = async () => {
     }
   });
 
-  win.loadURL('http://localhost:4200/').then();
+  win.loadURL('https://lay-v2.netlify.app/').then();
   win.setMenu(null);
 
   if (process.env.NODE_ENV === 'development') {

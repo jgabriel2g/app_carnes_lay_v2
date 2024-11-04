@@ -11,7 +11,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "electron": "electron ."
+    "electron": "electron .",
+    "buildApps": "electron-builder"
   },
   "private": true,
   "dependencies": {
@@ -59,6 +60,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.20",
     "electron": "^33.0.2",
+    "electron-builder": "^25.1.8",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",
@@ -74,5 +76,38 @@
     "tailwindcss": "^3.4.10",
     "typescript": "~5.4.0"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "build": {
+    "appId": "com.lavictoria.fe",
+    "productName": "Carnes La victoria",
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "directories": {
+      "buildResources": "build"
+    },
+    "files": [
+      "www/",
+      "desktop/main.js",
+      "desktop/preload.js"
+    ]
+  }
 }
