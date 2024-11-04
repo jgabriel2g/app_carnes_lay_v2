@@ -49,7 +49,6 @@ export class ListComponent  implements OnInit {
         },
         next:(resp:any) => {
           this.displayStocks = resp.results;
-          console.log(this.displayStocks)
           this.totalItems = resp.count;
           this.totalPages = Math.ceil(this.totalItems / this.limit);
           this.isLoading = !this.isLoading;

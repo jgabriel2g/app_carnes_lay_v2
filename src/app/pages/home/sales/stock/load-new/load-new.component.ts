@@ -17,19 +17,25 @@ export class LoadNewComponent  implements OnInit {
   public selectedItem: string = '';
   public productForm: FormGroup;
   @Output() close = new EventEmitter<boolean>();
-  @Input() displayStockId:any;
+  @Input() displayStockId?: string;
   ngOnInit(): void {
+    this.resetForm();
+
     if (this.displayStockId !== undefined) {
         this.getDisplayStock();
         this.productForm.get('quantityToAdd')?.enable();
         this.productForm.get('quantity')?.disable();
-
     } else {
       this.productForm.get('quantityToAdd')?.disable();
       this.getUnitTypes();
       this.getProducts();
-    };
+    }
   };
+
+  private resetForm() {
+    this.productForm.reset();
+    this.displayStockId = undefined;
+  }
 
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
     this.productForm = this.fb.group({
