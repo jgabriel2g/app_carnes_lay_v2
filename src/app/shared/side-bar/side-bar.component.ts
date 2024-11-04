@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -8,9 +8,10 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.scss'],
   standalone:true,
-  imports:[
+  imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NgOptimizedImage
   ]
 })
 export class SideBarComponent  implements OnInit {
