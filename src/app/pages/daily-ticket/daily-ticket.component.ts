@@ -14,12 +14,9 @@ export class DailyTicketComponent implements OnInit {
 
   ngOnInit(): void {
     this.sale = JSON.parse(sessionStorage.getItem('saleSummary') ||'')
-    console.log(this.sale)
-    /*
     setTimeout(() => {
       this.print()
     }, 2000);
-    */
   }
 
   print() {
