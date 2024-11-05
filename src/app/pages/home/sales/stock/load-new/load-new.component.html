@@ -13,8 +13,8 @@
             <h3 class="text-center text-xl font-semibold leading-6 text-gray-900 mb-5" id="modal-title">Ingresar producto a vitrina</h3>
 
             <!-- Products finder input field -->
-            <div class="mb-3" *ngIf="displayStockId == undefined" >
-              <label for="products-finder">Buscador de producto</label>
+            <div class="mb-3">
+              <label>Buscador de producto</label>
               <p-autoComplete
                 [disabled]="displayStockId !== undefined"
                 [placeholder]="displayStockId !== undefined ? selectedItem : 'Producto'"
@@ -30,7 +30,7 @@
 
 
             <!-- Presentation unit input field -->
-            <div  class="mb-3" *ngIf="displayStockId == undefined" >
+            <div  class="mb-3" *ngIf="displayStockId === undefined" >
               <label for="unit-type" >Unidad de presentación</label>
               <select  formControlName="type_of_unit_measurement" id="unit-type" name="location" class="inputs">
                 <option value="">Selecciona la unidad de presentación</option>

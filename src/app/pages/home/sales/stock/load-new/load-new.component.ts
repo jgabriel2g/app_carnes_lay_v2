@@ -19,8 +19,6 @@ export class LoadNewComponent  implements OnInit {
   @Output() close = new EventEmitter<boolean>();
   @Input() displayStockId?: string;
   ngOnInit(): void {
-    this.resetForm();
-
     if (this.displayStockId !== undefined) {
         this.getDisplayStock();
         this.productForm.get('quantityToAdd')?.enable();
@@ -49,6 +47,7 @@ export class LoadNewComponent  implements OnInit {
 
 
   actionResponse(value:boolean) {
+    this.resetForm()
     if (value) {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
@@ -78,13 +77,13 @@ export class LoadNewComponent  implements OnInit {
                   this.close.emit(value);
                 }
               })
-        };
+        }
       } else {
         this.alertSvc.presentAlert('Ooops', 'Revisa los campos');
-      };
+      }
     } else {
       this.close.emit(value);
-    };
+    }
   };
 
   getDisplayStock(){
@@ -113,7 +112,6 @@ export class LoadNewComponent  implements OnInit {
         },
          next:(resp:any) => {
            this.unitTypes = resp.results;
-           console.log(this.unitTypes)
          }
       });
   };
@@ -155,4 +153,5 @@ export class LoadNewComponent  implements OnInit {
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
   };
+
 }
