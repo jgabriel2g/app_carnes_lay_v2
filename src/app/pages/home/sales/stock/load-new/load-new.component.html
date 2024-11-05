@@ -1,9 +1,9 @@
 <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-    <div class="flex min-h-full  justify-center p-4 text-center items-center sm:p-0">
+    <div class="flex min-h-full   justify-center p-4 text-center items-center sm:p-0">
       <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-        <div class="sm:flex sm:items-start">
+        <div class="sm:flex sm:items-start w-full">
           <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-red-600">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -16,7 +16,7 @@
             <div class="mb-3">
               <label>Buscador de producto</label>
               <p-autoComplete
-                [disabled]="displayStockId !== undefined"
+                [disabled]="displayStockId !== null && displayStockId !== undefined && displayStockId !== true"
                 [placeholder]="displayStockId !== undefined ? selectedItem : 'Producto'"
                 [suggestions]="suggestions"
                 (completeMethod)="search($event)"
@@ -30,7 +30,7 @@
 
 
             <!-- Presentation unit input field -->
-            <div  class="mb-3" *ngIf="displayStockId === undefined" >
+            <div  class="mb-3" *ngIf="displayStockId === undefined || displayStockId === true || displayStockId === null" >
               <label for="unit-type" >Unidad de presentación</label>
               <select  formControlName="type_of_unit_measurement" id="unit-type" name="location" class="inputs">
                 <option value="">Selecciona la unidad de presentación</option>
@@ -44,8 +44,8 @@
 
             <!-- Product quantity field -->
             <div class="mb-3">
-              <label for="product-quantity" *ngIf="displayStockId !== undefined">Cantidad actual del producto</label>
-              <label for="product-quantity" *ngIf="displayStockId === undefined">Cantidad del producto</label>
+              <label for="product-quantity" *ngIf="displayStockId !== true && displayStockId !== undefined && displayStockId !== null">Cantidad actual del producto</label>
+              <label for="product-quantity" *ngIf="displayStockId === undefined || displayStockId === true || displayStockId === null">Cantidad del producto</label>
               <div class="relative shadow-md rounded-lg">
                 <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
@@ -59,7 +59,7 @@
               </div>
             </div>
             <!-- Product quantity field -->
-            <div class="mb-3" *ngIf="displayStockId !== undefined">
+            <div class="mb-3" *ngIf="displayStockId !== undefined && displayStockId !== true && displayStockId !== null">
               <label for="product-quantity-to-add" >Cantidad del producto a agregar</label>
               <div class="relative shadow-md rounded-lg">
                 <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">

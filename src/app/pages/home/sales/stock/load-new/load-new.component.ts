@@ -17,9 +17,9 @@ export class LoadNewComponent  implements OnInit {
   public selectedItem: string = '';
   public productForm: FormGroup;
   @Output() close = new EventEmitter<boolean>();
-  @Input() displayStockId?: string;
+  @Input() displayStockId?: any;
   ngOnInit(): void {
-    if (this.displayStockId !== undefined) {
+    if (this.displayStockId !==  null && this.displayStockId !== undefined && this.displayStockId !== true) {
         this.getDisplayStock();
         this.productForm.get('quantityToAdd')?.enable();
         this.productForm.get('quantity')?.disable();
@@ -44,7 +44,7 @@ export class LoadNewComponent  implements OnInit {
     if (value) {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
-        if (this.displayStockId !== undefined) {
+        if (this.displayStockId !== undefined && this.displayStockId !== null ) {
           const data = {
             quantity: Number(this.productForm.get('quantity')?.value) + Number(this.productForm.get('quantityToAdd')?.value),
             price: this.productForm.get('price')?.value
@@ -56,7 +56,7 @@ export class LoadNewComponent  implements OnInit {
             },
             next:(resp:any) => {
               this.alertSvc.presentAlert('Éxito', 'Producto actualizado al punto de venta');
-              this.close.emit(value);
+              this.closeModal(value)
             }
           })
         } else  {
@@ -67,7 +67,7 @@ export class LoadNewComponent  implements OnInit {
                 },
                 next:(resp:any) => {
                   this.alertSvc.presentAlert('Éxito', 'Producto cargado al punto de venta');
-                  this.close.emit(value);
+                  this.closeModal(value)
                 }
               })
         }
@@ -75,26 +75,29 @@ export class LoadNewComponent  implements OnInit {
         this.alertSvc.presentAlert('Ooops', 'Revisa los campos');
       }
     } else {
-      this.close.emit(value);
+      this.closeModal(value)
     }
   };
 
   getDisplayStock(){
-    this.salesSvc.getDisplayStockById(this.displayStockId)
-          .subscribe({
-            error:(err:any) =>{
-              this.handleError(err);
-            },
-            next:(resp:any) => {
-              this.getUnitTypes();
-              this.getProducts();
-              this.productForm.get('product')?.setValue(resp.product.id);
-              this.productForm.get('quantity')?.setValue(Number(resp.quantity));
-              this.productForm.get('type_of_unit_measurement')?.setValue(resp.type_of_unit_measurement.id);
-              this.productForm.get('price')?.setValue(resp.price);
-              this.selectedItem = resp.product.name;
-            }
-          });
+    console.log(this.displayStockId)
+    if (this.displayStockId !== null   && this.displayStockId !== undefined  && this.displayStockId !== true) {
+      this.salesSvc.getDisplayStockById(this.displayStockId)
+            .subscribe({
+              error:(err:any) =>{
+                this.handleError(err);
+              },
+              next:(resp:any) => {
+                this.getUnitTypes();
+                this.getProducts();
+                this.productForm.get('product')?.setValue(resp.product.id);
+                this.productForm.get('quantity')?.setValue(Number(resp.quantity));
+                this.productForm.get('type_of_unit_measurement')?.setValue(resp.type_of_unit_measurement.id);
+                this.productForm.get('price')?.setValue(resp.price);
+                this.selectedItem = resp.product.name;
+              }
+            });
+    };
   };
 
   getUnitTypes(){
@@ -123,7 +126,7 @@ export class LoadNewComponent  implements OnInit {
 
   search(event: AutoCompleteCompleteEvent) {
     this.suggestions = this.products
-      .filter(product => product.name.toLowerCase().includes(event.query.toLowerCase()))
+      .filter(product => product.name.toLowerCase().includes(event.query.toLowerCase()) || product.code.toLowerCase().includes(event.query.toLowerCase()))
       .map(product => product.name);
   };
 
@@ -145,6 +148,13 @@ export class LoadNewComponent  implements OnInit {
     } else {
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
     };
+  };
+
+  closeModal(value:boolean){
+    this.selectedItem = '';
+
+    console.log(this.productForm.value)
+    this.close.emit(value);
   };
 
 }
