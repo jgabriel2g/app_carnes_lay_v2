@@ -1,5 +1,5 @@
-<div class="bg-white flex-col justify-center items-center h-full w-full">
-  <div class="grid  md:grid-cols-3  lg:grid-cols-4 " >
+<div class="bg-white flex-col justify-center items-center h-full w-full overflow-y-auto" style="max-height: 100vh;">
+  <div class="grid md:grid-cols-3 lg:grid-cols-4">
     <div class="lg:col-span-4 md:col-span-3 col-span-0"></div>
     <div class="lg:col-span-4 md:col-span-6 col-span-12">
       <div id="ticket" style="max-width: 300px;" class="mx-auto">
@@ -12,45 +12,26 @@
           <div class="ticket-info mb-2">
             <h3 class="mx-auto text-center font-bold">Resumen de venta</h3>
             <table class="text-center w-full mb-0 mt-2">
-              <thead>
-              <tr>
-                <th></th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody class="w-full">
-                <tr class="w-full flex justify-between items-center">
-                  <td class="text-left font-medium">Fecha de cierre</td>
-                  <td class="text-right">{{ sale.end_time | date: 'dd-MM-yyyy'}}</td>
-                </tr>
-                <tr class="w-full flex justify-between items-center">
-                  <td class="text-left font-medium">Hora de cierre</td>
-                  <td class="text-right">{{ sale.end_time | date: 'shortTime' }}</td>
-                </tr>
-                <tr class="w-full flex justify-between items-center">
-                  <td class="text-left font-medium">Total facturas</td>
-                  <td class="text-right">{{ sale.total_bills}}</td>
-                </tr>
-                <tr class="w-full flex justify-between items-center">
-                  <td class="text-left font-medium">Atendido por</td>
-                  <td class="text-right">{{ sale.user.first_name}} {{ sale.user.last_name}}</td>
-                </tr>
-              </tbody>
+              <!-- Tabla de resumen -->
             </table>
           </div>
+
+          <!-- Sección de productos -->
           <div class="ticket-info">
             <h4 class="text-center font-bold">Productos</h4>
-          </div>
-          <div *ngFor="let p of sale.products_summary">
-            <div class="ticket-info">
-              <p>Producto: {{p.product_name}}</p>
-              <p>Precio: {{p.price | currency}}</p>
-              <p>Cantidad vendida: {{p.total_weight}}{{p.unidad}}</p>
-              <p>Total vendido: {{p.total_price | currency}}</p>
+            <div *ngFor="let p of sale.products_summary">
+              <div class="ticket-info">
+                <p>Producto: {{p.product_name}}</p>
+                <p>Precio: {{p.price | currency}}</p>
+                <p>Cantidad vendida: {{p.total_weight}}{{p.unidad}}</p>
+                <p>Total vendido: {{p.total_price | currency}}</p>
+              </div>
             </div>
           </div>
+
           <div class="ticket-info">
-            <table class="text-center w-full mb-0 mt-2">
+            <table class="text-center w-full mb-30 mt-2">
+              <!-- Tabla de totales -->
               <thead>
               <tr>
                 <th></th>
@@ -72,11 +53,10 @@
               </tr>
               </tbody>
             </table>
-            <p class="font-bold"> </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="lg:col-span-4 md:col-span-3 col-span-0"></div>
+    <div class="mt-30"></div>
   </div>
 </div>
