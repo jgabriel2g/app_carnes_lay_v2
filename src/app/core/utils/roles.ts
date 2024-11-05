@@ -79,6 +79,7 @@ export const rolesPermissions : { [key: number]: { name: string; permissions: st
         permissions: [
           'view-sales-module',
           'open-sales-box',
+          'close-sales-box',
           'create-sales',
           'print-bill',
           'view-market-rates',
