@@ -40,39 +40,40 @@ export class LoadNewComponent  implements OnInit {
     });
    }
 
-  actionResponse(value:boolean) {
+  actionResponse(value: boolean) {
     if (value) {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
-        if (this.displayStockId !== undefined && this.displayStockId !== null ) {
+        if (this.displayStockId !== undefined && this.displayStockId !== null) {
           const data = {
-            quantity: Number(this.productForm.get('quantity')?.value) + Number(this.productForm.get('quantityToAdd')?.value),
+            quantity: Number((Number(this.productForm.get('quantity')?.value) + Number(this.productForm.get('quantityToAdd')?.value)).toFixed(3)),
             price: this.productForm.get('price')?.value
           }
           this.salesSvc.updateDisplayStock(data, this.displayStockId)
-          .subscribe({
-            error:(err:any) => {
-             this.handleError(err)
-            },
-            next:(resp:any) => {
-              this.alertSvc.presentAlert('Éxito', 'Producto actualizado al punto de venta');
-              this.closeModal(value)
-            }
-          })
-        } else  {
+            .subscribe({
+              error: (err: any) => {
+                this.handleError(err)
+              },
+              next: (resp: any) => {
+                this.alertSvc.presentAlert('Éxito', 'Producto actualizado al punto de venta');
+                this.closeModal(value)
+              }
+            })
+        } else {
+          this.productForm.get('quantity')?.setValue(Number(this.productForm.get('quantity')?.value.toFixed(3)));
           this.salesSvc.createDisplayStock(this.productForm.value)
-              .subscribe({
-                error:(err:any) => {
-                 this.handleError(err)
-                },
-                next:(resp:any) => {
-                  this.alertSvc.presentAlert('Éxito', 'Producto cargado al punto de venta');
-                  this.closeModal(value)
-                }
-              })
+            .subscribe({
+              error: (err: any) => {
+                this.handleError(err)
+              },
+              next: (resp: any) => {
+                this.alertSvc.presentAlert('Éxito', 'Producto cargado al punto de venta');
+                this.closeModal(value)
+              }
+            })
         }
       } else {
-        this.alertSvc.presentAlert('Ooops', 'Revisa los campos');
+        this.alertSvc.presentAlert('Ooops', 'Revisa los campos').then();
       }
     } else {
       this.closeModal(value)
