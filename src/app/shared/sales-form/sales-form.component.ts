@@ -198,7 +198,7 @@ export class SalesFormComponent  implements OnInit {
 
   searchProducts(event: AutoCompleteCompleteEvent) {
     this.productSuggestions = this.Products
-      .filter(products => products.product.name.toLowerCase().includes(event.query.toLowerCase())  )
+      .filter(products => products.product.name.toLowerCase().includes(event.query.toLowerCase())  || products.product.code.toLowerCase().includes(event.query.toLowerCase())  )
       .map(product => `${ product.product.name}`  );
       // .map(product => `${ product.product.name} - ${product.product.code}` product.product.name );
       // || product.product.code

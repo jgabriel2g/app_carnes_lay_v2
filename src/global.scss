@@ -50,6 +50,7 @@ label{
   width: 100% !important;
   border-radius: 16px;
   outline: none !important;
+  color: black !important;
 }
 
 
@@ -57,6 +58,9 @@ label{
 .p-autocomplete-item:focus,
 .p-autocomplete-item.p-highlight {
   background-color: rgb(270 220 201 / var(--tw-bg-opacity)) !important;
+  color: black !important;
+  width: 100%;
+
 }
 
 
