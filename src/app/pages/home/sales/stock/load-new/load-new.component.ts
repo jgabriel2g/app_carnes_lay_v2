@@ -30,11 +30,6 @@ export class LoadNewComponent  implements OnInit {
     }
   };
 
-  private resetForm() {
-    this.productForm.reset();
-    this.displayStockId = undefined;
-  }
-
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
     this.productForm = this.fb.group({
       product: [0, Validators.required],
@@ -44,7 +39,6 @@ export class LoadNewComponent  implements OnInit {
       price: ['', [Validators.required, Validators.min(1)]]
     });
    }
-
 
   actionResponse(value:boolean) {
     if (value) {
@@ -83,7 +77,6 @@ export class LoadNewComponent  implements OnInit {
     } else {
       this.close.emit(value);
     }
-    this.resetForm();
   };
 
   getDisplayStock(){
@@ -117,7 +110,7 @@ export class LoadNewComponent  implements OnInit {
   };
 
   getProducts(){
-    this.inventorySvc.getProducts(100,0, true)
+    this.inventorySvc.getProducts(150,0, true)
           .subscribe({
             error:(err:any) => {
               this.handleError(err);
