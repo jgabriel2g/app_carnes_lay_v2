@@ -47,7 +47,6 @@ export class LoadNewComponent  implements OnInit {
 
 
   actionResponse(value:boolean) {
-    this.resetForm()
     if (value) {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
@@ -84,6 +83,7 @@ export class LoadNewComponent  implements OnInit {
     } else {
       this.close.emit(value);
     }
+    this.resetForm();
   };
 
   getDisplayStock(){
