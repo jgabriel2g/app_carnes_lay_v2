@@ -123,6 +123,7 @@ export class SalesFormComponent  implements OnInit {
       display_products: this.activeSale.products.map((product: any) => ({
         product: product.product,
         amount: product.amount.toString(),
+        price: product.price.toString(),
       })),
     };
 
