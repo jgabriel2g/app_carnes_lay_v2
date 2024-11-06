@@ -44,7 +44,7 @@ export class LoadNewComponent  implements OnInit {
     if (value) {
       this.productForm.markAllAsTouched();
       if (this.productForm.valid) {
-        if (this.displayStockId !== undefined && this.displayStockId !== null) {
+        if (this.displayStockId !== undefined && this.displayStockId !== null && this.displayStockId !== true) {
           const data = {
             quantity: Number((Number(this.productForm.get('quantity')?.value) + Number(this.productForm.get('quantityToAdd')?.value)).toFixed(3)),
             price: this.productForm.get('price')?.value

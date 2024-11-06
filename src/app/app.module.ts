@@ -12,9 +12,10 @@ import { AuthInterceptor } from './core/interceptors/refresh';
 import { TicketComponent } from './pages/ticket/ticket.component';
 import { CommonModule } from '@angular/common';
 import {DailyTicketComponent} from "./pages/daily-ticket/daily-ticket.component";
+import { RewardTickedComponent } from './pages/reward-ticked/reward-ticked.component';
 
 @NgModule({
-  declarations: [AppComponent, TicketComponent, DailyTicketComponent],
+  declarations: [AppComponent, TicketComponent, DailyTicketComponent, RewardTickedComponent],
   imports: [BrowserModule,CommonModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [ {
     provide: HTTP_INTERCEPTORS,

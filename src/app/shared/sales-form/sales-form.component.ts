@@ -287,6 +287,10 @@ export class SalesFormComponent  implements OnInit {
     sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill));
     window.open('/ticket', '_blank');
   };
+  printRewardTicket(){
+    sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill));
+    window.open('/reward', '_blank');
+  };
 
   clearSale(){
     this.activeSale = {
