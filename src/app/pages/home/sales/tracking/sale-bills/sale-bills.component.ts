@@ -14,7 +14,7 @@ export class SaleBillsComponent  implements OnInit {
   @Input() sale: string = '';
   bills: any[] = []
   @Output() close = new EventEmitter<boolean>();
-  public limit:number = 10;
+  public limit:number = 30;
   public offset:number = 0;
 
   public totalItems:number = 0;

@@ -22,7 +22,7 @@
                 <tbody class="w-full">
                     <tr class="w-full flex justify-between items-center" >
                         <td class="text-left font-medium ">Fecha de Generación</td>
-                        <td class="text-right">{{bill.date}}</td>
+                        <td class="text-right">{{bill.created | date:"short"}}</td>
                     </tr>
                     <tr class="w-full flex justify-between items-center" >
                         <td class="text-left font-medium ">Medio de Pago</td>
@@ -73,10 +73,10 @@
               <div class="flex w-full justify-between items-start" *ngFor="let p of bill.display_products">
                 <div class="text-xs text-left ">
                   <p class="text-sm">{{p.product.product.name}}</p>
-                  <small>{{p.amount}}{{p.product.type_of_unit_measurement.name}} x ${{p.product.price}}</small>
+                  <small>{{p.amount}}{{p.product.type_of_unit_measurement.name}} x ${{p.price}}</small>
                 </div>
                 <div class="price text-xs text-end">
-                  <p class="text-sm">{{convertToNumber(p.amount)  * convertToNumber(p.product.price) | currency }}</p>
+                  <p class="text-sm">{{convertToNumber(p.amount)  * convertToNumber(p.price) | currency }}</p>
                 </div>
               </div>
           </div>
