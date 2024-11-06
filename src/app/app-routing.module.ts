@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { TicketComponent } from './pages/ticket/ticket.component';
 import {DailyTicketComponent} from "./pages/daily-ticket/daily-ticket.component";
+import { RewardTickedComponent } from './pages/reward-ticked/reward-ticked.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,11 @@ const routes: Routes = [
   {
     path: 'ticket',
     component: TicketComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path: 'reward',
+    component: RewardTickedComponent,
     canActivate:[AuthGuard]
   },
   {

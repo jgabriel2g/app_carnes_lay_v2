@@ -1,0 +1,47 @@
+h4, h5, h6, p {
+  margin-bottom: 0 !important;
+  margin-top: 3px !important;
+
+}
+
+.ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: dashed .5px black;
+}
+.table>:not(caption)>*>*{
+  padding: 0 !important;
+}
+
+table {
+  font-size: 12px;
+}
+
+.ticket-auth {
+  font-size: 11px;
+}
+
+@media print {
+  .col-lg-4.col-md-6.col-sm-12, .col-md-6 {
+    width: 100%;
+    max-width: 100%;
+    float: none;
+  }
+
+  html, body {
+    width: 72.1mm;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h4, h5, h6, p, small {
+    font-size: 10pt;
+  }
+}
