@@ -120,7 +120,7 @@
                 <span class="" >Cotizaciones</span>
               </a>
               <!-- dropdown options -->
-              <a *ngIf="showSalesMenu && authSvc.hasPermission('view-sales-tracking')"  [routerLink]="['/home/sales/new']" routerLinkActive="active"   class="group flex gap-x-3 pl-6 rounded-md p-3 text-xs font-semibold leading-6 text-gray-400 hover:bg-[#b3241c] hover:text-white">
+              <a *ngIf="showSalesMenu && authSvc.hasPermission('view-sales-tracking')"  [routerLink]="['/home/sales/tracking']" routerLinkActive="active"   class="group flex gap-x-3 pl-6 rounded-md p-3 text-xs font-semibold leading-6 text-gray-400 hover:bg-[#b3241c] hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"  fill="none">
                   <path d="M14.9805 7.01556C14.9805 7.01556 15.4805 7.51556 15.9805 8.51556C15.9805 8.51556 17.5687 6.01556 18.9805 5.51556" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                   <path d="M9.99491 2.02134C7.49644 1.91556 5.56618 2.20338 5.56618 2.20338C4.34733 2.29053 2.01152 2.97385 2.01154 6.96454C2.01156 10.9213 1.9857 15.7993 2.01154 17.7439C2.01154 18.932 2.74716 21.7033 5.29332 21.8518C8.38816 22.0324 13.9628 22.0708 16.5205 21.8518C17.2052 21.8132 19.4847 21.2757 19.7732 18.7956C20.0721 16.2263 20.0126 14.4407 20.0126 14.0157" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -130,7 +130,7 @@
                 </svg>
                 <span class="" >Historial</span>
               </a>
-              <a *ngIf="showSalesMenu  && authSvc.hasPermission('open-sales-box')" [routerLink]="['/home/sales/tracking']" routerLinkActive="active"   class="group flex gap-x-3 pl-6 rounded-md p-3 text-xs font-semibold leading-6 text-gray-400 hover:bg-[#b3241c] hover:text-white">
+              <a *ngIf="showSalesMenu  && authSvc.hasPermission('open-sales-box')" [routerLink]="['/home/sales/new']" routerLinkActive="active"   class="group flex gap-x-3 pl-6 rounded-md p-3 text-xs font-semibold leading-6 text-gray-400 hover:bg-[#b3241c] hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"  fill="none">
                   <path d="M8 16H15.2632C19.7508 16 20.4333 13.1808 21.261 9.06908C21.4998 7.88311 21.6192 7.29013 21.3321 6.89507C21.045 6.5 20.4947 6.5 19.3941 6.5H19M6 6.5H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                   <path d="M11 5.5C11.4915 4.9943 12.7998 3 13.5 3M16 5.5C15.5085 4.9943 14.2002 3 13.5 3M13.5 3V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
