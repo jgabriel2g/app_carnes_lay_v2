@@ -3,8 +3,6 @@ import { Router } from "@angular/router";
 import { SaleResponse } from "../../core/interfaces/sale";
 
 declare const window: any;
-const ipcRenderer = window.require ? window.require('electron').ipcRenderer : null;
-
 
 @Component({
   selector: 'app-daily-ticket',
@@ -29,7 +27,7 @@ export class DailyTicketComponent implements OnInit {
   }
 
   print() {
-    if (ipcRenderer && this.sale) {
+    if (window.electronAPI && this.sale) {
       this.isPrinting = true;
 
       // Generar el HTML del ticket (contenido de `#ticket`)
@@ -37,7 +35,7 @@ export class DailyTicketComponent implements OnInit {
 
       // Enviar el HTML al proceso principal de Electron para imprimir
       if (ticketHtml) {
-        ipcRenderer.send('print-ticket', ticketHtml);
+        window.electronAPI.send('print-ticket', ticketHtml);
       }
 
       this.isPrinting = false;

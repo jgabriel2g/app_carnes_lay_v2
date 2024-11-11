@@ -89,19 +89,14 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
+          "target": "nsis"
         },
         {
-          "target": "zip",
-          "arch": [
-            "x64"
-          ]
+          "target": "zip"
         }
       ],
-      "icon": "build/icon.ico"
+      "icon": "build/icon.ico",
+      "sign": false
     },
     "directories": {
       "buildResources": "build"
@@ -111,5 +106,6 @@
       "desktop/main.js",
       "desktop/preload.js"
     ]
-  }
+  },
+  "asarUnpack": ["node_modules"]
 }
