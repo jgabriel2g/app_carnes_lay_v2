@@ -1,15 +1,20 @@
+/* Estilos generales */
 h4, h5, h6, p {
   margin-bottom: 0 !important;
   margin-top: 3px !important;
-
 }
 
-.ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
+.ticket-header,
+.ticket-info,
+.ticket-description,
+.ticket-subtotal,
+.ticket-total {
   padding-top: 8px;
   padding-bottom: 8px;
-  border-bottom: dashed .5px black;
+  border-bottom: dashed 0.5px black;
 }
-.table>:not(caption)>*>*{
+
+.table > :not(caption) > * > * {
   padding: 0 !important;
 }
 
@@ -20,8 +25,60 @@ table {
 .ticket-auth {
   font-size: 11px;
 }
+
+.ticket-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Estilos de impresión */
 @media print {
-  .no-print {
-    display: none;
+  /* Configurar el body y html para impresión sin márgenes ni overflow */
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    overflow: visible !important;
+  }
+
+  /* Asegura que el ticket tenga el ancho adecuado y se imprima completo */
+  #ticket {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    overflow: visible !important;
+    max-height: none !important;
+    page-break-inside: auto; /* Permite que el ticket fluya en varias páginas */
+  }
+
+  /* Evitar cortes dentro de secciones de productos */
+  .ticket-info {
+    page-break-inside: avoid;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: dashed 0.5px black;
+  }
+
+  /* Permitir que el ticket-body fluya en múltiples páginas */
+  .ticket-body {
+    page-break-after: auto;
+  }
+
+  /* Asegurar que cada fila en la tabla de productos no se divida */
+  table tr {
+    page-break-inside: avoid;
+  }
+
+  /* Ajustar fuente y elementos de scroll */
+  h4, h5, h6, p, small {
+    font-size: 10pt;
+  }
+
+  /* Mantener pie de página en la última página */
+  .ticket-footer {
+    page-break-after: auto;
   }
 }

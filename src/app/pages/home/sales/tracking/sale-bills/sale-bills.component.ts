@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import {Platform} from '@ionic/angular';
 import { SalesService } from '../../../../../core/services/sales.service';
 import { AlertsService } from '../../../../../core/services/alerts.service';
-import { ThirdPartyService } from '../../../../../core/services/third-party.service';
 import {Router} from "@angular/router";
+import {SaleResponse} from "../../../../../core/interfaces/sale";
+import {mapToCamelCase} from "../../../../../core/utils/mapper";
 
 @Component({
   selector: 'app-sale-bills',
@@ -23,15 +24,18 @@ export class SaleBillsComponent  implements OnInit {
   public pageNumbers: number[] = [];
   public clientSelected: string = '';
   public isLoading: boolean = false;
+  public isMobile: boolean = false;
 
   constructor(
     private alertSvc:AlertsService,
     private salesSvc:SalesService,
     private router:Router,
+    private platform: Platform
   ) { }
 
   ngOnInit() {
     this.getSales();
+    this.isMobile = this.platform.is('mobile');
   }
 
   showBillDetail(bill: any) {
@@ -121,9 +125,10 @@ export class SaleBillsComponent  implements OnInit {
       error:(err:any) => {
         console.log(err);
       },
-      next:(resp:any) => {
-        sessionStorage.setItem('saleSummary', JSON.stringify(resp));
-        window.open('/daily-ticket', '_blank');
+      next: (resp: any) => {
+        const result = mapToCamelCase(resp) as SaleResponse;
+        result.isMobile = this.isMobile;
+        this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
       }
     })
   }

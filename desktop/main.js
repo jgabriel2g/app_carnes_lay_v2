@@ -139,6 +139,19 @@ ipcMain.on('trigger-print', (event) => {
   }
 });
 
+ipcMain.on('print-ticket', (event, ticketHtml) => {
+  let printWindow = new BrowserWindow({ show: false });
+  printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(ticketHtml)}`).then();
+
+  printWindow.webContents.on('did-finish-load', () => {
+    printWindow.webContents.print({
+      silent: true,
+      printBackground: true,
+      deviceName: 'POS-80C',
+    });
+  });
+});
+
 app.whenReady().then(() => {
   createWindow().then();
 
