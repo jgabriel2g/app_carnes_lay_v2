@@ -71,6 +71,14 @@ export class SalesService {
     return this.http.patch(url,data,  this.authSvc.header);
   }
 
+  getReportDisplayStock() {
+    const url = `${this.authSvc.baseUrl}/sale/display-stock/get_total_inventory/`;
+    return this.http.get<Blob>(url, {
+      ...this.authSvc.header,
+      responseType: 'blob' as 'json',
+    });
+  }
+
   // BILLS MANAGE
 
   getBillsBySale(limit:number, offset:number, sale:string = '', client:string = ''){

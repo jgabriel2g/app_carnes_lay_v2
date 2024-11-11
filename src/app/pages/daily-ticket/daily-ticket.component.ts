@@ -41,6 +41,9 @@ export class DailyTicketComponent implements OnInit {
       }
 
       this.isPrinting = false;
+
+      // Navegar de regreso después de la impresión si es necesario
+      // this.router.navigateByUrl('/some-route-after-print').then();
     } else {
       console.warn('Electron IPC no disponible o sale es nulo.');
     }

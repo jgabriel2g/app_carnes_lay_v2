@@ -99,4 +99,20 @@ export class ListComponent  implements OnInit {
     };
   };
 
+  downloadInventory() {
+    this.salesSvc.getReportDisplayStock().subscribe({
+      next: (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inventario_vitrina.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        this.handleError(err);
+      },
+    });
+  }
+
 }
