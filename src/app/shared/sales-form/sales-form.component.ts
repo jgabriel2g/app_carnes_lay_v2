@@ -11,6 +11,8 @@ import { ThirdPartyService } from '../../core/services/third-party.service';
 import { AuthService } from '../../core/services/auth.service';
 import {OtpService} from "../../core/services/otp.service";
 import {DisplayStock} from "../../core/interfaces/displayStock";
+import {mapToCamelCase} from "../../core/utils/mapper";
+import {SaleResponse} from "../../core/interfaces/sale";
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -83,7 +85,8 @@ export class SalesFormComponent  implements OnInit {
     private thirdPartySvc:ThirdPartyService,
     private salesSvc:SalesService,
     private ngZone: NgZone,
-    private otpService: OtpService
+    private otpService: OtpService,
+    private router:Router
   ) { }
 
   ngOnInit() {
@@ -287,7 +290,8 @@ export class SalesFormComponent  implements OnInit {
 
   printBill(){
     sessionStorage.setItem('bill', JSON.stringify(this.activeSale.bill));
-    window.open('/ticket', '_blank');
+    this.router.navigateByUrl('/ticket').then();
+    sessionStorage.removeItem('saleBoxInfo');
   };
 
   printRewardTicket() {

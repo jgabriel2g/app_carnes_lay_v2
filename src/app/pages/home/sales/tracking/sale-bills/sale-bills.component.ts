@@ -40,7 +40,7 @@ export class SaleBillsComponent  implements OnInit {
 
   showBillDetail(bill: any) {
     sessionStorage.setItem('bill', JSON.stringify(bill));
-    window.open('/ticket', '_blank');
+    this.router.navigateByUrl('/ticket').then();
   };
 
   deleteSale(id:any){

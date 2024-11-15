@@ -134,7 +134,6 @@ export class SalesMainComponent  implements OnInit {
       await this.showAlert('Éxito', 'Caja cerrada exitosamente.');
       this.attempts = 0;
       this.otpCode = '';
-      console.log(this.boxInfo.id)
       this.salesSvc.closeBoxSale(this.boxInfo.id)
         .subscribe({
           error:(err:any) => {
@@ -171,7 +170,6 @@ export class SalesMainComponent  implements OnInit {
     this.windowWith = window.innerWidth;
   };
 
-
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.checkScreenWidth();
@@ -180,7 +178,6 @@ export class SalesMainComponent  implements OnInit {
   reloadBoxInfo(event:any) {
     this.getBoxSalesById();
   };
-
 
   handleError(err: any) {
     if (err.error) {
