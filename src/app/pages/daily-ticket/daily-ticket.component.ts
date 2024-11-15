@@ -30,9 +30,33 @@ export class DailyTicketComponent implements OnInit {
     if (window.electronAPI && this.sale) {
       this.isPrinting = true;
 
-      const ticketHtml = document.getElementById('ticket')?.outerHTML;
+      const ticketElement = document.getElementById('ticket');
+      if (ticketElement) {
+        const styles = Array.from(document.styleSheets)
+          .map((styleSheet) => {
+            try {
+              return Array.from(styleSheet.cssRules)
+                .map((rule) => rule.cssText)
+                .join(' ');
+            } catch (e) {
+              console.warn('Error leyendo estilos:', e);
+              return '';
+            }
+          })
+          .join(' ');
 
-      if (ticketHtml) {
+        const ticketHtml = `
+        <html lang="es">
+          <head>
+            <title>Daily Ticket</title>
+            <style>${styles}</style>
+          </head>
+          <body>
+            ${ticketElement.outerHTML}
+          </body>
+        </html>
+      `;
+
         window.electronAPI.send('print-ticket', ticketHtml);
       }
 
@@ -40,6 +64,23 @@ export class DailyTicketComponent implements OnInit {
     } else {
       window.print();
     }
+
     this.router.navigateByUrl('/home/sales/new/').then();
   }
+  // print() {
+  //   if (window.electronAPI && this.sale) {
+  //     this.isPrinting = true;
+  //
+  //     const ticketHtml = document.getElementById('ticket')?.outerHTML;
+  //
+  //     if (ticketHtml) {
+  //       window.electronAPI.send('print-ticket', ticketHtml);
+  //     }
+  //
+  //     this.isPrinting = false;
+  //   } else {
+  //     window.print();
+  //   }
+  //   this.router.navigateByUrl('/home/sales/new/').then();
+  // }
 }
