@@ -22,11 +22,22 @@ export class RewardTickedComponent  implements OnInit {
   }
 
   print() {
-    this.isPrinting  = !this.isPrinting;
-    window.print();
-    // window.electronAPI.triggerPrint();
-    this.isPrinting  = !this.isPrinting;
+    if (window.electronAPI) {
+      this.isPrinting = true;
+
+      const ticketHtml = document.getElementById('ticket')?.outerHTML;
+
+      if (ticketHtml) {
+        window.electronAPI.send('print-ticket', ticketHtml);
+      }
+
+      this.isPrinting = false;
+    } else {
+      window.print();
+    }
+    this.router.navigateByUrl('/home/sales/new/').then();
   }
+
   convertToNumber(value:string) {
     return Number(value);
   }
