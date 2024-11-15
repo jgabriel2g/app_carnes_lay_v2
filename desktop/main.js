@@ -146,8 +146,13 @@ ipcMain.on('print-ticket', (event, ticketHtml) => {
   printWindow.webContents.on('did-finish-load', () => {
     printWindow.webContents.print({
       silent: true,
-      printBackground: true,
+      color: false,
+      printBackground: false,
       deviceName: 'POS-80C',
+      pageSize: { width: 72100, height: 210000 },
+      margins: { marginType: 'none' }
+    },(success, failureReason) => {
+      if (!success) console.log('Impresión fallida:', failureReason);
     });
   });
 });

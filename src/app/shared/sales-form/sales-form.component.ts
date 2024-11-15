@@ -10,6 +10,7 @@ import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
 import { AuthService } from '../../core/services/auth.service';
 import {OtpService} from "../../core/services/otp.service";
+import {DisplayStock} from "../../core/interfaces/displayStock";
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -54,7 +55,7 @@ export class SalesFormComponent  implements OnInit {
   public clientSuggestions: any[]= [];
   public Clients:any[]= [];
   public PaymentMethods:any[]= [];
-  public Products:any[]= [];
+  public Products: DisplayStock[]= [];
   @Input() registerBox:any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
   @ViewChild('productInput') productInput!: ElementRef;
@@ -198,6 +199,7 @@ export class SalesFormComponent  implements OnInit {
   };
 
   searchProducts(event: AutoCompleteCompleteEvent) {
+    console.log(this.Products)
     this.productSuggestions = this.Products
       .filter(products => products.product.name.toLowerCase().includes(event.query.toLowerCase())  || products.product.code.toLowerCase().includes(event.query.toLowerCase())  )
       .map(product => `${ product.product.name}`  );
@@ -213,13 +215,13 @@ export class SalesFormComponent  implements OnInit {
 
   onProductSelect(event: any) {
     // || p.code
-    let selectedProduct = this.Products.find((p: any) => p.product.name === event.value);
+    let selectedProduct = this.Products.find((p: DisplayStock) => p.product.name === event.value);
     const productToAdd = {
-      product: selectedProduct.id ,
-      productName: selectedProduct.product.name,
+      product: selectedProduct?.id ,
+      productName: selectedProduct?.product.name,
       amount: null,
-      price: selectedProduct.price,
-      type_of_unit_measurement: `Ingresa la cantidad en ${selectedProduct.type_of_unit_measurement.name}`,
+      price: selectedProduct?.price,
+      type_of_unit_measurement: `Ingresa la cantidad en ${selectedProduct?.typeOfUnitMeasurement.name}`,
       isFinalized:false,
     };
     this.activeSale.products.push(productToAdd);
@@ -349,6 +351,10 @@ export class SalesFormComponent  implements OnInit {
       this.isCapturingWeight = true;
       this.activeInputIndex = index;
     }
+  }
+
+  toggleCaptureText(index: number): string {
+    return this.isCapturingWeight && this.activeInputIndex === index ? 'Dejar de Capturar' : 'Capturar Peso';
   }
 
 }

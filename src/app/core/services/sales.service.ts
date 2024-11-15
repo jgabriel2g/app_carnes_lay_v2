@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import {mapToCamelCase} from "../utils/mapper";
+import {getDisplayStockResponse} from "../interfaces/displayStock";
+import {map} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -47,15 +50,18 @@ export class SalesService {
 
   // DISPLAY STOCK MANAGE
 
-  getDisplayStock(limit:number, offset:number, search:string = ''){
+  getDisplayStock(limit: number, offset: number, search: string = '') {
     let params = new HttpParams();
     if (search) {
       params = params.set('search', search);
     }
-    const url =  `${this.authSvc.baseUrl}/sale/display-stock/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url, { headers: this.authSvc.header.headers, params });
-  };
+    const url = `${this.authSvc.baseUrl}/sale/display-stock/?limit=${limit}&offset=${offset}`;
 
+    return this.http.get<getDisplayStockResponse>(url, { headers: this.authSvc.header.headers, params })
+      .pipe(
+        map(response => mapToCamelCase(response))
+      );
+  };
   createDisplayStock(data:{}){
     const url =  `${this.authSvc.baseUrl}/sale/display-stock/`;
     return this.http.post(url, data, this.authSvc.header);

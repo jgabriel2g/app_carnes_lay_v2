@@ -30,20 +30,16 @@ export class DailyTicketComponent implements OnInit {
     if (window.electronAPI && this.sale) {
       this.isPrinting = true;
 
-      // Generar el HTML del ticket (contenido de `#ticket`)
       const ticketHtml = document.getElementById('ticket')?.outerHTML;
 
-      // Enviar el HTML al proceso principal de Electron para imprimir
       if (ticketHtml) {
         window.electronAPI.send('print-ticket', ticketHtml);
       }
 
       this.isPrinting = false;
-
-      // Navegar de regreso después de la impresión si es necesario
-      // this.router.navigateByUrl('/some-route-after-print').then();
     } else {
-      console.warn('Electron IPC no disponible o sale es nulo.');
+      window.print();
     }
+    this.router.navigateByUrl('/home/sales/new/').then();
   }
 }

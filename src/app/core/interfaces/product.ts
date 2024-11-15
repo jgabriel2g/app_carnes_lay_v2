@@ -57,4 +57,3 @@ export interface Product {
   stocks: Stock[];
   is_active: boolean;
 }
-

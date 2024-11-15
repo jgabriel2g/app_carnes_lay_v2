@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { filter } from 'rxjs';
 
+declare const window: any;
+
+
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AuthService } from '../../../../../core/services/auth.service';
 import {AlertController} from "@ionic/angular";
+import {mapToCamelCase} from "../../../../../core/utils/mapper";
+import {SaleResponse} from "../../../../../core/interfaces/sale";
 
 @Component({
   selector: 'app-sales-main',
@@ -139,10 +141,10 @@ export class SalesMainComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            sessionStorage.setItem('saleSummary', JSON.stringify(resp));
-            window.open('/daily-ticket', '_blank');
+            const result = mapToCamelCase(resp) as SaleResponse;
+            result.isMobile = false;
+            this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
             sessionStorage.removeItem('saleBoxInfo');
-            this.router.navigateByUrl('/home/sales/new/').then();
           }
         });
     } else {
