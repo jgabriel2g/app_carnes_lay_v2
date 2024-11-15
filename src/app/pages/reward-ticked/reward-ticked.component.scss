@@ -1,7 +1,6 @@
 h4, h5, h6, p {
   margin-bottom: 0 !important;
   margin-top: 3px !important;
-
 }
 
 .ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
@@ -21,27 +20,31 @@ table {
   font-size: 11px;
 }
 
-@media print {
-  .col-lg-4.col-md-6.col-sm-12, .col-md-6 {
-    width: 100%;
-    max-width: 100%;
-    float: none;
-  }
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
 
-  html, body {
-    width: 72.1mm;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+.text-center {
+  text-align: center;
+}
 
-  img {
-    max-width: 100%;
-    height: auto;
-  }
+.w-full {
+  width: 100%;
+}
 
-  h4, h5, h6, p, small {
-    font-size: 10pt;
-  }
+.logo {
+  height: 100px;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.text-left {
+  text-align: left;
 }

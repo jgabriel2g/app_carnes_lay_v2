@@ -1,7 +1,6 @@
 h4, h5, h6, p {
   margin-bottom: 0 !important;
   margin-top: 3px !important;
-
 }
 
 .ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
@@ -20,8 +19,42 @@ table {
 .ticket-auth {
   font-size: 11px;
 }
-@media print {
-  .no-print {
-    display: none;
-  }
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.logo {
+  height: 100px;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-0 {     margin-bottom: 0px; }
+.mt-2 {     margin-top: 0.5rem/* 8px */; }
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {     align-items: center; }
+.w-full {     width: 100%; }
