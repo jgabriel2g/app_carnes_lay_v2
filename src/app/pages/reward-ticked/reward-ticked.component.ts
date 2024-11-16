@@ -97,6 +97,6 @@ table {
     } else {
       window.print();
     }
-    this.router.navigateByUrl('/home/sales/new/').then();
+    // this.router.navigateByUrl('/home/sales/new/').then();
   }
 }
