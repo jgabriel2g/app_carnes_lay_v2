@@ -168,10 +168,8 @@
         <button (click)="createSale()" *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized || isLoading" >Registrar</button>
         <button (click)="clearSale()" class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="activeSale.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
         <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized" >Ver Factura</button>
-        <button (click)="printRewardTicket()" *ngIf="authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized && activeSale.sale > 20000" >Ver boleto</button>
+        <button (click)="printRewardTicket()" *ngIf="authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed">Ver boleto</button>
       </dl>
     </div>
   </div>
 </div>
-
-
