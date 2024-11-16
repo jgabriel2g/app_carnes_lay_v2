@@ -59,9 +59,14 @@ export class SalesService {
 
     return this.http.get<getDisplayStockResponse>(url, { headers: this.authSvc.header.headers, params })
       .pipe(
-        map(response => mapToCamelCase(response))
+        map(response => {
+          const camelCasedResponse = mapToCamelCase(response);
+          camelCasedResponse.results = camelCasedResponse.results.map((result: any) => mapToCamelCase(result));
+          return camelCasedResponse;
+        })
       );
   };
+
   createDisplayStock(data:{}){
     const url =  `${this.authSvc.baseUrl}/sale/display-stock/`;
     return this.http.post(url, data, this.authSvc.header);

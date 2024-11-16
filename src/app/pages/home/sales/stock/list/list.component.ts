@@ -3,6 +3,7 @@ import { SalesService } from '../../../../../core/services/sales.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AuthService } from '../../../../../core/services/auth.service';
+import {DisplayStock} from "../../../../../core/interfaces/displayStock";
 
 @Component({
   selector: 'app-list',
@@ -18,7 +19,7 @@ export class ListComponent  implements OnInit {
   public currentPage = 1;
   public totalPages = 1;
   public pageNumbers: number[] = [];
-  public displayStocks:any[] = [];
+  public displayStocks: DisplayStock[] = [];
   public isLoading:boolean = false;
   public displayId:any
 
