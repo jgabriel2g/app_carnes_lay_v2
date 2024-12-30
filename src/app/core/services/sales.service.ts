@@ -131,4 +131,9 @@ export class SalesService {
     return this.http.delete(url, this.authSvc.header);
   };
 
+  sendToDian(id:string){
+    const url = `${this.authSvc.baseUrl}/sale/bill/${id}/send_fe_to_dian/`;
+    return this.http.post(url, {}, this.authSvc.header);
+  }
+
 }

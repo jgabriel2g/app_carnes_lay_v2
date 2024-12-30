@@ -132,4 +132,20 @@ export class SaleBillsComponent  implements OnInit {
       }
     })
   }
+
+  sendToDian(billId: string) {
+    this.salesSvc.sendToDian(billId).subscribe({
+      error:(err:any) => {
+        console.log(err);
+        this.handleError(err);
+      },
+      next:(resp:any) => {
+        this.alertSvc.presentAlert('Éxito', 'Factura enviada a la Dian');
+      }
+    })
+  }
+
+  viewPdf(url: string) {
+    window.open(url, '_blank');
+  }
 }
