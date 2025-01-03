@@ -129,6 +129,7 @@ export class SalesFormComponent  implements OnInit {
         amount: product.amount.toString(),
         price: product.price.toString(),
       })),
+      ...(this.activeSale.client && { client: this.activeSale.client }),
     };
 
     if (this.isSaleValid()) {

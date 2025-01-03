@@ -39,8 +39,8 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr *ngFor="let dS of displayStocks"  >
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{dS.product?.code}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.product?.name}}</td>
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{dS.product.code}}</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.product.name}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.price | currency}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.quantity}} {{dS.typeOfUnitMeasurement.name}}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{dS.remainingPercentage}} %</td>
