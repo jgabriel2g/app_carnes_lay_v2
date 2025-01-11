@@ -114,7 +114,7 @@ export class LoadNewComponent  implements OnInit {
   };
 
   getProducts(){
-    this.inventorySvc.getProducts(150,0, true)
+    this.inventorySvc.getProducts(250,0, true)
           .subscribe({
             error:(err:any) => {
               this.handleError(err);
