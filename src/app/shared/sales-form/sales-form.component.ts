@@ -205,7 +205,10 @@ export class SalesFormComponent  implements OnInit {
       .map(client => {
         const fullName = `${client.first_name} ${client.last_name}`;
         const company = client.company_name ? ` (${client.company_name})` : '';
-        return fullName + company;
+        return {
+          label: fullName + company,
+          value: client
+        };
       });
   }
 
@@ -220,9 +223,10 @@ export class SalesFormComponent  implements OnInit {
   };
 
   onClientSelect(event: any) {
-    let selectedClient = this.Clients.filter( (p:any) =>  p.first_name || p.last_name || p.identification_number || p.email  == event.value)
-    this.activeSale.client = selectedClient[0].id;
-  };
+    const selectedClient = event.value;
+    this.activeSale.client = selectedClient.value.id;
+  }
+
 
   onProductSelect(event: any) {
     // || p.code
