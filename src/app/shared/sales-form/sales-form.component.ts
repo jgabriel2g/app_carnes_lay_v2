@@ -101,6 +101,7 @@ export class SalesFormComponent  implements OnInit {
         this.Products = stockResp.results;
         this.PaymentMethods = paymentResp.results;
         this.Clients = clientResp.results;
+        console.log(this.Clients);
       },
       error: (err) => {
         console.error('Error loading data:', err);
@@ -192,15 +193,21 @@ export class SalesFormComponent  implements OnInit {
   };
 
   searchClients(event: any) {
-    let value = event.query
+    const value = event.query.toLowerCase();
     this.clientSuggestions = this.Clients
-      .filter(client => client.first_name.toLowerCase().includes(value.toLowerCase()) ||
-              client.last_name.toLowerCase().includes(value.toLowerCase()) ||
-              client.identification_number.toLowerCase().includes(value.toLowerCase()) ||
-              client.email.toLowerCase().includes(value.toLowerCase())
-              )
-      .map(client => client.first_name || client.last_name || client.identification_number || client.email);
-  };
+      .filter(client =>
+        client.first_name.toLowerCase().includes(value) ||
+        client.last_name.toLowerCase().includes(value) ||
+        (client.company_name && client.company_name.toLowerCase().includes(value)) ||
+        client.identification_number.toLowerCase().includes(value) ||
+        client.email.toLowerCase().includes(value)
+      )
+      .map(client => {
+        const fullName = `${client.first_name} ${client.last_name}`;
+        const company = client.company_name ? ` (${client.company_name})` : '';
+        return fullName + company;
+      });
+  }
 
   searchProducts(event: AutoCompleteCompleteEvent) {
     console.log(this.Products)
