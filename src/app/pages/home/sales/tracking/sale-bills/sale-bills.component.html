@@ -41,7 +41,7 @@
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.created | date:"short"}}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.total_cost | currency}}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.payment_method.name }}</td>
-                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.client.first_name === "" && "sin cliente" }} {{b.client.first_name }} {{b.client.last_name }}</td>
+                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.client.first_name === "" && "CONSUMIDOR FINAL" }} {{b.client.first_name }} {{b.client.last_name }}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500" *ngIf="b.client.first_name !== ''">
                           <button class="btn-primary px-2" (click)="sendToDian(b.id)">
                             Enviar a la Dian

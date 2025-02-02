@@ -6,7 +6,11 @@
       class="logo"
     >
     <h4 class="text-xs">CARNES LA VICTORIA</h4>
-    <h6 class="text-xs">Cra 10 CL 6 MERCADO PÚBLICO, FUNDACIÓN</h6>
+    <h5 class="text-xs">NIT 57271562-7</h5>
+    <h6 class="text-xs">Dir Cra 10 CL 6 MERCADO PÚBLICO, FUNDACIÓN</h6>
+    <h6 class="text-xs font-bold">DOCUMENTO ELECTRÓNICO EN PROCESO DE VALIDACION. NO REEMPLAZA LA FACTURA</h6>
+    <br>
+    <h6 class="text-xs font-bold">ORDEN DE DESPACHO. <br> {{bill.id}}</h6>
   </div>
   <div class="ticket-body">
     <div class="ticket-info mb-2">
@@ -26,6 +30,18 @@
         <tr class="w-full flex justify-between items-center" >
           <td class="text-left font-medium ">Medio de Pago</td>
           <td class="text-right">{{bill.payment_method.name}}</td>
+        </tr>
+        <tr class="w-full flex justify-between items-center" *ngIf="bill.client.first_name === ''">
+          <td class="text-left font-medium ">Cliente:</td>
+          <td class="text-right">Consumidor final</td>
+        </tr>
+        <tr class="w-full flex justify-between items-center" *ngIf="bill.client.first_name === ''">
+          <td class="text-left font-medium ">NIT/CC:</td>
+          <td class="text-right">222222222222</td>
+        </tr>
+        <tr class="w-full flex justify-between items-center" >
+          <td class="text-left font-medium ">Vendedor: </td>
+          <td class="text-right">{{bill.user.first_name}} {{bill.user.last_name}}</td>
         </tr>
         </tbody>
       </table>
@@ -66,12 +82,12 @@
 
     <div class="ticket-description mb-1">
       <div class="flex justify-between"  >
-        <h6 class="text-xs font-bold">DESCRIPCIÓN</h6>
+        <h6 class="text-xs font-bold">PRODUCTO</h6>
         <h6 class="text-xs font-bold">VALOR</h6>
       </div>
       <div class="flex w-full justify-between items-start" *ngFor="let p of bill.display_products">
         <div class="text-xs text-left ">
-          <p class="text-sm">{{p.product.product.name}}</p>
+          <p class="text-sm"> {{p.product.product.code}} {{p.product.product.name}}</p>
           <small>{{p.amount}}{{p.product.type_of_unit_measurement.name}} x ${{p.price}}</small>
         </div>
         <div class="price text-xs text-end">
@@ -88,23 +104,26 @@
     </div>
     <div class="ticket-total">
       <div class="flex justify-between ">
-        <h5 class="pb-1 text-[12px] font-semibold">TOTAL COBRADO</h5>
+        <h5 class="pb-1 text-[12px] font-semibold">SUBTOTAL</h5>
         <h5 class="text-xs">{{bill.total_cost | currency}}</h5>
       </div>
     </div>
     <div class="ticket-total">
       <div class="flex justify-between ">
-        <h5 class="pb-1 text-[12px] font-semibold">TOTAL RECIBIDO</h5>
+        <h5 class="pb-1 text-[12px] font-semibold">RECIBIDO:</h5>
         <h5 class="text-xs">{{bill.total_received | currency}}</h5>
       </div>
     </div>
     <div class="ticket-total">
       <div class="flex justify-between ">
-        <h5 class="pb-1 text-[12px] font-semibold">TOTAL CAMBIO</h5>
+        <h5 class="pb-1 text-[12px] font-semibold">CAMBIO:</h5>
         <h5 class="text-xs">{{bill.total_sent | currency}}</h5>
       </div>
     </div>
   </div>
-  <div class="ticket-footer">
+  <div class="ticket-footer text-center w-full">
+    <h1 class="text-base font-bold">Gracias por su compra</h1>
+    <h6 class="text-xs font-bold">ESTE DOCUMENTO NO REEMPLAZA NI SE CONSIDERA LA FACTURA ELECTRONICA, LA CUAL SERA ENVIADA POR CORREO ELECTRONICO</h6>
+    <h6 class="text-xs">Software de facturación electrónica propio</h6>
   </div>
 </div>

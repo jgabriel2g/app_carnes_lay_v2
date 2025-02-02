@@ -67,7 +67,7 @@ export class ClientsFormComponent  implements OnInit {
       regime_type: ['', [Validators.required]],
       responsibilities: ['', [Validators.required]],
       person_type: ['', [Validators.required]],
-      companyName: ['', [Validators.required]],
+      company_name: ['', [Validators.required]],
     });
   }
 

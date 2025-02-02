@@ -57,10 +57,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
           </svg>
         </div>
-        <input formControlName="companyName" type="text" name="names" id="names" class="inputs" placeholder="Ingresa la razón social">
+        <input formControlName="company_name" type="text" name="company_names" id="company_names" class="inputs" placeholder="Ingresa la razón social">
       </div>
-      <div *ngIf="clientsForm.get('companyName')?.invalid && clientsForm.get('companyName')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('companyName')?.errors?.['required']">La razón social es requerida</small>
+      <div *ngIf="clientsForm.get('company_name')?.invalid && clientsForm.get('company_name')?.touched">
+        <small class="error-message" *ngIf="clientsForm.get('company_name')?.errors?.['required']">La razón social es requerida</small>
       </div>
     </div>
     <div class="mb-2 w-full">
