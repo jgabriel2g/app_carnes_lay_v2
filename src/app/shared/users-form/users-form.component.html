@@ -1,117 +1,258 @@
-<div class="container mx-auto pb-4 px-0 sm:px-6 lg:px-8  md:max-w-full max-w-[290px]">
+<div class="container mx-auto pb-4 px-0 sm:px-6 lg:px-8 md:max-w-full max-w-[290px]">
   <div class="py-16">
     <div>
+      <!-- MIGAS DE PAN -->
       <nav class="hidden sm:flex" aria-label="Breadcrumb">
         <ol role="list" class="flex items-center space-x-4">
           <li>
             <div class="flex">
-              <a class="text-sm font-medium text-gray-500 hover:text-gray-700">Home</a>
+              <a class="text-sm font-medium text-gray-500 hover:text-gray-700"
+              >Home</a
+              >
             </div>
           </li>
           <li>
             <div class="flex items-center">
-              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 flex-shrink-0 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
               </svg>
-              <a [routerLink]="['/routePath']" routerLinkActive="router-link-active"  class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Perfil</a>
+              <a
+                [routerLink]="['/routePath']"
+                routerLinkActive="router-link-active"
+                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >Perfil</a
+              >
             </div>
           </li>
           <li>
             <div class="flex items-center">
-              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 flex-shrink-0 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
               </svg>
-              <a  aria-current="page" class="ml-4 text-sm font-medium text-red-500 hover:text-red-700">Formulario</a>
+              <a
+                aria-current="page"
+                class="ml-4 text-sm font-medium text-red-500 hover:text-red-700"
+              >Formulario</a
+              >
             </div>
           </li>
         </ol>
       </nav>
     </div>
+
+    <!-- ENCABEZADO -->
     <div class="mt-4 md:flex md:items-center md:justify-between">
       <div class="min-w-0 flex-1">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Mi Perfil</h2>
+        <h2
+          class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
+        >
+          Mi Perfil
+        </h2>
       </div>
       <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
-        <button (click)="onSubmit()" type="button" class="btn-primary px-6">Guardar</button>
-        <button  routerLink="/home/profile/changePassword" type="button" class="btn-primary px-6 ml-2  text-nowrap">Cambiar contraseña</button>
+        <button (click)="onSubmit()" type="button" class="btn-primary px-6">
+          Guardar
+        </button>
+        <button
+          routerLink="/home/profile/changePassword"
+          type="button"
+          class="btn-primary px-6 ml-2 text-nowrap"
+        >
+          Cambiar contraseña
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- FORMULARIO -->
   <form [formGroup]="userForm">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 h-full mx-auto">
-      <!-- Username input field -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 h-full mx-auto"
+    >
+      <!-- Username -->
       <div class="mb-2 w-full">
         <label for="user">Usuario</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
-          <input formControlName="username" type="text" name="user" id="user" class="inputs" placeholder="Ingresa el usuario">
+          <input
+            formControlName="username"
+            type="text"
+            name="user"
+            id="user"
+            class="inputs"
+            placeholder="Ingresa el usuario"
+          />
         </div>
-        <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched">
-          <small class="error-message" *ngIf="userForm.get('username')?.errors?.['required']">El usuario es requerido</small>
+        <div
+          *ngIf="
+            userForm.get('username')?.invalid &&
+            userForm.get('username')?.touched
+          "
+        >
+          <small
+            class="error-message"
+            *ngIf="userForm.get('username')?.errors?.['required']"
+          >El usuario es requerido</small
+          >
         </div>
       </div>
 
-      <!-- first name input field -->
+      <!-- first_name -->
       <div class="mb-2 w-full">
-        <label for="names" >Nombres</label>
+        <label for="names">Nombres</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
-          <input formControlName="first_name" type="text" name="names" id="names" class="inputs" placeholder="Ingresa el nombre">
+          <input
+            formControlName="first_name"
+            type="text"
+            name="names"
+            id="names"
+            class="inputs"
+            placeholder="Ingresa el nombre"
+          />
         </div>
-        <div *ngIf="userForm.get('first_name')?.invalid && userForm.get('first_name')?.touched">
-          <small class="error-message" *ngIf="userForm.get('first_name')?.errors?.['required']">Primer nombre es requerido</small>
+        <div
+          *ngIf="
+            userForm.get('first_name')?.invalid &&
+            userForm.get('first_name')?.touched
+          "
+        >
+          <small
+            class="error-message"
+            *ngIf="userForm.get('first_name')?.errors?.['required']"
+          >Primer nombre es requerido</small
+          >
         </div>
       </div>
 
-      <!-- last name input field -->
+      <!-- last_name -->
       <div class="mb-2 w-full">
-        <label for="last-names" >Apellidos</label>
+        <label for="last-names">Apellidos</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
-          <input formControlName="last_name" type="text" name="last-names" id="last-names" class="inputs" placeholder="Ingresa el apellido">
+          <input
+            formControlName="last_name"
+            type="text"
+            name="last-names"
+            id="last-names"
+            class="inputs"
+            placeholder="Ingresa el apellido"
+          />
         </div>
-        <div *ngIf="userForm.get('last_name')?.invalid && userForm.get('last_name')?.touched">
-          <small class="error-message" *ngIf="userForm.get('last_name')?.errors?.['required']">Apellido es requerido</small>
+        <div
+          *ngIf="
+            userForm.get('last_name')?.invalid &&
+            userForm.get('last_name')?.touched
+          "
+        >
+          <small
+            class="error-message"
+            *ngIf="userForm.get('last_name')?.errors?.['required']"
+          >Apellido es requerido</small
+          >
         </div>
       </div>
 
-      <!-- phone name input field -->
+      <!-- phone_number -->
       <div class="mb-2 w-full">
-        <label for="phone" >Teléfono</label>
+        <label for="phone">Teléfono</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
-          <input formControlName="phone_number" type="text" name="phone" id="phone" class="inputs" placeholder="Ingresa el teléfono">
+          <input
+            formControlName="phone_number"
+            type="text"
+            name="phone"
+            id="phone"
+            class="inputs"
+            placeholder="Ingresa el teléfono"
+          />
         </div>
-        <div *ngIf="userForm.get('phone_number')?.invalid && userForm.get('phone_number')?.touched">
-          <small class="error-message" *ngIf="userForm.get('phone_number')?.errors?.['required']">Teléfono es requerido</small>
+        <div
+          *ngIf="
+            userForm.get('phone_number')?.invalid &&
+            userForm.get('phone_number')?.touched
+          "
+        >
+          <small
+            class="error-message"
+            *ngIf="userForm.get('phone_number')?.errors?.['required']"
+          >Teléfono es requerido</small
+          >
         </div>
-
       </div>
 
-      <!-- email name input field -->
+      <!-- email -->
       <div class="mb-2 w-full">
-        <label for="email" >Correo electrónico</label>
+        <label for="email">Correo electrónico</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
-          <input formControlName="email" type="email" name="email" id="email" class="inputs" placeholder="Ingresa el correo electrónico">
+          <input
+            formControlName="email"
+            type="email"
+            name="email"
+            id="email"
+            class="inputs"
+            placeholder="Ingresa el correo electrónico"
+          />
         </div>
-        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
-          <small class="error-message" *ngIf="userForm.get('email')?.errors?.['required']">Correo electrónico es requerido</small>
-          <small class="error-message" *ngIf="userForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</small>
+        <div
+          *ngIf="
+            userForm.get('email')?.invalid && userForm.get('email')?.touched
+          "
+        >
+          <small
+            class="error-message"
+            *ngIf="userForm.get('email')?.errors?.['required']"
+          >Correo electrónico es requerido</small
+          >
+          <small
+            class="error-message"
+            *ngIf="userForm.get('email')?.errors?.['email']"
+          >Ingresa un correo electrónico válido</small
+          >
         </div>
       </div>
 
-      <!-- id type name input field -->
+      <!-- identification_type -->
       <div class="mb-2 w-full">
-        <label for="id-type" >Tipo de identificación</label>
-        <select formControlName="identification_type" id="id-type" name="id-type" class="inputs">
-          <option value=0>Selecciona el tipo de documento</option>
-          <option [value]="d.id" *ngFor="let d of DocTypes">{{d.name}}</option>
+        <label for="id-type">Tipo de identificación</label>
+        <select
+          formControlName="identification_type"
+          id="id-type"
+          name="id-type"
+          class="inputs"
+        >
+          <option value="0">Selecciona el tipo de documento</option>
+          <option [value]="d.id" *ngFor="let d of docTypes">{{ d.name }}</option>
         </select>
-        <div *ngIf="userForm.get('identification_type')?.invalid && userForm.get('identification_type')?.touched">
-          <small class="error-message" *ngIf="userForm.get('identification_type')?.errors">Tipo de documento es requerido</small>
+        <div
+          *ngIf="
+            userForm.get('identification_type')?.invalid &&
+            userForm.get('identification_type')?.touched
+          "
+        >
+          <small class="error-message"
+          >Tipo de documento es requerido</small
+          >
         </div>
       </div>
 
-      <!-- id  input field -->
+      <!-- identification_number -->
       <div class="mb-2 w-full">
-        <label for="id" >Número de identificación</label>
+        <label for="id">Número de identificación</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
           <input
             formControlName="identification_number"
@@ -120,32 +261,40 @@
             id="id"
             class="inputs"
             placeholder="Ingresa el número de identificación"
-          >
+          />
         </div>
-        <div *ngIf="userForm.get('identification_number')?.invalid && userForm.get('identification_number')?.touched">
-          <small class="error-message" *ngIf="userForm.get('identification_number')?.errors?.['required']">El Documento es requerido</small>
+        <div
+          *ngIf="
+            userForm.get('identification_number')?.invalid &&
+            userForm.get('identification_number')?.touched
+          "
+        >
+          <small
+            class="error-message"
+            *ngIf="
+              userForm.get('identification_number')?.errors?.['required']
+            "
+          >El Documento es requerido</small
+          >
         </div>
       </div>
     </div>
 
-    <!-- Roles fields -->
+    <!-- Roles (Groups) -->
     <div class="mb-2 w-full lg:grid-cols-3">
       <label class="mb-2">Roles</label>
       <div *ngFor="let group of availableGroups; let i = index">
         <label class="flex items-center mb-3 gap-x-3">
-          <input type="checkbox"
-                 [value]="group.value"
-                 [checked]="selectedGroups.includes(group.value)"
-                 class="rounded-lg"
-                 [disabled]="group.value === i + 1"
-                 (change)="toggleGroup($event, group.value)">
+          <input
+            type="checkbox"
+            [value]="group.value"
+            [checked]="(userForm.get('groups')?.value || []).includes(group.value)"
+            class="rounded-lg"
+            (change)="toggleGroup($event, group.value)"
+          />
           {{ group.label }}
         </label>
       </div>
     </div>
   </form>
 </div>
-
-
-
-

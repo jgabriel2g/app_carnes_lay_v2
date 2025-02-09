@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryService } from '../../../../../core/services/inventory.service';
-import {Product, Stock} from "../../../../../core/interfaces/product";
+import {Product, Stock} from "../../../../../core/models/product";
 
 @Component({
   selector: 'app-stock',

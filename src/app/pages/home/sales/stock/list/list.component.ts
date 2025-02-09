@@ -3,7 +3,7 @@ import { SalesService } from '../../../../../core/services/sales.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AuthService } from '../../../../../core/services/auth.service';
-import {DisplayStock} from "../../../../../core/interfaces/displayStock";
+import {DisplayStock} from "../../../../../core/models/displayStock";
 
 @Component({
   selector: 'app-list',

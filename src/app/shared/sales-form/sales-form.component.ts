@@ -10,9 +10,9 @@ import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
 import { AuthService } from '../../core/services/auth.service';
 import {OtpService} from "../../core/services/otp.service";
-import {DisplayStock} from "../../core/interfaces/displayStock";
+import {DisplayStock} from "../../core/models/displayStock";
 import {mapToCamelCase} from "../../core/utils/mapper";
-import {SaleResponse} from "../../core/interfaces/sale";
+import {Sale} from "../../core/models/sale.model";
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;

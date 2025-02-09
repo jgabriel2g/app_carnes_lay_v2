@@ -13,7 +13,7 @@
   <!-- Sección de productos -->
   <div class="ticket-info">
     <h4 class="text-center font-bold">Productos</h4>
-    <div *ngFor="let p of sale?.productsSummary">
+    <div *ngFor="let p of sale?.products_summary">
       <div class="ticket-info">
         <p class="text-base">Producto: {{p.productName}}</p>
         <p class="text-base">Precio: {{p.price | currency}}</p>
@@ -35,15 +35,15 @@
       <tbody class="w-full">
       <tr class="w-full flex justify-between items-center">
         <td class="text-left text-sm font-bold">Total vendido:</td>
-        <td class="text-right text-sm font-bold">{{sale?.totalSold | currency}}</td>
+        <td class="text-right text-sm font-bold">{{sale?.total_sold | currency}}</td>
       </tr>
       <tr class="w-full flex justify-between items-center">
         <td class="text-left text-sm font-bold">Dinero base:</td>
-        <td class="text-right text-sm font-bold">{{sale?.baseMoney | currency}}</td>
+        <td class="text-right text-sm font-bold">{{sale?.base_money | currency}}</td>
       </tr>
       <tr class="w-full flex justify-between items-center">
         <td class="text-left text-sm font-bold">Total dinero en caja:</td>
-        <td class="text-right text-sm font-bold">{{sale?.totalMoney | currency}}</td>
+        <td class="text-right text-sm font-bold">{{sale?.total_money | currency}}</td>
       </tr>
       </tbody>
     </table>

@@ -1,10 +1,9 @@
 <ion-content>
   <div class="container mx-auto px-0 sm:px-6 lg:px-8 h-full">
     <div class="flex flex-col justify-center items-center gap-y-4 h-full  mx-auto md:max-w-md max-w-[290px]">
-      <!-- Logo image-->
-      <img src="../../../../assets/images/logo_victoria.png" class="mb-5" alt="">
 
-      <!-- Username input field -->
+      <img ngSrc="../../../../assets/images/logo_victoria.png" class="mb-5" alt="" height="170" width="512">
+
       <div class="mb-5 w-full">
         <label for="email" >Usuario</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
@@ -17,7 +16,6 @@
         </div>
       </div>
 
-      <!-- Password input field -->
       <div class="mb-5 w-full">
         <label for="password" >Contraseña</label>
         <div class="relative mt-1s rounded-2xl shadow-md">
@@ -43,15 +41,8 @@
             </svg>
           </div>
         </div>
-        <!-- Recover password anchor tag -->
-        <div class="flex items-center justify-end mt-2">
-          <div class="text-sm leading-6">
-            <a routerLink="/auth/recoverPassword" class="font-semibold text-[#b3241c] hover:text-red-900">¿Olvidaste tu contraseña?</a>
-          </div>
-        </div>
       </div>
 
-      <!-- Submit button  -->
       <div class="mb-5 w-full shadow-md rounded-2xl">
         <button (click)="login()" type="button" class="btn-primary">Iniciar sesión</button>
       </div>

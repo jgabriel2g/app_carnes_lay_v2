@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { filter } from 'rxjs';
+import {Bill} from "../../core/models/sale.model";
 
 declare const window: any;
 
@@ -13,12 +14,16 @@ declare const window: any;
 })
 export class TicketComponent  implements OnInit {
   public isPrinting:boolean = false;
-  bill: any;
+  public bill: Bill | undefined;
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.bill = JSON.parse(sessionStorage.getItem('bill') ||'')
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state) {
+      this.bill = navigation.extras.state['bill'];
+    }
+
     setTimeout(() => {
       this.print()
     }, 2000);

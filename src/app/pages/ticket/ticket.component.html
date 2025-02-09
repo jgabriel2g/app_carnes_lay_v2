@@ -1,4 +1,4 @@
-<div id="ticket" style="max-width: 300px;">
+<div *ngIf="bill" id="ticket" style="max-width: 300px;">
   <div class="ticket-header mb-1 text-center w-full">
     <img
       src="https://lay-victoria.s3.us-east-1.amazonaws.com/logo_victoria.png"
@@ -87,8 +87,8 @@
       </div>
       <div class="flex w-full justify-between items-start" *ngFor="let p of bill.display_products">
         <div class="text-xs text-left ">
-          <p class="text-sm"> {{p.product.product.code}} {{p.product.product.name}}</p>
-          <small>{{p.amount}}{{p.product.type_of_unit_measurement.name}} x ${{p.price}}</small>
+          <p class="text-sm"> {{p.code}} {{p.product}}</p>
+          <small>{{p.amount}}{{p.type_of_unit_measurement}} x ${{p.price}}</small>
         </div>
         <div class="price text-xs text-end">
           <p class="text-sm">{{convertToNumber(p.amount)  * convertToNumber(p.price) | currency }}</p>

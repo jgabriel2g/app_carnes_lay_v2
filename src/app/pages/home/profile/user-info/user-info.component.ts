@@ -6,17 +6,14 @@ import { Component, HostListener, OnInit } from '@angular/core';
   styleUrls: ['./user-info.component.scss'],
 })
 export class UserInfoComponent  implements OnInit {
-
   public windowWith:any;
-  public isColapsed:boolean = false
 
   ngOnInit() {
     this.checkScreenWidth();
-
   }
 
   constructor() {
-    this.checkScreenWidth(); // Verifica el ancho inicial
+    this.checkScreenWidth();
   }
 
   @HostListener('window:resize', ['$event'])

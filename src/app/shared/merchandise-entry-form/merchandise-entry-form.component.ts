@@ -8,7 +8,7 @@ import { InventoryService } from '../../core/services/inventory.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import {AlertController, IonicModule} from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
-import {Stock} from "../../core/interfaces/product";
+import {Stock} from "../../core/models/product";
 
 
 interface AutoCompleteCompleteEvent {

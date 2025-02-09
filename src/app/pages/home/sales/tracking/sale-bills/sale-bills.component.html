@@ -13,10 +13,28 @@
 
           <div class="mb-2 w-full">
             <label>Clientes</label>
-            <input type="text" [(ngModel)]="clientSelected" (keyup)="getSales()" placeholder="Buscar por cliente" class="inputs" >
+            <input type="text" [(ngModel)]="clientSelected" (keyup)="getBills()" placeholder="Buscar por cliente" class="inputs" >
           </div>
 
           <div class="mt-3 text-center sm:mt-5">
+            <div *ngIf="isLoading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50">
+              <svg class="animate-spin h-8 w-8 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 0 0 8 8V4a8 8 0 0 0-8 8z"
+                ></path>
+              </svg>
+            </div>
+
             <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Facturas generadas</h3>
             <div *ngIf="bills.length" class="mt-2">
               <div class=" -mb-2 overflow-x-auto ">
@@ -32,28 +50,46 @@
                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-primary">Cliente</th>
                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-primary"></th>
                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-primary"></th>
+                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-primary"></th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 ">
                       <tr *ngFor="let b of bills; let i = index">
                         <td  class="whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{i + 1}}</td>
-                        <td (click)="showBillDetail(b)"  class="cursor-pointer whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
-                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.created | date:"short"}}</td>
+                        <td (click)="showBillDetail(b.id)"  class="cursor-pointer whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
+                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{ b.date | date: 'shortTime' }}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.total_cost | currency}}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.payment_method.name }}</td>
-                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.client.first_name === "" && "CONSUMIDOR FINAL" }} {{b.client.first_name }} {{b.client.last_name }}</td>
-                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500" *ngIf="b.client.first_name !== ''">
-                          <button class="btn-primary px-2" (click)="sendToDian(b.id)">
-                            Enviar a la Dian
+                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">
+                          {{
+                            !b.client || !b.client.first_name
+                              ? 'Consumidor final'
+                              : (b.client.first_name + ' ' + b.client.last_name)
+                          }}
+                        </td>
+                        <td
+                          class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500"
+                          *ngIf="b.client"
+                        >
+                          <button
+                            [ngClass]="{
+                              'btn-primary': !b.is_approved,
+                              'btn-primary text-white cursor-default rounded-lg p-2': b.is_approved
+                            }"
+                            class="px-2"
+                            [disabled]="b.is_approved"
+                            (click)="sendToDian(b.id)"
+                          >
+                            {{ b.is_approved ? 'Enviado a la Dian' : 'Enviar a la Dian' }}
                           </button>
                         </td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500" *ngIf="b.invoice_response !== null && b.is_approved">
                           <button class="btn-primary px-2" (click)="viewPdf(b.invoice_response.urlPdf)">
-                            PDF
+                            ver PDF
                           </button>
                         </td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">
-                          <button (click)="deleteSale(b.id)">
+                          <button (click)="deleteBill(b.id)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 hover:text-red-700">
                               <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                             </svg>
@@ -65,32 +101,99 @@
                 </div>
               </div>
             </div>
-            <nav class="flex justify-center mt-10" aria-label="Page navigation example">
-              <ul class="flex items-center gap-x-2 -space-x-px h-10 text-base">
+            <!-- PAGINADOR CON ELIPSIS -->
+            <nav
+              class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-2"
+              aria-label="Page navigation example"
+            >
+              <ul class="flex flex-wrap sm:flex-nowrap items-center gap-x-2">
+                <!-- Botón PREVIOUS -->
                 <li>
-                  <button [disabled]="isLoading" (click)="previousPage()" [disabled]="currentPage === 1" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-2 h-6 ms-0 leading-tight text-gray-500 bg-white border-e-0   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                  <button
+                    (click)="previousPage()"
+                    [disabled]="currentPage === 1"
+                    class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed
+              flex items-center justify-center px-2 h-6 ms-0
+              leading-tight text-gray-500 bg-white border-e-0
+              hover:bg-gray-100 hover:text-gray-700
+              dark:bg-gray-800 dark:text-gray-400
+              dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
                     <span class="sr-only">Previous</span>
-                    <svg class="w-3 h-3 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    <svg
+                      class="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 6 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 1 1 5l4 4"
+                      />
                     </svg>
                   </button>
                 </li>
-                <li *ngFor="let page of pageNumbers" class="flex items-center justify-center">
-                  <button [disabled]="isLoading"
-                  (click)="goToPage(page)"
-                  [class.active]="currentPage === page"  aria-current="page" class="z-10 rounded-full flex items-center flex-nowrap justify-center px-2 h-6 leading-tight text-gray-600 border-gray-300 bg-gray-50 hover:bg-red-100 hover:text-red-700  dark:bg-gray-700 dark:text-white">
-                  {{ page }}
-                  </button>
+
+                <!-- Botones de página o '...' -->
+                <li
+                  *ngFor="let page of pageNumbers"
+                  class="flex items-center justify-center"
+                >
+                  <ng-container *ngIf="page !== '...'">
+                    <button
+                      [disabled]="isLoading"
+                      (click)="goToPage(page)"
+                      [class.active]="currentPage === page"
+                      aria-current="page"
+                      class="z-10 rounded-full flex items-center flex-nowrap
+                justify-center px-2 h-6 leading-tight text-gray-600
+                border-gray-300 bg-gray-50 hover:bg-red-100
+                hover:text-red-700 dark:bg-gray-700 dark:text-white"
+                    >
+                      {{ page }}
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="page === '...'">
+                    <span class="mx-2 text-gray-500">...</span>
+                  </ng-container>
+                </li>
+
+                <!-- Botón NEXT -->
                 <li>
-                  <button [disabled]="isLoading" (click)="nextPage()" [disabled]="offset + limit >= totalItems" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-2 h-6 leading-tight text-gray-500 bg-white   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                  <button
+                    (click)="nextPage()"
+                    [disabled]="offset + limit >= totalItems"
+                    class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed
+              flex items-center justify-center px-2 h-6 leading-tight
+              text-gray-500 bg-white hover:bg-gray-100
+              hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400
+              dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
                     <span class="sr-only">Next</span>
-                    <svg class="w-3 h-3 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    <svg
+                      class="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 6 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m1 9 4-4-4-4"
+                      />
                     </svg>
                   </button>
                 </li>
               </ul>
             </nav>
+
             <div  *ngIf="!bills.length" class="rounded-md bg-blue-50 p-4">
               <div class="flex">
                 <div class="flex-shrink-0">
@@ -100,11 +203,9 @@
                 </div>
                 <div class="ml-3 flex-1 md:flex md:justify-between">
                   <p class="text-sm text-blue-700">Sin resultados</p>
-
                 </div>
               </div>
             </div>
-
           </div>
         </div>
         <div class="flex items-center justify-center">

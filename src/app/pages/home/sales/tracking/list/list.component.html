@@ -38,9 +38,11 @@
               <td  class="whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{i + 1}}</td>
               <td (click)="showSalesDetail(b.id)"  class="cursor-pointer whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
               <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.start_time | date:"short"}}</td>
-              <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.end_time | date:"short"}}</td>
+              <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">
+                {{ b.end_time ? (b.end_time | date:"short") : 'Caja Activa' }}
+              </td>
               <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.total_sold | currency}}</td>
-              <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.user?.first_name}} {{b.user?.last_name}}</td>
+              <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.user.first_name}} {{b.user.last_name}}</td>
               <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">
                 <button (click)="deleteSale(b.id)">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 hover:text-red-700">
@@ -55,27 +57,93 @@
       </div>
     </div>
 
-    <nav class="flex justify-center mt-10" aria-label="Page navigation example">
-      <ul class="flex items-center gap-x-2 -space-x-px h-10 text-base">
+    <!-- PAGINADOR CON ELIPSIS -->
+    <nav
+      class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-2"
+      aria-label="Page navigation example"
+    >
+      <ul class="flex flex-wrap sm:flex-nowrap items-center gap-x-2">
+        <!-- Botón PREVIOUS -->
         <li>
-          <button [disabled]="isLoading" (click)="previousPage()" [disabled]="currentPage === 1" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-2 h-6 ms-0 leading-tight text-gray-500 bg-white border-e-0   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <button
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+            class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed
+              flex items-center justify-center px-2 h-6 ms-0
+              leading-tight text-gray-500 bg-white border-e-0
+              hover:bg-gray-100 hover:text-gray-700
+              dark:bg-gray-800 dark:text-gray-400
+              dark:hover:bg-gray-700 dark:hover:text-white"
+          >
             <span class="sr-only">Previous</span>
-            <svg class="w-3 h-3 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 1 1 5l4 4"
+              />
             </svg>
           </button>
         </li>
-        <li *ngFor="let page of pageNumbers" class="flex items-center justify-center">
-          <button [disabled]="isLoading"
-          (click)="goToPage(page)"
-          [class.active]="currentPage === page"  aria-current="page" class="z-10 rounded-full flex items-center flex-nowrap justify-center px-2 h-6 leading-tight text-gray-600 border-gray-300 bg-gray-50 hover:bg-red-100 hover:text-red-700  dark:bg-gray-700 dark:text-white">
-          {{ page }}
-          </button>
+
+        <!-- Botones de página o '...' -->
+        <li
+          *ngFor="let page of pageNumbers"
+          class="flex items-center justify-center"
+        >
+          <ng-container *ngIf="page !== '...'">
+            <button
+              [disabled]="isLoading"
+              (click)="goToPage(page)"
+              [class.active]="currentPage === page"
+              aria-current="page"
+              class="z-10 rounded-full flex items-center flex-nowrap
+                justify-center px-2 h-6 leading-tight text-gray-600
+                border-gray-300 bg-gray-50 hover:bg-red-100
+                hover:text-red-700 dark:bg-gray-700 dark:text-white"
+            >
+              {{ page }}
+            </button>
+          </ng-container>
+          <ng-container *ngIf="page === '...'">
+            <span class="mx-2 text-gray-500">...</span>
+          </ng-container>
+        </li>
+
+        <!-- Botón NEXT -->
         <li>
-          <button [disabled]="isLoading" (click)="nextPage()" [disabled]="offset + limit >= totalItems" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-2 h-6 leading-tight text-gray-500 bg-white   hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <button
+            (click)="nextPage()"
+            [disabled]="offset + limit >= totalItems"
+            class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed
+              flex items-center justify-center px-2 h-6 leading-tight
+              text-gray-500 bg-white hover:bg-gray-100
+              hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400
+              dark:hover:bg-gray-700 dark:hover:text-white"
+          >
             <span class="sr-only">Next</span>
-            <svg class="w-3 h-3 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 9 4-4-4-4"
+              />
             </svg>
           </button>
         </li>
@@ -86,4 +154,4 @@
 </div>
 
 <!-- SALE BILLS MODAL  -->
-<app-sale-bills [sale]="saleId" *ngIf="showDetailBills" (close)="closeDetailModal($event)" ></app-sale-bills>
+<app-sale-bills [sale]="saleId" *ngIf="showDetailBills" (closed)="closeDetailModal($event)" ></app-sale-bills>

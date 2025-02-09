@@ -2,31 +2,36 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {mapToCamelCase} from "../utils/mapper";
-import {getDisplayStockResponse} from "../interfaces/displayStock";
-import {map} from "rxjs";
+import {getDisplayStockResponse} from "../models/displayStock";
+import {map, Observable} from "rxjs";
+import {PaymentMethod} from "../models/global.model";
+import {Bill, BillSummary, Sale} from "../models/sale.model";
+import {PaginatedResponse} from "../models/global.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SalesService {
 
-  constructor(private authSvc:AuthService, private http:HttpClient) { }
+  constructor(
+    private authSvc:AuthService,
+    private http:HttpClient
+  ) { }
 
-
-  getPaymentMethods(){
+  // PAYMENT METHODS
+  getPaymentMethods(): Observable<PaginatedResponse<PaymentMethod>> {
     const url = `${this.authSvc.baseUrl}/configuration/payment-method/`;
-    return this.http.get(url, this.authSvc.header);
+    return this.http.get<PaginatedResponse<PaymentMethod>>(url, this.authSvc.header);
   };
 
-  // SALES BOX MANAGE ENDPOINTS
-
-  getBoxSales(){
-    const url = `${this.authSvc.baseUrl}/sale/`;
-    return this.http.get(url, this.authSvc.header);
+  // SALES MANAGE ENDPOINTS
+  getSales(limit:number, offset:number): Observable<PaginatedResponse<Sale>> {
+    const url = `${this.authSvc.baseUrl}/sale/?limit=${limit}&offset=${offset}`;
+    return this.http.get<PaginatedResponse<Sale>>(url, this.authSvc.header);
   };
 
-  getMyBoxSales(){
-    const url = `${this.authSvc.baseUrl}/sale/get_my_sales/`;
+  getMyOpenSale(){
+    const url = `${this.authSvc.baseUrl}/sale/get_my_open_sale/`;
     return this.http.get(url, this.authSvc.header);
   };
 
@@ -91,29 +96,33 @@ export class SalesService {
   }
 
   // BILLS MANAGE
+  getBillsBySale(
+    limit: number,
+    offset: number,
+    saleId: string,
+    clientName?: string
+  ): Observable<PaginatedResponse<BillSummary>> {
+    let params = new HttpParams()
+      .set('limit', limit)
+      .set('offset', offset)
 
-  getBillsBySale(limit:number, offset:number, sale:string = '', client:string = ''){
-    let params = new HttpParams();
+    if (saleId) {
+      params = params.set('sale_id', saleId);
+    }
 
-    if (sale) {
-      params = params.set('sale_id', sale);
-    };
-    if (client) {
-      params = params.set('client_name', client);
-    };
+    if (clientName) {
+      params = params.set('client_name', clientName);
+    }
 
-    const url =  `${this.authSvc.baseUrl}/sale/bill/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url, { headers: this.authSvc.header.headers, params });
-  };
+    return this.http.get<PaginatedResponse<BillSummary>>(
+      `${this.authSvc.baseUrl}/sale/bill/`,
+      { headers: this.authSvc.header.headers, params }
+    );
+  }
 
   createBill(data:{}){
     const url =  `${this.authSvc.baseUrl}/sale/bill/`;
     return this.http.post(url, data, this.authSvc.header);
-  };
-
-  getSaleById(id:any){
-    const url =  `${this.authSvc.baseUrl}/sale/bill/${id}/`;
-    return this.http.get(url, this.authSvc.header);
   };
 
   deleteBillSale(id:any){
@@ -121,12 +130,7 @@ export class SalesService {
     return this.http.delete(url, this.authSvc.header);
   };
 
-  getSales(limit:number, offset:number){
-    const url =  `${this.authSvc.baseUrl}/sale/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url, this.authSvc.header);
-  };
-
-  deleteSale(id:string){
+  deleteSale(id:string) {
     const url =  `${this.authSvc.baseUrl}/sale/${id}/`;
     return this.http.delete(url, this.authSvc.header);
   };
@@ -134,6 +138,11 @@ export class SalesService {
   sendToDian(id:string){
     const url = `${this.authSvc.baseUrl}/sale/bill/${id}/send_fe_to_dian/`;
     return this.http.post(url, {}, this.authSvc.header);
+  }
+
+  getBillById(id:string): Observable<Bill>{
+    const url = `${this.authSvc.baseUrl}/sale/bill/${id}/`;
+    return this.http.get<Bill>(url, this.authSvc.header);
   }
 
 }

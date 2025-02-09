@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import {Observable} from "rxjs";
+import {DocTypeListResponse} from "../models/docType.model";
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +12,10 @@ export class GlobalService {
   constructor(private http:HttpClient, private authSvc:AuthService) { }
 
 
-  getDocTypes(){
+  getDocTypes(): Observable<DocTypeListResponse> {
     const url = `${this.authSvc.baseUrl}/configuration/identification-type/`;
-    return this.http.get(url, this.authSvc.header);
-  };
+    return this.http.get<DocTypeListResponse>(url, this.authSvc.header);
+  }
 
   getPaymentMethods(){
     const url = `${this.authSvc.baseUrl}/configuration/payment-method/`;

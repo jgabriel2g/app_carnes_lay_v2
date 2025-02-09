@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { SaleResponse } from "../../core/interfaces/sale";
+import { Sale } from "../../core/models/sale.model";
 
 declare const window: any;
 
@@ -11,12 +11,12 @@ declare const window: any;
 })
 export class DailyTicketComponent implements OnInit {
   public isPrinting: boolean = false;
-  sale: SaleResponse | null = null;
+  sale: Sale | null = null;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    const navigation = history.state as { sale: SaleResponse | null };
+    const navigation = history.state as { sale: Sale | null };
     this.sale = navigation.sale;
 
     if (!this.sale?.isMobile) {

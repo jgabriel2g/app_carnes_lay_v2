@@ -23,12 +23,15 @@ export class OpenSalesBoxComponent  implements OnInit {
     if (saleBox){
       this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
     }
-    this.salesSvc.getMyBoxSales().subscribe({
-      error:(err:any) => {this.isLoading = false},
+    this.salesSvc.getMyOpenSale().subscribe({
+      error:() => {
+        this.isLoading = false;
+        console.log('No se encontró ninguna caja de ventas abierta');
+      },
       next:(resp:any) => {
         this.isLoading = false;
-        if (Array.isArray(resp) && resp.length > 0 && resp[0].is_open) {
-          sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp[0]));
+        if (resp.is_open) {
+          sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp));
           this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
         }
       }
