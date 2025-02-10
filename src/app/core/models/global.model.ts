@@ -16,3 +16,7 @@ export interface PaymentMethod {
   name: string;
 }
 
+export interface PersonType {
+  id: string;
+  name: string;
+}

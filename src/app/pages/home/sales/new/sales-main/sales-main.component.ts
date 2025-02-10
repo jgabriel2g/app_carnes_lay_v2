@@ -140,7 +140,7 @@ export class SalesMainComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            const result = mapToCamelCase(resp) as Sale;
+            const result = resp;
             result.isMobile = false;
             this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
             sessionStorage.removeItem('saleBoxInfo');

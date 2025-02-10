@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AuthService } from '../../../../../core/services/auth.service';
 import {DisplayStock} from "../../../../../core/models/displayStock";
+import {PaginatedResponse} from "../../../../../core/models/global.model";
+import {ProductStock} from "../../../../../core/models/sale.model";
 
 @Component({
   selector: 'app-list',
@@ -12,14 +14,14 @@ import {DisplayStock} from "../../../../../core/models/displayStock";
 })
 export class ListComponent  implements OnInit {
   public loadMoreStock:boolean = false;
-  public limit:number = 10;
+  public limit:number = 15;
   public offset:number = 0;
   public search:string = '';
   public totalItems:number = 0;
   public currentPage = 1;
   public totalPages = 1;
   public pageNumbers: number[] = [];
-  public displayStocks: DisplayStock[] = [];
+  public displayStocks: ProductStock[] = [];
   public isLoading:boolean = false;
   public displayId:any
 
@@ -49,7 +51,7 @@ export class ListComponent  implements OnInit {
           this.handleError(err);
           this.isLoading = !this.isLoading;
         },
-        next:(resp:any) => {
+        next:(resp:PaginatedResponse<ProductStock>) => {
           this.displayStocks = resp.results;
           this.totalItems = resp.count;
           this.totalPages = Math.ceil(this.totalItems / this.limit);

@@ -3,16 +3,16 @@
     <div class="hidden sm:block">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a *ngFor="let sale of sales; let i = index"
-          [class.border-red-500]="activeSale === sale"  [class.text-red-600]="activeSale === sale" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium  flex items-center gap-x-4" aria-current="page">
+          <a *ngFor="let sale of saleSessions; let i = index"
+          [class.border-red-500]="saleSessionSelected === sale"  [class.text-red-600]="saleSessionSelected === sale" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium  flex items-center gap-x-4" aria-current="page">
             <span (click)="selectTab(sale)">Venta {{i + 1}}</span>
-            <button (click)="deleteTab(i)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
-            </button>
+<!--            <button (click)="deleteTab(i)">-->
+<!--              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />-->
+<!--              </svg>-->
+<!--            </button>-->
           </a>
-          <a (click)="newSale()" *ngIf=" authSvc.hasPermission('create-sales')" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium " aria-current="page">Nueva venta</a>
+<!--          <a (click)="newSale()" *ngIf=" authSvc.hasPermission('create-sales')" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium " aria-current="page">Nueva venta</a>-->
         </nav>
       </div>
     </div>
@@ -29,15 +29,26 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Z" />
             </svg>
           </div>
-          <input [disabled]="activeSale.isFinalized"  [(ngModel)]="activeSale.date" type="date" name="sale-date" id="sale-date" class="inputs">
+          <input [disabled]="saleSessionSelected.isFinalized"  [(ngModel)]="saleSessionSelected.date" type="date" name="sale-date" id="sale-date" class="inputs">
         </div>
       </div>
 
       <!-- Payment method input field -->
       <div class="col-span-2">
         <label for="id-type">Método de pago</label>
-        <select [disabled]="activeSale.isFinalized" [(ngModel)]="activeSale.payment_method" id="id-type" name="id-type" class="inputs mt-1">
-          <option [value]="pM.id" *ngFor="let pM of PaymentMethods">{{pM.name}}</option>
+        <select
+          [disabled]="saleSessionSelected.isFinalized"
+          [(ngModel)]="saleSessionSelected.payment_method"
+          id="id-type"
+          name="id-type"
+          class="inputs mt-1"
+        >
+          <option
+            [value]="pM.id"
+            *ngFor="let pM of paymentMethods"
+          >
+            {{pM.name}}
+          </option>
         </select>
       </div>
 
@@ -45,9 +56,11 @@
       <div class="col-span-2">
         <div>
           <label>Selecciona el cliente</label>
-          <p-autoComplete placeholder="..."
+          <p-autoComplete
+            placeholder="Selecciona Cliente..."
             [(ngModel)]="selectedClient"
             [suggestions]="clientSuggestions"
+            [optionLabel]="'label'"
             (completeMethod)="searchClients($event)"
             (onSelect)="onClientSelect($event)"
           ></p-autoComplete>
@@ -58,10 +71,12 @@
       <div class="col-span-2">
         <label>Buscador de productos</label>
         <p-autoComplete
-          [disabled]="activeSale.isFinalized" [(ngModel)]="selectedProduct"
+          [disabled]="saleSessionSelected.isFinalized"
+          [(ngModel)]="selectedProduct"
           [suggestions]="productSuggestions"
           (completeMethod)="searchProducts($event)"
           (onSelect)="onProductSelect($event)"
+          placeholder="Buscar producto..."
         ></p-autoComplete>
       </div>
 
@@ -84,13 +99,14 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                  <tr *ngFor="let sP of activeSale.products; let i = index">
+                  <tr *ngFor="let sP of saleSessionSelected.products; let i = index">
                     <td class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0">
                       {{ sP.productName}}
                     </td>
                     <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <input
-                        [disabled]="activeSale.isFinalized" [(ngModel)]="sP.amount"
+                        [disabled]="saleSessionSelected.isFinalized"
+                        [(ngModel)]="sP.amount"
                         type="number"
                         id="product-price"
                         class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-2xl"
@@ -99,7 +115,6 @@
                         min="0"
                         #amountInput
                       >
-                      <small class="text-gray-400 font-medium text-xs mt-1">{{sP.type_of_unit_measurement}}</small>
                     </td>
                     <td>
                       <button class="p-5 rounded-2xl bg-[#b3241c] text-white font-bold" type="button" (click)="toggleWeightCapture(i)">
@@ -109,7 +124,7 @@
                     <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
                       <!-- Product price field -->
                       <input
-                        [disabled]="activeSale.isFinalized"
+                        [disabled]="saleSessionSelected.isFinalized"
                         [(ngModel)]="sP.price"
                         type="number"
                         id="pp"
@@ -121,8 +136,7 @@
                       <small class="text-gray-400 font-medium text-xs mt-1"></small>
                     </td>
                     <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
-                      <!-- Product cost field -->
-                      {{sP.amount * sP.price | currency}}
+                      {{ (sP.amount || 0) * (sP.price || 0) | currency }}
                     </td>
                     <td class="relative whitespace-nowrap py-2.5 mt-3 flex justify-center gap-x-3">
                       <button (click)="removeProduct(i)">
@@ -145,17 +159,17 @@
       <dl class="mt-5 w-full">
         <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3">
           <dt class="truncate text-sm font-medium text-gray-500">Total Venta</dt>
-          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{activeSale.sale | currency}}</dd>
+          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{saleSessionSelected.sale | currency}}</dd>
         </div>
         <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3">
           <dt class="truncate text-sm font-medium text-gray-500">Total de productos</dt>
-          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{activeSale.products.length}}</dd>
+          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{saleSessionSelected.products.length}}</dd>
         </div>
         <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full">
           <dt class="truncate text-sm font-medium text-gray-500">Total recibido</dt>
           <input
-            [disabled]="activeSale.isFinalized"
-            [(ngModel)]="activeSale.total_received"
+            [disabled]="saleSessionSelected.isFinalized"
+            [(ngModel)]="saleSessionSelected.total_received"
             (keydown)="onlyNumbers($event)"
             (focus)="clearOnFocus()"
             (blur)="resetIfEmpty()"
@@ -165,10 +179,10 @@
             class="bg-gray-50 block w-full rounded-xl py-2 pl-4 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 mt-2"
             placeholder="0">
         </div>
-        <button (click)="createSale()" *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="activeSale.isFinalized || isLoading" >Registrar</button>
-        <button (click)="clearSale()" class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="activeSale.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
-        <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!activeSale.isFinalized" >Ver Factura</button>
-        <button (click)="printRewardTicket()" *ngIf="authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed">Ver boleto</button>
+        <button (click)="createSale()" *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="saleSessionSelected.isFinalized || isLoading" >Registrar</button>
+        <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!saleSessionSelected.isFinalized" >Ver Factura</button>
+        <button (click)="clearSale()" class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="saleSessionSelected.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
+<!--        <button (click)="printRewardTicket()" *ngIf="authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed">Ver boleto</button>-->
       </dl>
     </div>
   </div>

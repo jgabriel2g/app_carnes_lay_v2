@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { Client } from '../models/client.model';
+import {PaginatedResponse} from "../models/global.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +13,12 @@ export class ThirdPartyService {
   constructor(private http:HttpClient, private authSvc:AuthService) { }
 
 
-  getClients(limit:number, offset:number){
+  getClients(
+    limit:number,
+    offset:number
+  ): Observable<PaginatedResponse<Client>> {
     const url = `${this.authSvc.baseUrl}/third-party/client/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url, this.authSvc.header);
+    return this.http.get<PaginatedResponse<Client>>(url, this.authSvc.header);
   };
 
   newClient(data:{}){

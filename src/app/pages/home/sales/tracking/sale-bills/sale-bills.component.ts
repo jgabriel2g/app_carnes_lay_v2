@@ -182,7 +182,7 @@ export class SaleBillsComponent  implements OnInit {
   printSaleDetails(): void {
     this.salesSvc.getBoxSaleById(this.sale).subscribe({
       next: resp => {
-        const result = mapToCamelCase(resp) as Sale;
+        const result = resp as Sale;
         result.isMobile = this.isMobile;
         this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
       },

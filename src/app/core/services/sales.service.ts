@@ -5,7 +5,7 @@ import {mapToCamelCase} from "../utils/mapper";
 import {getDisplayStockResponse} from "../models/displayStock";
 import {map, Observable} from "rxjs";
 import {PaymentMethod} from "../models/global.model";
-import {Bill, BillSummary, Sale} from "../models/sale.model";
+import {Bill, BillSummary, CreateBill, ProductStock, Sale} from "../models/sale.model";
 import {PaginatedResponse} from "../models/global.model";
 
 @Injectable({
@@ -50,26 +50,20 @@ export class SalesService {
     return this.http.post(url, {},  this.authSvc.header);
   };
 
-
-
-
   // DISPLAY STOCK MANAGE
 
-  getDisplayStock(limit: number, offset: number, search: string = '') {
+  getDisplayStock(
+    limit: number,
+    offset: number,
+    search: string = ''
+  ): Observable<PaginatedResponse<ProductStock>> {
     let params = new HttpParams();
     if (search) {
       params = params.set('search', search);
     }
     const url = `${this.authSvc.baseUrl}/sale/display-stock/?limit=${limit}&offset=${offset}`;
 
-    return this.http.get<getDisplayStockResponse>(url, { headers: this.authSvc.header.headers, params })
-      .pipe(
-        map(response => {
-          const camelCasedResponse = mapToCamelCase(response);
-          camelCasedResponse.results = camelCasedResponse.results.map((result: any) => mapToCamelCase(result));
-          return camelCasedResponse;
-        })
-      );
+    return this.http.get<PaginatedResponse<ProductStock>>(url, { headers: this.authSvc.header.headers, params })
   };
 
   createDisplayStock(data:{}){
@@ -120,8 +114,8 @@ export class SalesService {
     );
   }
 
-  createBill(data:{}){
-    const url =  `${this.authSvc.baseUrl}/sale/bill/`;
+  createBill(data:CreateBill){
+    const url = `${this.authSvc.baseUrl}/sale/bill/`;
     return this.http.post(url, data, this.authSvc.header);
   };
 

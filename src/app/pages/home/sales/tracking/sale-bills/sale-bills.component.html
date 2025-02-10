@@ -72,11 +72,7 @@
                           *ngIf="b.client"
                         >
                           <button
-                            [ngClass]="{
-                              'btn-primary': !b.is_approved,
-                              'btn-primary text-white cursor-default rounded-lg p-2': b.is_approved
-                            }"
-                            class="px-2"
+                            class="btn-primary text-white cursor-default rounded-lg p-2"
                             [disabled]="b.is_approved"
                             (click)="sendToDian(b.id)"
                           >

@@ -2,12 +2,31 @@ import {User} from "./auth.model";
 import { Client } from "./client.model";
 import {PaymentMethod} from "./global.model";
 
+
+export interface ProductStock {
+  id: string;
+  product: {
+    id: string;
+    name: string;
+    code: string;
+    created: string;
+  },
+  quantity: number;
+  last_quantity: number;
+  price: number;
+  type_of_unit_measurement: {
+    id: string;
+    name: string;
+  },
+  remaining_percentage: number;
+}
+
 export interface ProductSummary {
-  productName: string;
-  totalWeight: number;
+  product_name: string;
+  total_weight: number;
   unit: string;
   price: number;
-  totalPrice: number;
+  total_price: number;
 }
 
 export interface Sale {
@@ -60,4 +79,27 @@ export interface Bill {
   display_products: DisplayProduct[];
   total_unit_measurements: { [key: string]: TotalUnitMeasurement };
   created: string;
+}
+
+export interface ProductSelected {
+  productId: string,
+  productName: string,
+  amount: number | null,
+  price: number,
+  type_of_unit_measurement: string
+}
+
+export interface ProductBuy {
+  product: string,
+  amount: number,
+  price: number,
+}
+
+export interface CreateBill {
+  date: string;
+  payment_method: string;
+  total_received: number;
+  sale: string;
+  client?: string;
+  products_data: ProductBuy[];
 }

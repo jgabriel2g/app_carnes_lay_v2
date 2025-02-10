@@ -81,7 +81,6 @@ export class LoadNewComponent  implements OnInit {
   };
 
   getDisplayStock(){
-    console.log(this.displayStockId)
     if (this.displayStockId !== null   && this.displayStockId !== undefined  && this.displayStockId !== true) {
       this.salesSvc.getDisplayStockById(this.displayStockId)
             .subscribe({
@@ -98,7 +97,7 @@ export class LoadNewComponent  implements OnInit {
                 this.selectedItem = resp.product.name;
               }
             });
-    };
+    }
   };
 
   getUnitTypes(){
@@ -153,8 +152,6 @@ export class LoadNewComponent  implements OnInit {
 
   closeModal(value:boolean){
     this.selectedItem = '';
-
-    console.log(this.productForm.value)
     this.close.emit(value);
   };
 

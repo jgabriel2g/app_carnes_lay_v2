@@ -31,11 +31,11 @@
           <td class="text-left font-medium ">Medio de Pago</td>
           <td class="text-right">{{bill.payment_method.name}}</td>
         </tr>
-        <tr class="w-full flex justify-between items-center" *ngIf="bill.client.first_name === ''">
+        <tr class="w-full flex justify-between items-center" *ngIf="!bill.client">
           <td class="text-left font-medium ">Cliente:</td>
           <td class="text-right">Consumidor final</td>
         </tr>
-        <tr class="w-full flex justify-between items-center" *ngIf="bill.client.first_name === ''">
+        <tr class="w-full flex justify-between items-center" *ngIf="!bill.client">
           <td class="text-left font-medium ">NIT/CC:</td>
           <td class="text-right">222222222222</td>
         </tr>
@@ -47,7 +47,7 @@
       </table>
     </div>
 
-    <div class="client-info mb-2" *ngIf="bill.client.first_name !== ''">
+    <div class="client-info mb-2" *ngIf="bill.client">
       <table class="table table-centered table-borderless w-full mb-0">
         <thead>
         <tr>
