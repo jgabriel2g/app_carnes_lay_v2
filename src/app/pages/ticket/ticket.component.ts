@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
-import { filter } from 'rxjs';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {Bill} from "../../core/models/sale.model";
 
 declare const window: any;
@@ -12,7 +10,7 @@ declare const window: any;
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.scss'],
 })
-export class TicketComponent  implements OnInit {
+export class TicketComponent  implements OnInit, AfterViewInit {
   public isPrinting:boolean = false;
   public bill: Bill | undefined;
 
@@ -23,10 +21,12 @@ export class TicketComponent  implements OnInit {
     if (navigation?.extras?.state) {
       this.bill = navigation.extras.state['bill'];
     }
+  }
 
-    setTimeout(() => {
-      this.print()
-    }, 2000);
+  ngAfterViewInit(): void {
+    if (this.bill) {
+      setTimeout(() => this.print(), 0);
+    }
   }
 
   print() {
