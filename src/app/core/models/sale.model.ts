@@ -50,6 +50,7 @@ export interface BillSummary {
   client: Client;
   is_approved: boolean;
   invoice_response: any;
+  created: string;
 }
 
 export interface DisplayProduct {
