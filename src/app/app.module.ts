@@ -10,13 +10,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/refresh';
 import { TicketComponent } from './pages/ticket/ticket.component';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {DailyTicketComponent} from "./pages/daily-ticket/daily-ticket.component";
 import { RewardTickedComponent } from './pages/reward-ticked/reward-ticked.component';
 
 @NgModule({
   declarations: [AppComponent, TicketComponent, DailyTicketComponent, RewardTickedComponent],
-  imports: [BrowserModule,CommonModule, IonicModule.forRoot(), AppRoutingModule],
+    imports: [BrowserModule, CommonModule, IonicModule.forRoot(), AppRoutingModule, NgOptimizedImage],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
