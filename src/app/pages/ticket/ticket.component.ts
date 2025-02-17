@@ -25,7 +25,7 @@ export class TicketComponent  implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.bill) {
-    //   setTimeout(() => this.print(), 1000);
+      setTimeout(() => this.print(), 1000);
     }
   }
 
