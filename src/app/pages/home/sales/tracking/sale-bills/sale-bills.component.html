@@ -57,7 +57,7 @@
                       <tr *ngFor="let b of bills; let i = index">
                         <td  class="whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{i + 1}}</td>
                         <td (click)="showBillDetail(b.id)"  class="cursor-pointer whitespace-nowrap text-center py-2 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">Ver</td>
-                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{ b.date | date: 'shortTime' }}</td>
+                        <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{ b.created | date: 'shortTime' }}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.total_cost | currency}}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">{{b.payment_method.name }}</td>
                         <td class="whitespace-nowrap text-center px-3 py-2 text-sm text-gray-500">
