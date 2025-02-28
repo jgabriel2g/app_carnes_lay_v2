@@ -33,8 +33,8 @@ export class LoadNewComponent  implements OnInit {
   constructor(private alertSvc:AlertsService, private fb: FormBuilder , private inventorySvc:InventoryService, private salesSvc:SalesService) {
     this.productForm = this.fb.group({
       product: [0, Validators.required],
-      quantity: [0, [Validators.required, Validators.min(0)]],
-      quantityToAdd: [0, [Validators.required, Validators.min(0)]],
+      quantity: [null, [Validators.required, Validators.min(0)]],
+      quantityToAdd: [null, [Validators.required, Validators.min(0)]],
       type_of_unit_measurement: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(1)]]
     });
