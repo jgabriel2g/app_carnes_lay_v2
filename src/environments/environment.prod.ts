@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://api.geo-stock.online/api'
+  baseUrl: 'https://api-lv.geo-stock.online/api'
 };
