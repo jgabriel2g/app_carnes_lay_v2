@@ -125,7 +125,7 @@ export class SalesFormComponent  implements OnInit {
    */
   isSaleValid(): boolean {
     const hasNullAmount = this.saleSessionSelected.products.some(
-      (p) => p.amount === null
+      (p) => p.amount === null || p.amount < 0.1
     );
     if (hasNullAmount) {
       return false;
