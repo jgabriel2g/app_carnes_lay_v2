@@ -140,9 +140,10 @@ export class SalesMainComponent  implements OnInit {
             console.log(err);
           },
           next:(resp:any) => {
-            const result = resp;
-            result.isMobile = false;
-            this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
+            // const result = resp;
+            // result.isMobile = false;
+            // this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
+            this.router.navigateByUrl('/home/sales/new/').then();
             sessionStorage.removeItem('saleBoxInfo');
           }
         });
