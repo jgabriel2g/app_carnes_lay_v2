@@ -1,5 +1,11 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -7,40 +13,35 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-side-bar',
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.scss'],
-  standalone:true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NgOptimizedImage
-  ]
+  standalone: true,
+  imports: [CommonModule, RouterModule, NgOptimizedImage],
 })
-export class SideBarComponent  implements OnInit {
+export class SideBarComponent implements OnInit {
   @Output() close = new EventEmitter<boolean>();
 
-  public windowWith:any;
-  public showInventoryMenu:boolean = false;
-  public showSalesMenu:boolean = false;
-  public isColapsed:boolean = false
+  public windowWith: any;
+  public showInventoryMenu: boolean = false;
+  public showSalesMenu: boolean = false;
+  public isColapsed: boolean = false;
   ngOnInit() {
     this.checkScreenWidth();
   }
 
-  constructor(public authSvc:AuthService) {
-    this.checkScreenWidth(); // Verifica el ancho inicial
-  };
+  constructor(public authSvc: AuthService) {
+    this.checkScreenWidth();
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.checkScreenWidth();
-  };
+  }
 
   checkScreenWidth() {
     this.windowWith = window.innerWidth;
-  };
+  }
 
-  toCollapse(){
+  toCollapse() {
     this.isColapsed = !this.isColapsed;
-      this.close.emit(this.isColapsed);
-  };
-
+    this.close.emit(this.isColapsed);
+  }
 }

@@ -1,0 +1,261 @@
+<div class="p-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Métricas de Ventas del Mes</h1>
+    <div class="flex items-center gap-4">
+      <!-- Filtro de fechas -->
+      <div class="flex items-center gap-2">
+        <input
+          type="date"
+          [(ngModel)]="startDate"
+          class="px-3 py-2 border rounded-md"
+          placeholder="Fecha inicio"
+        />
+        <span>a</span>
+        <input
+          type="date"
+          [(ngModel)]="endDate"
+          class="px-3 py-2 border rounded-md"
+          placeholder="Fecha fin"
+        />
+        <button
+          (click)="applyDateFilter()"
+          class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+        >
+          Aplicar
+        </button>
+        <button
+          (click)="clearDateFilter()"
+          class="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
+        >
+          Limpiar
+        </button>
+      </div>
+      <button
+        (click)="refresh()"
+        class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md"
+      >
+        <ion-icon name="refresh-outline" class="text-gray-600"></ion-icon>
+        <span>Actualizar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div
+    *ngIf="isLoading"
+    class="flex flex-col items-center justify-center py-16"
+  >
+    <ion-spinner
+      name="circular"
+      class="text-center text-primary h-12 w-12 mb-4"
+    ></ion-spinner>
+    <p class="text-gray-500">Cargando métricas...</p>
+  </div>
+
+  <!-- Error state -->
+  <div
+    *ngIf="error && !isLoading"
+    class="bg-red-100 text-red-700 p-4 rounded-md"
+  >
+    <p>{{ error }}</p>
+    <button (click)="refresh()" class="mt-2 text-red-700 underline">
+      Intentar de nuevo
+    </button>
+  </div>
+
+  <!-- Data loaded -->
+  <div *ngIf="!isLoading && !error">
+    <!-- Summary cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <div
+        class="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-blue-100"
+      >
+        <h2 class="text-base font-normal mb-1 text-blue-600">Ventas Totales</h2>
+        <p class="text-2xl font-semibold text-blue-700">
+          {{ formatCurrency(totalVentas) }}
+        </p>
+        <p *ngIf="metrics" class="text-xs text-blue-500 mt-1">
+          Periodo: {{ metrics.start_date | date : "dd/MM/yyyy" }} -
+          {{ metrics.end_date | date : "dd/MM/yyyy" }}
+        </p>
+      </div>
+      <div
+        class="bg-gradient-to-br from-green-50 to-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-green-100"
+      >
+        <h2 class="text-base font-normal mb-1 text-green-600">
+          Productos Vendidos
+        </h2>
+        <div class="flex items-baseline gap-2">
+          <p class="text-2xl font-semibold text-green-700">
+            {{ totalKilos | number : "1.2-2" }}
+          </p>
+          <span class="text-sm text-green-500">Kg</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <p class="text-2xl font-semibold text-green-700">
+            {{ totalUnidades | number : "1.0-0" }}
+          </p>
+          <span class="text-sm text-green-500">unidades</span>
+        </div>
+      </div>
+      <div
+        class="bg-gradient-to-br from-purple-50 to-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-purple-100"
+      >
+        <h2 class="text-base font-normal mb-1 text-purple-600">
+          Productos Totales
+        </h2>
+        <p class="text-2xl font-semibold text-purple-700">
+          {{ metrics?.count | number : "1.0-0" }}
+        </p>
+        <p class="text-xs text-purple-500 mt-1">
+          Productos disponibles para vender
+        </p>
+      </div>
+    </div>
+
+    <!-- Products table -->
+    <div
+      class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100"
+    >
+      <h2 class="text-lg font-semibold p-4 border-b border-gray-100 bg-gray-50">
+        Detalle de Productos Vendidos
+      </h2>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-100">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Código
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Producto
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Cantidad
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Unidad
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Valor Unitario
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Valor Total
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100">
+            <!-- Loading state -->
+            <tr *ngIf="isTableLoading">
+              <td colspan="5" class="px-6 py-8">
+                <div class="flex justify-center">
+                  <ion-spinner
+                    name="circular"
+                    class="text-blue-600 h-8 w-8"
+                  ></ion-spinner>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Data rows -->
+            <tr
+              *ngFor="let product of metrics?.products || []"
+              [class.hidden]="isTableLoading"
+              class="hover:bg-gray-50 transition-colors"
+            >
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-700">
+                  {{ product.code }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-700">
+                  {{ product.product_name }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-600">
+                  {{ formatQuantity(product) }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-600">
+                  {{ product.type_of_unit_measurement }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-600">
+                  {{ formatCurrency(product.unit_price) }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-700">
+                  {{ formatCurrency(product.total_sold) }}
+                </div>
+              </td>
+            </tr>
+
+            <!-- Empty state -->
+            <tr
+              *ngIf="
+                !isTableLoading &&
+                (!metrics?.products || metrics?.products?.length === 0)
+              "
+              [class.hidden]="isTableLoading"
+            >
+              <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                No hay datos de productos vendidos en este periodo
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination controls -->
+      <div
+        class="flex justify-between items-center p-4 border-t border-gray-100 bg-gray-50"
+      >
+        <div class="text-sm text-gray-500">
+          Página {{ currentPage }} de {{ totalPages }} - Mostrando
+          {{ metrics?.products?.length || 0 }} de
+          {{ metrics?.count || 0 }} productos
+        </div>
+        <div class="flex gap-2">
+          <button
+            (click)="previousPage()"
+            [disabled]="!metrics?.previous"
+            class="px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Anterior
+          </button>
+          <button
+            (click)="nextPage()"
+            [disabled]="!metrics?.next"
+            class="px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

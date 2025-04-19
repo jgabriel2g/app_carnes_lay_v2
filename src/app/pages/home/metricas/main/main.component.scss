@@ -1,0 +1,46 @@
+/* Estilos específicos para el componente de métricas */
+.text-primary {
+  color: #b3241c;
+}
+
+ion-spinner {
+  --color: #b3241c;
+}
+
+/* Estilos para la tabla en dispositivos móviles */
+@media (max-width: 640px) {
+  table {
+    font-size: 0.75rem;
+  }
+
+  th,
+  td {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* Efectos de hover para las filas de la tabla */
+tbody tr:hover {
+  background-color: rgba(243, 244, 246, 0.5);
+}
+
+/* Estilos para scrollbars */
+.overflow-x-auto {
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+}
