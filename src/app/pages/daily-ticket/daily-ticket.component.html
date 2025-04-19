@@ -1,24 +1,28 @@
-<div id="ticket" style="max-width: 300px;">
+<div id="ticket" style="max-width: 300px">
   <div class="ticket-header mb-1 text-center w-full">
     <img
       src="https://lay-victoria.s3.us-east-1.amazonaws.com/logo_victoria.png"
       alt="logo"
       class="logo"
-    >
+    />
     <h6 class="text-xs">CRA 10 CL 6 MERCADO PÚBLICO, FUNDACIÓN</h6>
   </div>
   <div class="ticket-info mb-2">
     <h3 class="mx-auto text-center font-bold">Resumen de venta</h3>
+    <p class="mx-auto text-center font-bold">{{sale?.user?.first_name}} {{sale?.user?.last_name}}</p>
+    <p class="mx-auto text-center font-bold">{{ sale?.start_time | date : "dd/MM/yyyy" }}</p>
   </div>
   <!-- Sección de productos -->
   <div class="ticket-info">
     <h4 class="text-center font-bold">Productos</h4>
     <div *ngFor="let p of sale?.products_summary">
       <div class="ticket-info">
-        <p class="text-base">Producto: {{p.product_name}}</p>
-        <p class="text-base">Precio: {{p.price | currency}}</p>
-        <p class="text-base">Cantidad vendida: {{p.total_weight}}{{p.unit}}</p>
-        <p class="text-base">Total vendido: {{p.total_price | currency}}</p>
+        <p class="text-base">Producto: {{ p.product_name }}</p>
+        <p class="text-base">Precio: {{ p.price | currency }}</p>
+        <p class="text-base">
+          Cantidad vendida: {{ p.total_weight }}{{ p.unit }}
+        </p>
+        <p class="text-base">Total vendido: {{ p.total_price | currency }}</p>
       </div>
     </div>
   </div>
@@ -27,24 +31,30 @@
     <table class="text-center w-full mb-30 mt-2">
       <!-- Tabla de totales -->
       <thead>
-      <tr>
-        <th></th>
-        <th></th>
-      </tr>
+        <tr>
+          <th></th>
+          <th></th>
+        </tr>
       </thead>
       <tbody class="w-full">
-      <tr class="w-full flex justify-between items-center">
-        <td class="text-left text-sm font-bold">Total vendido:</td>
-        <td class="text-right text-sm font-bold">{{sale?.total_sold | currency}}</td>
-      </tr>
-      <tr class="w-full flex justify-between items-center">
-        <td class="text-left text-sm font-bold">Dinero base:</td>
-        <td class="text-right text-sm font-bold">{{sale?.base_money | currency}}</td>
-      </tr>
-      <tr class="w-full flex justify-between items-center">
-        <td class="text-left text-sm font-bold">Total dinero en caja:</td>
-        <td class="text-right text-sm font-bold">{{sale?.total_money | currency}}</td>
-      </tr>
+        <tr class="w-full flex justify-between items-center">
+          <td class="text-left text-sm font-bold">Total vendido:</td>
+          <td class="text-right text-sm font-bold">
+            {{ sale?.total_sold | currency }}
+          </td>
+        </tr>
+        <tr class="w-full flex justify-between items-center">
+          <td class="text-left text-sm font-bold">Dinero base:</td>
+          <td class="text-right text-sm font-bold">
+            {{ sale?.base_money | currency }}
+          </td>
+        </tr>
+        <tr class="w-full flex justify-between items-center">
+          <td class="text-left text-sm font-bold">Total dinero en caja:</td>
+          <td class="text-right text-sm font-bold">
+            {{ sale?.total_money | currency }}
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
