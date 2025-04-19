@@ -1,50 +1,62 @@
-import {  Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren, NgZone } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+  NgZone,
+  OnDestroy,
+  AfterViewChecked,
+} from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {  AutoCompleteModule } from 'primeng/autocomplete';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { IonicModule } from '@ionic/angular';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { SalesService } from '../../core/services/sales.service';
 import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
 import { AuthService } from '../../core/services/auth.service';
-import {OtpService} from "../../core/services/otp.service";
-import {CreateBill, ProductSelected, ProductStock} from "../../core/models/sale.model";
-import {PaymentMethod} from "../../core/models/global.model";
-import {Client} from "../../core/models/client.model";
-import {Router} from "@angular/router";
+import { OtpService } from '../../core/services/otp.service';
+import {
+  CreateBill,
+  ProductSelected,
+  ProductStock,
+} from '../../core/models/sale.model';
+import { PaymentMethod } from '../../core/models/global.model';
+import { Client } from '../../core/models/client.model';
+import { Router } from '@angular/router';
+import {
+  ActiveSale,
+  SalesStateService,
+} from '../../core/services/sales-state.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
 }
 
-interface ActiveSale  {
-  date: string,
-  client: string | null,
-  payment_method: string,
-  total_received: number,
-  products: ProductSelected[],
-  sale: number,
-  bill: any,
-  isFinalized: boolean,
-}
-
 @Component({
   selector: 'app-sales-form',
   templateUrl: './sales-form.component.html',
   styleUrls: ['./sales-form.component.scss'],
-  standalone:true,
-  imports:[
+  standalone: true,
+  imports: [
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
     AutoCompleteModule,
     IonicModule,
-  ]
+  ],
 })
-export class SalesFormComponent  implements OnInit {
-  @Input() registerBox:any;
+export class SalesFormComponent
+  implements OnInit, OnDestroy, AfterViewChecked
+{
+  @Input() registerBox: any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
 
   @ViewChild('productInput') productInput!: ElementRef;
@@ -60,37 +72,51 @@ export class SalesFormComponent  implements OnInit {
   public paymentMethods: PaymentMethod[] = [];
   public products: ProductStock[] = [];
 
-  public saleSessions: ActiveSale[] = [
-    {
-      date: this.getCurrentDate(),
-      client: '',
-      payment_method: '',
-      total_received: 0,
-      products:[],
-      sale:0  ,
-      isFinalized:false,
-      bill:null
-    },
-  ];
+  // State from service
+  public saleSessions: ActiveSale[] = [];
+  public saleSessionSelected!: ActiveSale;
 
-  public saleSessionSelected: ActiveSale = this.saleSessions[0];
-  public isLoading:boolean = false;
+  private subscriptions: Subscription = new Subscription();
+
+  public isLoading: boolean = false;
   public isCapturingWeight: boolean = false;
   public activeInputIndex: number | null = null;
 
   constructor(
-    public authSvc:AuthService,
-    private alertSvc:AlertsService,
-    private thirdPartySvc:ThirdPartyService,
-    private salesSvc:SalesService,
+    public authSvc: AuthService,
+    private alertSvc: AlertsService,
+    private thirdPartySvc: ThirdPartyService,
+    private salesSvc: SalesService,
+    private salesStateSvc: SalesStateService,
     private ngZone: NgZone,
     private otpService: OtpService,
-    private router:Router
-  ) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    // Subscribe to sales sessions from state service
+    this.subscriptions.add(
+      this.salesStateSvc.salesSessions$.subscribe((sessions) => {
+        this.saleSessions = sessions;
+      })
+    );
+
+    // Subscribe to selected session from state service
+    this.subscriptions.add(
+      this.salesStateSvc.selectedSession$.subscribe((session) => {
+        this.saleSessionSelected = session;
+      })
+    );
+    console.log('Sesión seleccionada actualizada:', this.saleSessionSelected);
+    // TODO: Implementar el cliente seleccionado en la sesión
+
     this.loadInitialData();
     this.writeWeightOnInput();
+  }
+
+  ngOnDestroy() {
+    // Clean up subscriptions to prevent memory leaks
+    this.subscriptions.unsubscribe();
   }
 
   /**
@@ -111,12 +137,17 @@ export class SalesFormComponent  implements OnInit {
           this.paymentMethods.length > 0 &&
           !this.saleSessionSelected.payment_method
         ) {
-          this.saleSessionSelected.payment_method = this.paymentMethods[0].id;
+          // Update the selected session's payment method
+          const updatedSession = {
+            ...this.saleSessionSelected,
+            payment_method: this.paymentMethods[0].id,
+          };
+          this.salesStateSvc.updateSalesSession(updatedSession);
         }
       },
       error: (err) => {
         console.error('Error loading data:', err);
-      }
+      },
     });
   }
 
@@ -131,8 +162,8 @@ export class SalesFormComponent  implements OnInit {
       return false;
     }
     const isPaymentEnough =
-      this.saleSessionSelected.total_received >= this.saleSessionSelected.sale &&
-      this.saleSessionSelected.sale > 0;
+      this.saleSessionSelected.total_received >=
+      this.saleSessionSelected.sale && this.saleSessionSelected.sale > 0;
     const hasProducts = this.saleSessionSelected.products.length > 0;
 
     return isPaymentEnough && hasProducts;
@@ -143,7 +174,9 @@ export class SalesFormComponent  implements OnInit {
    */
   createSale() {
     if (!this.isSaleValid()) {
-      this.alertSvc.presentAlert('Ooops', 'Formulario de venta incompleto').then();
+      this.alertSvc
+        .presentAlert('Ooops', 'Formulario de venta incompleto')
+        .then();
       return;
     }
 
@@ -152,20 +185,31 @@ export class SalesFormComponent  implements OnInit {
       payment_method: this.saleSessionSelected.payment_method,
       total_received: this.saleSessionSelected.total_received,
       sale: this.registerBox,
-      products_data: this.saleSessionSelected.products.map((p: ProductSelected) => ({
-        product: p.productId,
-        amount: Number(p.amount) || 0,
-        price: Number(p.price) || 0
-      })),
-      ...(this.saleSessionSelected.client && { client: this.saleSessionSelected.client }),
+      products_data: this.saleSessionSelected.products.map(
+        (p: ProductSelected) => ({
+          product: p.productId,
+          amount: Number(p.amount) || 0,
+          price: Number(p.price) || 0,
+        })
+      ),
+      ...(this.saleSessionSelected.client && {
+        client: this.saleSessionSelected.client,
+      }),
     };
 
     this.isLoading = true;
     this.salesSvc.createBill(data).subscribe({
       next: (resp: any) => {
         console.log(resp);
-        this.saleSessionSelected.isFinalized = true;
-        this.saleSessionSelected.bill = resp;
+
+        // Update session in state service
+        const updatedSession = {
+          ...this.saleSessionSelected,
+          isFinalized: true,
+          bill: resp,
+        };
+        this.salesStateSvc.updateSalesSession(updatedSession);
+
         this.isLoading = false;
         this.reloadBoxInfo.emit(true);
         this.alertSvc.presentAlert('Éxito', 'Venta completada').then();
@@ -183,10 +227,12 @@ export class SalesFormComponent  implements OnInit {
    */
   newSale() {
     if (this.saleSessions.length >= 2) {
-      this.alertSvc.presentAlert(
-        'Advertencia',
-        'Solo puedes tener dos ventanas de ventas abiertas a la vez'
-      ).then();
+      this.alertSvc
+        .presentAlert(
+          'Advertencia',
+          'Solo puedes tener dos ventanas de ventas abiertas a la vez'
+        )
+        .then();
       return;
     }
 
@@ -198,28 +244,19 @@ export class SalesFormComponent  implements OnInit {
       products: [],
       sale: 0,
       isFinalized: false,
-      bill: {}
+      bill: {},
     };
 
-    this.saleSessions.push(newSale);
-    this.saleSessionSelected = newSale;
+    // Add new session to state service
+    this.salesStateSvc.addSalesSession(newSale);
   }
 
   /**
    * Delete a sale tab.
    */
   deleteTab(index: number) {
-    this.saleSessions.splice(index, 1);
-    this.saleSessionSelected = this.saleSessions[this.saleSessions.length - 1] || {
-      date: this.getCurrentDate(),
-      client: '',
-      payment_method: '0b03af7e-60a1-4e1a-a269-0b1ff82b1ab1',
-      total_received: 0,
-      products: [],
-      sale: 0,
-      isFinalized: false,
-      bill: {}
-    };
+    // Remove session from state service
+    this.salesStateSvc.removeSalesSession(index);
   }
 
   /**
@@ -228,16 +265,18 @@ export class SalesFormComponent  implements OnInit {
   searchClients(event: any) {
     const query = event.query.toLowerCase();
     this.clientSuggestions = this.clients
-      .filter(client =>
-        client.first_name.toLowerCase().includes(query) ||
-        client.last_name.toLowerCase().includes(query) ||
-        (client.company_name && client.company_name.toLowerCase().includes(query)) ||
-        client.identification_number.toLowerCase().includes(query) ||
-        client.email.toLowerCase().includes(query)
+      .filter(
+        (client) =>
+          client.first_name.toLowerCase().includes(query) ||
+          client.last_name.toLowerCase().includes(query) ||
+          (client.company_name &&
+            client.company_name.toLowerCase().includes(query)) ||
+          client.identification_number.toLowerCase().includes(query) ||
+          client.email.toLowerCase().includes(query)
       )
-      .map(client => ({
+      .map((client) => ({
         label: `${client.first_name} ${client.last_name}`, // 🔹 Mostrará este texto en el input
-        value: client
+        value: client,
       }));
   }
 
@@ -253,83 +292,150 @@ export class SalesFormComponent  implements OnInit {
     );
 
     this.productSuggestions = filtered.map((p) => ({
-      label: `${p.product.code} ${p.product.name}`,
+      label: `${p.product.code} - ${p.product.name}`,
       value: p,
+      product: p.product,
+      price: p.price,
+      type_of_unit_measurement: p.type_of_unit_measurement,
     }));
   }
 
   /**
-   * Select the client after clicking on a suggestion.
+   * On client select handler
    */
   onClientSelect(event: any) {
-    this.selectedClient = event.value;
-    this.saleSessionSelected.client = event.value.value.id;
+    const updatedSession = {
+      ...this.saleSessionSelected,
+      client: event.value.id,
+    };
+    this.salesStateSvc.updateSalesSession(updatedSession);
   }
 
   /**
-   * Manage the selection of product (autocompleted).
+   * On product select handler - versión simplificada
    */
   onProductSelect(event: any) {
-    const selectedProduct: ProductStock = event.value.value;
-    if (!selectedProduct) return;
+    let productData;
 
-    const productToAdd: ProductSelected = {
-      productId: selectedProduct.id,
-      productName: selectedProduct.product.name,
-      amount: null,
-      price: selectedProduct.price,
-      type_of_unit_measurement: selectedProduct.type_of_unit_measurement.id
-    };
-
-    this.saleSessionSelected.products.push(productToAdd);
-    this.selectedProduct = null;
-
-    setTimeout(() => {
-      const amountInputsArray = this.amountInputs.toArray();
-      const lastAmountInput = amountInputsArray[amountInputsArray.length - 1];
-      if (lastAmountInput) {
-        lastAmountInput.nativeElement.focus();
+    // Identificar la estructura del evento
+    if (event && typeof event === 'object') {
+      if (event.value && event.value.product) {
+        productData = event.value;
+      } else if (event.product) {
+        productData = event;
+      } else if (event.label && event.value) {
+        productData = event;
+      } else {
+        console.error('Estructura de evento no reconocida:', event);
+        return;
       }
-    }, 200);
+    } else {
+      console.error('Evento no es un objeto válido:', event);
+      return;
+    }
 
+    // Si llegamos aquí, tenemos datos suficientes para crear el producto
+    try {
+      // Crear objeto de producto a agregar
+      const productToAdd: ProductSelected = {
+        productId: productData.value.id,
+        productName: productData.product.name,
+        amount: null,
+        price: productData.price,
+        type_of_unit_measurement: productData.type_of_unit_measurement.name,
+      };
+
+      // Agregar producto a la sesión
+      const currentProducts = [...this.saleSessionSelected.products];
+      currentProducts.push(productToAdd);
+
+      const updatedSession = {
+        ...this.saleSessionSelected,
+        products: currentProducts,
+      };
+
+      // Actualizar la sesión
+      this.salesStateSvc.updateSalesSession(updatedSession);
+
+      // IMPORTANTE: Limpiar el producto seleccionado completamente
+      this.selectedProduct = null;
+
+      // Comprobar si se actualizó correctamente
+      setTimeout(() => {
+        // Enfocar el campo de cantidad
+        const lastIndex = this.saleSessionSelected.products.length - 1;
+        if (this.amountInputs && lastIndex >= 0) {
+          const amountInputs = this.amountInputs.toArray();
+
+          if (amountInputs && amountInputs[lastIndex]) {
+            amountInputs[lastIndex].nativeElement.focus();
+          }
+        }
+      }, 100);
+    } catch (error) {
+      console.error('Error procesando producto:', error);
+    }
   }
 
   /**
    * Update the total of the sale (activeSale.sale)
    */
   updateTotalSaleValue() {
-    this.saleSessionSelected.sale = this.saleSessionSelected.products.reduce((sum: any, p: ProductSelected) => {
-      const amount = Number(p.amount || 0);
-      const price = Number(p.price || 0);
-      return sum + amount * price;
-    }, 0);
+    let total = 0;
+    this.saleSessionSelected.products.forEach((p) => {
+      total += (p.amount || 0) * p.price;
+    });
+
+    // Update the selected session
+    const updatedSession = {
+      ...this.saleSessionSelected,
+      sale: total,
+    };
+    this.salesStateSvc.updateSalesSession(updatedSession);
   }
 
   /**
-   * Delete a product from the sale after confirming OTP.
+   * Remove product from the list
    */
   removeProduct(index: number) {
-    this.otpService.verifyOtpAndExecute(() => {
-      this.saleSessionSelected.products.splice(index, 1);
-      this.updateTotalSaleValue();
-    }).then();
+    // Restaurar la verificación OTP
+    this.otpService
+      .verifyOtpAndExecute(() => {
+        const updatedProducts = [...this.saleSessionSelected.products];
+        updatedProducts.splice(index, 1);
+
+        const updatedSession = {
+          ...this.saleSessionSelected,
+          products: updatedProducts,
+        };
+
+        this.salesStateSvc.updateSalesSession(updatedSession);
+        this.updateTotalSaleValue();
+      })
+      .then();
   }
 
   /**
-   * Permite solo números y símbolo decimal.
+   * Only allows numeric input
    */
   onlyNumbers(event: KeyboardEvent) {
-    const pressKey = event.key;
-    const isNumberOrSymbol = /^[0-9.,]$/.test(pressKey);
-    const controlKey = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
-
-    if (!isNumberOrSymbol && !controlKey.includes(pressKey)) {
-      event.preventDefault();
-    }
+    // Allow numbers, backspace, delete, tab, etc.
+    return (
+      (event.key >= '0' && event.key <= '9') ||
+      event.key === '.' ||
+      event.key === 'Backspace' ||
+      event.key === 'Delete' ||
+      event.key === 'ArrowLeft' ||
+      event.key === 'ArrowRight' ||
+      event.key === 'Tab'
+    );
   }
 
-  selectTab(data: ActiveSale) {
-    this.saleSessionSelected = data;
+  /**
+   * Select tab from the list of open sales
+   */
+  selectTab(sale: ActiveSale) {
+    this.salesStateSvc.setSelectedSession(sale);
   }
 
   handleError(err: any) {
@@ -345,84 +451,239 @@ export class SalesFormComponent  implements OnInit {
     this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.').then();
   }
 
-  printBill() {
-    this.router.navigate(['/ticket'], { state: { bill: this.saleSessionSelected.bill } });
+  async printBill() {
+    await this.router.navigate(['/ticket'], {
+      state: { bill: this.saleSessionSelected.bill },
+    });
   }
 
   printRewardTicket() {
-    sessionStorage.setItem('bill', JSON.stringify(this.saleSessionSelected.bill));
+    sessionStorage.setItem(
+      'bill',
+      JSON.stringify(this.saleSessionSelected.bill)
+    );
     window.open('/reward', '_blank');
   }
 
+  /**
+   * Clear the current sale form
+   */
   clearSale() {
-    this.saleSessionSelected = {
-      date: this.getCurrentDate(),
-      client: '',
-      payment_method: '0b03af7e-60a1-4e1a-a269-0b1ff82b1ab1',
-      total_received: 0,
-      products: [],
-      sale: 0,
-      isFinalized: false,
-      bill: {}
-    };
+    this.salesStateSvc.clearSession(this.saleSessionSelected);
+    this.selectedClient = null;
   }
 
+  /**
+   * Get current date as ISO string for date input
+   */
   getCurrentDate(): string {
-    const currentDate = new Date();
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const year = currentDate.getFullYear();
-    return `${year}-${month}-${day}`;
+    const date = new Date();
+    return date.toISOString().split('T')[0];
   }
 
+  /**
+   * Clear on focus for amount fields
+   */
   clearOnFocus() {
     if (this.saleSessionSelected.total_received === 0) {
-      this.saleSessionSelected.total_received = '' as unknown as number;
-    }
-  }
-
-  resetIfEmpty() {
-    if (this.saleSessionSelected.total_received === ('' as unknown as number)) {
-      this.saleSessionSelected.total_received = 0;
+      const updatedSession = {
+        ...this.saleSessionSelected,
+        total_received: null as any, // Need to allow null temporarily
+      };
+      this.salesStateSvc.updateSalesSession(updatedSession);
     }
   }
 
   /**
-   * Subscribe to the "weight" event via Electron (if it exists) and update the amount of the active product
+   * Reset if empty for amount fields
+   */
+  resetIfEmpty() {
+    if (!this.saleSessionSelected.total_received) {
+      const updatedSession = {
+        ...this.saleSessionSelected,
+        total_received: 0,
+      };
+      this.salesStateSvc.updateSalesSession(updatedSession);
+    }
+  }
+
+  /**
+   * Write weight on input from scale
    */
   writeWeightOnInput() {
-    if (window.electronAPI) {
-      window.electronAPI.receive('weight', (data: any) => {
-        this.ngZone.run(() => {
-          if (!this.isCapturingWeight || this.activeInputIndex === null) return;
+    window.addEventListener('message', (event) => {
+      // Only process if we're actively capturing weight and have a valid index
+      if (!this.isCapturingWeight || this.activeInputIndex === null) return;
 
-          const weight = parseFloat(data);
-          this.saleSessionSelected.products[this.activeInputIndex].amount = weight;
-          this.updateTotalSaleValue();
-        });
-      });
-    }
+      try {
+        const data = event.data;
+        if (data && typeof data === 'string' && data.startsWith('weight:')) {
+          const weight = parseFloat(data.substring(7));
+          if (!isNaN(weight)) {
+            this.ngZone.run(() => {
+              // Deep clone products array to avoid direct mutation
+              const updatedProducts = [...this.saleSessionSelected.products];
+              if (updatedProducts[this.activeInputIndex!]) {
+                updatedProducts[this.activeInputIndex!] = {
+                  ...updatedProducts[this.activeInputIndex!],
+                  amount: weight,
+                };
+
+                const updatedSession = {
+                  ...this.saleSessionSelected,
+                  products: updatedProducts,
+                };
+
+                this.salesStateSvc.updateSalesSession(updatedSession);
+                this.updateTotalSaleValue();
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error processing weight data:', error);
+      }
+    });
   }
 
   /**
-   * Activate/deactivate weight capture for a product in the list.
+   * Toggle weight capture for a specific product
    */
   toggleWeightCapture(index: number) {
+    // If we're already capturing for this index, stop
     if (this.isCapturingWeight && this.activeInputIndex === index) {
       this.isCapturingWeight = false;
       this.activeInputIndex = null;
-    } else {
-      this.isCapturingWeight = true;
-      this.activeInputIndex = index;
+      return;
+    }
+
+    // Start capturing for this index
+    this.isCapturingWeight = true;
+    this.activeInputIndex = index;
+  }
+
+  /**
+   * Get the text to display on the capture button
+   */
+  toggleCaptureText(index: number): string {
+    return this.isCapturingWeight && this.activeInputIndex === index
+      ? 'Detener'
+      : 'Capturar';
+  }
+
+  /**
+   * Update product amount and recalculate total
+   */
+  updateProductAmount(index: number, value: number) {
+    // Create a copy of the products array
+    const updatedProducts = [...this.saleSessionSelected.products];
+
+    // Update the specific product
+    updatedProducts[index] = {
+      ...updatedProducts[index],
+      amount: value,
+    };
+
+    // Update the session
+    const updatedSession = {
+      ...this.saleSessionSelected,
+      products: updatedProducts,
+    };
+
+    this.salesStateSvc.updateSalesSession(updatedSession);
+    this.updateTotalSaleValue();
+  }
+
+  /**
+   * Update product price and recalculate total
+   */
+  updateProductPrice(index: number, value: number) {
+    // Create a copy of the products array
+    const updatedProducts = [...this.saleSessionSelected.products];
+
+    // Update the specific product
+    updatedProducts[index] = {
+      ...updatedProducts[index],
+      price: value,
+    };
+
+    // Update the session
+    const updatedSession = {
+      ...this.saleSessionSelected,
+      products: updatedProducts,
+    };
+
+    this.salesStateSvc.updateSalesSession(updatedSession);
+    this.updateTotalSaleValue();
+  }
+
+  /**
+   * Función trackBy para mejorar el rendimiento de la lista de productos
+   */
+  trackByProductId(index: number, product: ProductSelected): string {
+    return product.productId;
+  }
+
+  /**
+   * Método para detectar y solucionar problemas con el servicio de estado
+   * (solo para depuración)
+   */
+  ngAfterViewChecked() {
+    // Verificamos si hay una discrepancia entre el estado local y el del servicio
+    if (
+      this.saleSessionSelected &&
+      this.saleSessionSelected.products &&
+      this.salesStateSvc.selectedSession &&
+      this.salesStateSvc.selectedSession.products &&
+      this.saleSessionSelected.products.length !==
+      this.salesStateSvc.selectedSession.products.length
+    ) {
+      console.log('⚠️ Discrepancia detectada en el número de productos');
+      console.log('Local products:', this.saleSessionSelected.products);
+      console.log(
+        'Service products:',
+        this.salesStateSvc.selectedSession.products
+      );
+
+      // Forzar sincronización si es necesario
+      this.saleSessionSelected = { ...this.salesStateSvc.selectedSession };
     }
   }
 
   /**
-   * Toggle text of weight capture button.
+   * Método para limpiar el input de producto después de seleccionar
    */
-  toggleCaptureText(index: number): string {
-    return this.isCapturingWeight && this.activeInputIndex === index
-      ? 'Dejar de Capturar'
-      : 'Capturar Peso';
+  clearProductInput() {
+    // Limpiar con un pequeño retraso para no interferir con la selección
+    setTimeout(() => {
+      this.selectedProduct = null;
+    }, 200);
+  }
+
+  /**
+   * Método para restablecer y limpiar el input después de seleccionar un producto
+   * @param autoComplete Referencia al componente de autocompletado
+   */
+  resetAndClearInput(autoComplete: any) {
+    // Limpiar el modelo
+    this.selectedProduct = null;
+
+    // Intentar limpiar directamente el campo de entrada si está disponible
+    try {
+      if (
+        autoComplete &&
+        autoComplete.inputEL &&
+        autoComplete.inputEL.nativeElement
+      ) {
+        // Limpiar el valor del input directamente
+        autoComplete.inputEL.nativeElement.value = '';
+        // También intentar limpiar cualquier valor interno del componente
+        if (autoComplete.value) {
+          autoComplete.value = null;
+        }
+      }
+    } catch (error) {
+      console.error('Error al limpiar campo de autocompletado:', error);
+    }
   }
 }

@@ -18,7 +18,8 @@
   table {
     width: 100%;
     border-collapse: collapse;
-    th, td {
+    th,
+    td {
       border: 1px solid #ccc;
       padding: 8px;
     }
@@ -27,19 +28,25 @@
     }
   }
 }
-h4, h5, h6, p {
+h4,
+h5,
+h6,
+p {
   margin-bottom: 0 !important;
   margin-top: 3px !important;
-
 }
 
-.ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
+.ticket-header,
+.ticket-info,
+.client-info,
+.ticket-description,
+.ticket-total {
   padding-top: 8px;
   padding-bottom: 8px;
-  border-bottom: dashed .5px black;
+  border-bottom: dashed 0.5px black;
 }
-.table>:not(caption)>*>*{
-    padding: 0 !important;
+.table > :not(caption) > * > * {
+  padding: 0 !important;
 }
 
 table {

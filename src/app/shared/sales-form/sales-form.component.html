@@ -1,35 +1,41 @@
 <div class="sales-form-container">
-  <div class="mb-2">
-    <div class="hidden sm:block">
-      <div class="border-b border-gray-200">
-        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a *ngFor="let sale of saleSessions; let i = index"
-          [class.border-red-500]="saleSessionSelected === sale"  [class.text-red-600]="saleSessionSelected === sale" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium  flex items-center gap-x-4" aria-current="page">
-            <span (click)="selectTab(sale)">Venta {{i + 1}}</span>
-<!--            <button (click)="deleteTab(i)">-->
-<!--              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">-->
-<!--                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />-->
-<!--              </svg>-->
-<!--            </button>-->
-          </a>
-<!--          <a (click)="newSale()" *ngIf=" authSvc.hasPermission('create-sales')" class="cursor-pointer whitespace-nowrap border-b-2  p-4 text-sm font-medium " aria-current="page">Nueva venta</a>-->
-        </nav>
-      </div>
-    </div>
+  <div class="mt-4">
   </div>
 
   <div class="grid grid-cols-5 gap-x-4">
-    <div class="col-span-3 xl:col-span-4  grid grid-cols-2  h-full overflow-y-auto gap-3 sales-wrapper">
+    <div
+      class="col-span-3 xl:col-span-4 grid grid-cols-2 h-full overflow-y-auto gap-3 sales-wrapper"
+    >
       <!-- Sale date input field -->
       <div class="col-span-1">
         <label for="sale-date">Fecha de venta</label>
         <div class="relative mt-1 rounded-2xl">
-          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Z" />
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-red-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Z"
+              />
             </svg>
           </div>
-          <input [disabled]="saleSessionSelected.isFinalized"  [(ngModel)]="saleSessionSelected.date" type="date" name="sale-date" id="sale-date" class="inputs">
+          <input
+            [disabled]="saleSessionSelected.isFinalized"
+            [(ngModel)]="saleSessionSelected.date"
+            type="date"
+            name="sale-date"
+            id="sale-date"
+            class="inputs"
+          />
         </div>
       </div>
 
@@ -43,11 +49,8 @@
           name="id-type"
           class="inputs mt-1"
         >
-          <option
-            [value]="pM.id"
-            *ngFor="let pM of paymentMethods"
-          >
-            {{pM.name}}
+          <option [value]="pM.id" *ngFor="let pM of paymentMethods">
+            {{ pM.name }}
           </option>
         </select>
       </div>
@@ -61,8 +64,10 @@
             [(ngModel)]="selectedClient"
             [suggestions]="clientSuggestions"
             [optionLabel]="'label'"
+            [forceSelection]="true"
             (completeMethod)="searchClients($event)"
             (onSelect)="onClientSelect($event)"
+            emptyMessage="No se encontraron clientes"
           ></p-autoComplete>
         </div>
       </div>
@@ -71,102 +76,197 @@
       <div class="col-span-2">
         <label>Buscador de productos</label>
         <p-autoComplete
+          #productAutoComplete
           [disabled]="saleSessionSelected.isFinalized"
           [(ngModel)]="selectedProduct"
           [suggestions]="productSuggestions"
+          [optionLabel]="'label'"
+          [field]="'label'"
+          [style]="{ width: '100%' }"
+          [forceSelection]="true"
+          [autoHighlight]="true"
+          [showClear]="true"
           (completeMethod)="searchProducts($event)"
-          (onSelect)="onProductSelect($event)"
+          (onSelect)="
+            onProductSelect($event); resetAndClearInput(productAutoComplete)
+          "
+          (onBlur)="clearProductInput()"
           placeholder="Buscar producto..."
+          emptyMessage="No se encontraron productos"
         ></p-autoComplete>
       </div>
 
       <!-- Product table -->
-      <div class="lg:col-span-3 col-span-2 overflow-x-auto max-h-28 lg:max-h-80">
+      <div
+        class="lg:col-span-3 col-span-2 overflow-x-auto max-h-28 lg:max-h-80"
+      >
         <div class="flow-root">
           <div class="">
-            <div class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-4">
-              <table class="min-w-full divide-y divide-gray-300">
+            <div
+              class="inline-block min-w-full py-2 align-middle sm:px-4 lg:px-4"
+            >
+              <!-- Mensaje si no hay productos -->
+              <div
+                *ngIf="saleSessionSelected.products.length === 0"
+                class="text-center p-4 text-gray-500 border border-gray-200 rounded-lg"
+              >
+                No hay productos seleccionados aún
+              </div>
+
+              <!-- Tabla de productos -->
+              <table
+                *ngIf="saleSessionSelected.products.length > 0"
+                class="min-w-full divide-y divide-gray-300"
+              >
                 <thead>
-                  <tr>
-                   <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Cantidad</th>
-                    <th></th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Precio</th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-primary">Costo</th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                      <span class="sr-only">Edit</span>
-                    </th>
-                  </tr>
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                  >
+                    Nombre
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                  >
+                    Cantidad
+                  </th>
+                  <th></th>
+                  <th
+                    scope="col"
+                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                  >
+                    Precio
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                  >
+                    Costo
+                  </th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                    <span class="sr-only">Edit</span>
+                  </th>
+                </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                  <tr *ngFor="let sP of saleSessionSelected.products; let i = index">
-                    <td class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0">
-                      {{ sP.productName}}
-                    </td>
-                    <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
-                      <input
-                        [disabled]="saleSessionSelected.isFinalized"
-                        [(ngModel)]="sP.amount"
-                        type="number"
-                        id="product-price"
-                        class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-2xl"
-                        (keyup)="updateTotalSaleValue()"
-                        (keydown)="onlyNumbers($event)"
-                        min="0"
-                        #amountInput
+                <tr
+                  *ngFor="
+                      let sP of saleSessionSelected.products;
+                      let i = index;
+                      trackBy: trackByProductId
+                    "
+                >
+                  <td
+                    class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0"
+                  >
+                    {{ sP.productName }}
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
+                  >
+                    <input
+                      [disabled]="saleSessionSelected.isFinalized"
+                      [(ngModel)]="sP.amount"
+                      type="number"
+                      id="product-price"
+                      class="block w-full rounded-xl py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-2xl"
+                      (ngModelChange)="updateProductAmount(i, $event)"
+                      (keydown)="onlyNumbers($event)"
+                      min="0"
+                      #amountInput
+                    />
+                  </td>
+                  <td>
+                    <button
+                      class="p-5 rounded-2xl bg-[#b3241c] text-white font-bold"
+                      type="button"
+                      (click)="toggleWeightCapture(i)"
+                    >
+                      {{ toggleCaptureText(i) }}
+                    </button>
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
+                  >
+                    <!-- Product price field -->
+                    <input
+                      [disabled]="saleSessionSelected.isFinalized"
+                      [(ngModel)]="sP.price"
+                      type="number"
+                      id="pp"
+                      class="block w-full rounded-xl py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
+                      (ngModelChange)="updateProductPrice(i, $event)"
+                      (keydown)="onlyNumbers($event)"
+                      min="0"
+                    />
+                    <small
+                      class="text-gray-400 font-medium text-xs mt-1"
+                    ></small>
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
+                  >
+                    {{ (sP.amount || 0) * (sP.price || 0) | currency }}
+                  </td>
+                  <td
+                    class="relative whitespace-nowrap py-2.5 mt-3 flex justify-center gap-x-3"
+                  >
+                    <button (click)="removeProduct(i)">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6 text-red-500 hover:text-red-700"
                       >
-                    </td>
-                    <td>
-                      <button class="p-5 rounded-2xl bg-[#b3241c] text-white font-bold" type="button" (click)="toggleWeightCapture(i)">
-                        {{ toggleCaptureText(i) }}
-                      </button>
-                    </td>
-                    <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
-                      <!-- Product price field -->
-                      <input
-                        [disabled]="saleSessionSelected.isFinalized"
-                        [(ngModel)]="sP.price"
-                        type="number"
-                        id="pp"
-                        class="block w-full rounded-xl py-2 pl-2 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
-                        (keyup)="updateTotalSaleValue()"
-                        (keydown)="onlyNumbers($event)"
-                        min="0"
-                      >
-                      <small class="text-gray-400 font-medium text-xs mt-1"></small>
-                    </td>
-                    <td class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500">
-                      {{ (sP.amount || 0) * (sP.price || 0) | currency }}
-                    </td>
-                    <td class="relative whitespace-nowrap py-2.5 mt-3 flex justify-center gap-x-3">
-                      <button (click)="removeProduct(i)">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 hover:text-red-700">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-
     </div>
     <!-- Total Sale and Payment -->
-    <div class="xl:col-span-1 col-span-2" >
+    <div class="xl:col-span-1 col-span-2">
       <dl class="mt-5 w-full">
-        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3">
-          <dt class="truncate text-sm font-medium text-gray-500">Total Venta</dt>
-          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{saleSessionSelected.sale | currency}}</dd>
+        <div
+          class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3"
+        >
+          <dt class="truncate text-sm font-medium text-gray-500">
+            Total Venta
+          </dt>
+          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">
+            {{ saleSessionSelected.sale | currency }}
+          </dd>
         </div>
-        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3">
-          <dt class="truncate text-sm font-medium text-gray-500">Total de productos</dt>
-          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">{{saleSessionSelected.products.length}}</dd>
+        <div
+          class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full mb-3"
+        >
+          <dt class="truncate text-sm font-medium text-gray-500">
+            Total de productos
+          </dt>
+          <dd class="mt-1 text-xl font-semibold tracking-tight text-primary">
+            {{ saleSessionSelected.products.length }}
+          </dd>
         </div>
-        <div class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full">
-          <dt class="truncate text-sm font-medium text-gray-500">Total recibido</dt>
+        <div
+          class="overflow-hidden rounded-lg bg-red-50 px-4 py-4 shadow w-full"
+        >
+          <dt class="truncate text-sm font-medium text-gray-500">
+            Total recibido
+          </dt>
           <input
             [disabled]="saleSessionSelected.isFinalized"
             [(ngModel)]="saleSessionSelected.total_received"
@@ -176,13 +276,35 @@
             type="number"
             name="sale-value-pay"
             id="sale-value-pay"
-            class="bg-gray-50 block w-full rounded-xl py-2 pl-4 text-gray-900  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 mt-2"
-            placeholder="0">
+            class="bg-gray-50 block w-full rounded-xl py-2 pl-4 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 mt-2"
+            placeholder="0"
+          />
         </div>
-        <button (click)="createSale()" *ngIf=" authSvc.hasPermission('create-sales')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="saleSessionSelected.isFinalized || isLoading" >Registrar</button>
-        <button (click)="printBill()" *ngIf=" authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed" [disabled]="!saleSessionSelected.isFinalized" >Ver Factura</button>
-        <button (click)="clearSale()" class="btn-primary mt-4 disabled:cursor-not-allowed" *ngIf="saleSessionSelected.isFinalized" [disabled]="  isLoading" >Limpiar Información</button>
-<!--        <button (click)="printRewardTicket()" *ngIf="authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed">Ver boleto</button>-->
+        <button
+          (click)="createSale()"
+          *ngIf="authSvc.hasPermission('create-sales')"
+          class="btn-primary mt-4 disabled:cursor-not-allowed"
+          [disabled]="saleSessionSelected.isFinalized || isLoading"
+        >
+          Registrar
+        </button>
+        <button
+          (click)="printBill()"
+          *ngIf="authSvc.hasPermission('print-bill')"
+          class="btn-primary mt-4 disabled:cursor-not-allowed"
+          [disabled]="!saleSessionSelected.isFinalized"
+        >
+          Ver Factura
+        </button>
+        <button
+          (click)="clearSale()"
+          class="btn-primary mt-4 disabled:cursor-not-allowed"
+          *ngIf="saleSessionSelected.isFinalized"
+          [disabled]="isLoading"
+        >
+          Limpiar Información
+        </button>
+        <!--        <button (click)="printRewardTicket()" *ngIf="authSvc.hasPermission('print-bill')"  class="btn-primary mt-4 disabled:cursor-not-allowed">Ver boleto</button>-->
       </dl>
     </div>
   </div>
