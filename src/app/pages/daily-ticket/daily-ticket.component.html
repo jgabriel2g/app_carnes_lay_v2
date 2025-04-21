@@ -3,16 +3,14 @@
     <img
       ngSrc="../../../assets/images/logo_lay.png"
       alt="logo"
-      class="mx-auto"
-      height="100"
-      width="200"
+      class="logo"
     />
-    <h4 class="text-xs">CARNES LAY</h4>
-    <h5 class="text-xs">NIT 19602067-7</h5>
-    <h6 class="text-xs">Dir. CL 5 # 9-55 MERCADO PÚBLICO, FUNDACIÓN</h6>
+    <h6 class="text-xs">CRA 10 CL 6 MERCADO PÚBLICO, FUNDACIÓN</h6>
   </div>
   <div class="ticket-info mb-2">
     <h3 class="mx-auto text-center font-bold">Resumen de venta</h3>
+    <p class="mx-auto text-center font-bold">{{sale?.user?.first_name}} {{sale?.user?.last_name}}</p>
+    <p class="mx-auto text-center font-bold">{{ sale?.start_time | date : "dd/MM/yyyy" }}</p>
   </div>
   <!-- Sección de productos -->
   <div class="ticket-info">
