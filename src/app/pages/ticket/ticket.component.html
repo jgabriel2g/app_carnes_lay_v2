@@ -1,48 +1,63 @@
-<div *ngIf="bill" id="ticket" style="max-width: 300px;">
+<div *ngIf="bill" id="ticket" style="max-width: 300px">
   <div class="ticket-header mb-1 text-center w-full">
     <img
-      src="https://lay-victoria.s3.us-east-1.amazonaws.com/logo_victoria.png"
+      ngSrc="../../../assets/images/logo_lay.png"
       alt="logo"
-      class="logo"
-    >
-    <h4 class="text-xs">CARNES LA VICTORIA</h4>
-    <h5 class="text-xs">NIT 57271562-7</h5>
-    <h6 class="text-xs">Dir Cra 10 CL 6 MERCADO PÚBLICO, FUNDACIÓN</h6>
-    <h6 class="text-xs font-bold">DOCUMENTO ELECTRÓNICO EN PROCESO DE VALIDACION. NO REEMPLAZA LA FACTURA</h6>
-    <br>
-    <h6 class="text-xs font-bold">ORDEN DE DESPACHO. <br> {{bill.id}}</h6>
+      class="mx-auto"
+      height="100"
+      width="200"
+    />
+    <h4 class="text-xs">CARNES LAY</h4>
+    <h5 class="text-xs">NIT 19602067-7</h5>
+    <h6 class="text-xs">Dir. CL 5 # 9-55 MERCADO PÚBLICO, FUNDACIÓN</h6>
+    <h6 class="text-xs font-bold">
+      DOCUMENTO ELECTRÓNICO EN PROCESO DE VALIDACION. NO REEMPLAZA LA FACTURA
+    </h6>
+    <br />
+    <h6 class="text-xs font-bold">
+      ORDEN DE DESPACHO. <br />
+      {{ bill.id }}
+    </h6>
   </div>
   <div class="ticket-body">
     <div class="ticket-info mb-2">
       <h5 class="mx-auto text-center font-bold">Sistema POS</h5>
       <table class="text-center w-full mb-0 mt-2">
         <thead>
-        <tr>
-          <th></th>
-          <th></th>
-        </tr>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
         </thead>
         <tbody class="w-full">
-        <tr class="w-full flex justify-between items-center" >
-          <td class="text-left font-medium ">Fecha de Generación</td>
-          <td class="text-right">{{bill.created | date:"short"}}</td>
-        </tr>
-        <tr class="w-full flex justify-between items-center" >
-          <td class="text-left font-medium ">Medio de Pago</td>
-          <td class="text-right">{{bill.payment_method.name}}</td>
-        </tr>
-        <tr class="w-full flex justify-between items-center" *ngIf="!bill.client">
-          <td class="text-left font-medium ">Cliente:</td>
-          <td class="text-right">Consumidor final</td>
-        </tr>
-        <tr class="w-full flex justify-between items-center" *ngIf="!bill.client">
-          <td class="text-left font-medium ">NIT/CC:</td>
-          <td class="text-right">222222222222</td>
-        </tr>
-        <tr class="w-full flex justify-between items-center" >
-          <td class="text-left font-medium ">Vendedor: </td>
-          <td class="text-right">{{bill.user.first_name}} {{bill.user.last_name}}</td>
-        </tr>
+          <tr class="w-full flex justify-between items-center">
+            <td class="text-left font-medium">Fecha de Generación</td>
+            <td class="text-right">{{ bill.created | date : "short" }}</td>
+          </tr>
+          <tr class="w-full flex justify-between items-center">
+            <td class="text-left font-medium">Medio de Pago</td>
+            <td class="text-right">{{ bill.payment_method.name }}</td>
+          </tr>
+          <tr
+            class="w-full flex justify-between items-center"
+            *ngIf="!bill.client"
+          >
+            <td class="text-left font-medium">Cliente:</td>
+            <td class="text-right">Consumidor final</td>
+          </tr>
+          <tr
+            class="w-full flex justify-between items-center"
+            *ngIf="!bill.client"
+          >
+            <td class="text-left font-medium">NIT/CC:</td>
+            <td class="text-right">222222222222</td>
+          </tr>
+          <tr class="w-full flex justify-between items-center">
+            <td class="text-left font-medium">Vendedor:</td>
+            <td class="text-right">
+              {{ bill.user.first_name }} {{ bill.user.last_name }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -50,80 +65,107 @@
     <div class="client-info mb-2" *ngIf="bill.client">
       <table class="table table-centered table-borderless w-full mb-0">
         <thead>
-        <tr>
-          <th></th>
-          <th></th>
-        </tr>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
         </thead>
         <tbody class="w-full">
-        <tr class="flex justify-between items-center w-full ">
-          <td class="text-left font-medium">CLIENTE</td>
-          <td class="text-right">{{bill.client.first_name}} {{bill.client.last_name}} </td>
-        </tr>
-        <tr class="flex justify-between items-center w-full ">
-          <td class="text-left font-medium ">NIT/CC</td>
-          <td class="text-right">{{bill.client.identification_number}}</td>
-        </tr>
-        <tr class="flex justify-between items-center w-full ">
-          <td class="text-left font-medium ">EMAIL</td>
-          <td class="text-right">{{bill.client.email}}</td>
-        </tr>
-        <tr class="flex justify-between items-center w-full ">
-          <td class="text-left font-medium ">TELÉFONO</td>
-          <td class="text-right">{{bill.client.phone}}</td>
-        </tr>
-        <tr class="flex justify-between items-center w-full ">
-          <td class="text-left font-medium ">DIRECCIÓN</td>
-          <td class="text-right">{{bill.client.address || 'No ingresada'}}</td>
-        </tr>
+          <tr class="flex justify-between items-center w-full">
+            <td class="text-left font-medium">CLIENTE</td>
+            <td class="text-right">
+              {{ bill.client.first_name }} {{ bill.client.last_name }}
+            </td>
+          </tr>
+          <tr class="flex justify-between items-center w-full">
+            <td class="text-left font-medium">NIT/CC</td>
+            <td class="text-right">{{ bill.client.identification_number }}</td>
+          </tr>
+          <tr class="flex justify-between items-center w-full">
+            <td class="text-left font-medium">EMAIL</td>
+            <td class="text-right">{{ bill.client.email }}</td>
+          </tr>
+          <tr class="flex justify-between items-center w-full">
+            <td class="text-left font-medium">TELÉFONO</td>
+            <td class="text-right">{{ bill.client.phone }}</td>
+          </tr>
+          <tr class="flex justify-between items-center w-full">
+            <td class="text-left font-medium">DIRECCIÓN</td>
+            <td class="text-right">
+              {{ bill.client.address || "No ingresada" }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <div class="ticket-description mb-1">
-      <div class="flex justify-between"  >
+      <div class="flex justify-between">
         <h6 class="text-xs font-bold">PRODUCTO</h6>
         <h6 class="text-xs font-bold">VALOR</h6>
       </div>
-      <div class="flex w-full justify-between items-start" *ngFor="let p of bill.display_products">
-        <div class="text-xs text-left ">
-          <p class="text-sm"> {{p.code}} {{p.product}}</p>
-          <small>{{p.amount}}{{p.type_of_unit_measurement}} x ${{p.price}}</small>
+      <div
+        class="flex w-full justify-between items-start"
+        *ngFor="let p of bill.display_products"
+      >
+        <div class="text-xs text-left">
+          <p class="text-sm">{{ p.code }} {{ p.product }}</p>
+          <small
+            >{{ p.amount }}{{ p.type_of_unit_measurement }} x ${{
+              p.price
+            }}</small
+          >
         </div>
         <div class="price text-xs text-end">
-          <p class="text-sm">{{convertToNumber(p.amount)  * convertToNumber(p.price) | currency }}</p>
+          <p class="text-sm">
+            {{
+              convertToNumber(p.amount) * convertToNumber(p.price) | currency
+            }}
+          </p>
         </div>
       </div>
     </div>
     <div class="ticket-total">
-      <div *ngFor="let unit of getTotalUnitMeasurementsKeys(bill.total_unit_measurements)" class="inline">
-        <h5 *ngIf="bill.total_unit_measurements[unit].total > 0" class="pb-1 text-[12px] font-semibold">
-          {{ bill.total_unit_measurements[unit].total }} {{ bill.total_unit_measurements[unit].name }} totales
+      <div
+        *ngFor="
+          let unit of getTotalUnitMeasurementsKeys(bill.total_unit_measurements)
+        "
+        class="inline"
+      >
+        <h5
+          *ngIf="bill.total_unit_measurements[unit].total > 0"
+          class="pb-1 text-[12px] font-semibold"
+        >
+          {{ bill.total_unit_measurements[unit].total }}
+          {{ bill.total_unit_measurements[unit].name }} totales
         </h5>
       </div>
     </div>
     <div class="ticket-total">
-      <div class="flex justify-between ">
+      <div class="flex justify-between">
         <h5 class="pb-1 text-[12px] font-semibold">SUBTOTAL</h5>
-        <h5 class="text-xs">{{bill.total_cost | currency}}</h5>
+        <h5 class="text-xs">{{ bill.total_cost | currency }}</h5>
       </div>
     </div>
     <div class="ticket-total">
-      <div class="flex justify-between ">
+      <div class="flex justify-between">
         <h5 class="pb-1 text-[12px] font-semibold">RECIBIDO:</h5>
-        <h5 class="text-xs">{{bill.total_received | currency}}</h5>
+        <h5 class="text-xs">{{ bill.total_received | currency }}</h5>
       </div>
     </div>
     <div class="ticket-total">
-      <div class="flex justify-between ">
+      <div class="flex justify-between">
         <h5 class="pb-1 text-[12px] font-semibold">CAMBIO:</h5>
-        <h5 class="text-xs">{{bill.total_sent | currency}}</h5>
+        <h5 class="text-xs">{{ bill.total_sent | currency }}</h5>
       </div>
     </div>
   </div>
   <div class="ticket-footer text-center w-full">
     <h1 class="text-base font-bold">Gracias por su compra</h1>
-    <h6 class="text-xs font-bold">ESTE DOCUMENTO NO REEMPLAZA NI SE CONSIDERA LA FACTURA ELECTRONICA, LA CUAL SERA ENVIADA POR CORREO ELECTRONICO</h6>
+    <h6 class="text-xs font-bold">
+      ESTE DOCUMENTO NO REEMPLAZA NI SE CONSIDERA LA FACTURA ELECTRONICA, LA
+      CUAL SERA ENVIADA POR CORREO ELECTRONICO
+    </h6>
     <h6 class="text-xs">Software de facturación electrónica propio</h6>
   </div>
 </div>
