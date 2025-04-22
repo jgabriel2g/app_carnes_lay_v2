@@ -31,6 +31,9 @@ export class LoginComponent  implements OnInit {
   }
 
   login(){
+    sessionStorage.clear();
+    localStorage.clear();
+
     this.isLoading = !this.isLoading;
 
     const data: LoginRequest = {
