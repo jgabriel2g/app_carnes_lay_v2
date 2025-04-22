@@ -517,18 +517,6 @@ export class SalesFormComponent
         this.ngZone.run(() => {
           if (!this.isCapturingWeight || this.activeInputIndex === null) return;
           const weight = parseFloat(data);
-          this.saleSessionSelected.products[this.activeInputIndex].amount = weight;
-          this.updateTotalSaleValue();
-        });
-      });
-    } else {
-      // —— VERSIÓN POSTMESSAGE (FALLBACK) ——
-      const handler = (event: MessageEvent) => {
-        if (!this.isCapturingWeight || this.activeInputIndex === null) return;
-        // opcionalmente: if (event.origin !== 'tu-origen-esperado') return;
-        const msg = event.data;
-        if (typeof msg === 'string' && msg.startsWith('weight:')) {
-          const weight = parseFloat(msg.substring(7));
           if (!isNaN(weight)) {
             this.ngZone.run(() => {
               const updatedProducts = [...this.saleSessionSelected.products];
@@ -543,27 +531,61 @@ export class SalesFormComponent
               this.updateTotalSaleValue();
             });
           }
-        }
-      };
-      window.addEventListener('message', handler);
-      // si quieres, almacena `handler` para luego removerlo con removeEventListener
+        });
+      });
     }
+    // else {
+    //   // —— VERSIÓN POSTMESSAGE (FALLBACK) ——
+    //   const handler = (event: MessageEvent) => {
+    //     if (!this.isCapturingWeight || this.activeInputIndex === null) return;
+    //     // opcionalmente: if (event.origin !== 'tu-origen-esperado') return;
+    //     const msg = event.data;
+    //     if (typeof msg === 'string' && msg.startsWith('weight:')) {
+    //       const weight = parseFloat(msg.substring(7));
+    //       if (!isNaN(weight)) {
+    //         this.ngZone.run(() => {
+    //           const updatedProducts = [...this.saleSessionSelected.products];
+    //           updatedProducts[this.activeInputIndex!] = {
+    //             ...updatedProducts[this.activeInputIndex!],
+    //             amount: weight,
+    //           };
+    //           this.salesStateSvc.updateSalesSession({
+    //             ...this.saleSessionSelected,
+    //             products: updatedProducts,
+    //           });
+    //           this.updateTotalSaleValue();
+    //         });
+    //       }
+    //     }
+    //   };
+    //   window.addEventListener('message', handler);
+    //   // si quieres, almacena `handler` para luego removerlo con removeEventListener
+    // }
   }
 
   /**
    * Toggle weight capture for a specific product
    */
+  // toggleWeightCapture(index: number) {
+  //   // If we're already capturing for this index, stop
+  //   if (this.isCapturingWeight && this.activeInputIndex === index) {
+  //     this.isCapturingWeight = false;
+  //     this.activeInputIndex = null;
+  //     return;
+  //   }
+  //
+  //   // Start capturing for this index
+  //   this.isCapturingWeight = true;
+  //   this.activeInputIndex = index;
+  // }
   toggleWeightCapture(index: number) {
-    // If we're already capturing for this index, stop
     if (this.isCapturingWeight && this.activeInputIndex === index) {
       this.isCapturingWeight = false;
       this.activeInputIndex = null;
-      return;
+    } else {
+      this.isCapturingWeight = true;
+      this.activeInputIndex = index;
     }
-
-    // Start capturing for this index
-    this.isCapturingWeight = true;
-    this.activeInputIndex = index;
   }
 
   /**
