@@ -511,39 +511,43 @@ export class SalesFormComponent
    * Write weight on input from scale
    */
   writeWeightOnInput() {
-    window.addEventListener('message', (event) => {
-      // Only process if we're actively capturing weight and have a valid index
-      if (!this.isCapturingWeight || this.activeInputIndex === null) return;
-
-      try {
-        const data = event.data;
-        if (data && typeof data === 'string' && data.startsWith('weight:')) {
-          const weight = parseFloat(data.substring(7));
+    if (window.electronAPI) {
+      // —— VERSIÓN ELECTRON ANTIGUA ——
+      window.electronAPI.receive('weight', (data: any) => {
+        this.ngZone.run(() => {
+          if (!this.isCapturingWeight || this.activeInputIndex === null) return;
+          const weight = parseFloat(data);
+          this.saleSessionSelected.products[this.activeInputIndex].amount = weight;
+          this.updateTotalSaleValue();
+        });
+      });
+    } else {
+      // —— VERSIÓN POSTMESSAGE (FALLBACK) ——
+      const handler = (event: MessageEvent) => {
+        if (!this.isCapturingWeight || this.activeInputIndex === null) return;
+        // opcionalmente: if (event.origin !== 'tu-origen-esperado') return;
+        const msg = event.data;
+        if (typeof msg === 'string' && msg.startsWith('weight:')) {
+          const weight = parseFloat(msg.substring(7));
           if (!isNaN(weight)) {
             this.ngZone.run(() => {
-              // Deep clone products array to avoid direct mutation
               const updatedProducts = [...this.saleSessionSelected.products];
-              if (updatedProducts[this.activeInputIndex!]) {
-                updatedProducts[this.activeInputIndex!] = {
-                  ...updatedProducts[this.activeInputIndex!],
-                  amount: weight,
-                };
-
-                const updatedSession = {
-                  ...this.saleSessionSelected,
-                  products: updatedProducts,
-                };
-
-                this.salesStateSvc.updateSalesSession(updatedSession);
-                this.updateTotalSaleValue();
-              }
+              updatedProducts[this.activeInputIndex!] = {
+                ...updatedProducts[this.activeInputIndex!],
+                amount: weight,
+              };
+              this.salesStateSvc.updateSalesSession({
+                ...this.saleSessionSelected,
+                products: updatedProducts,
+              });
+              this.updateTotalSaleValue();
             });
           }
         }
-      } catch (error) {
-        console.error('Error processing weight data:', error);
-      }
-    });
+      };
+      window.addEventListener('message', handler);
+      // si quieres, almacena `handler` para luego removerlo con removeEventListener
+    }
   }
 
   /**
