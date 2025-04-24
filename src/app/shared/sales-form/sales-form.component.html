@@ -1,6 +1,5 @@
 <div class="sales-form-container">
-  <div class="mt-4">
-  </div>
+  <div class="mt-4"></div>
 
   <div class="grid grid-cols-5 gap-x-4">
     <div
@@ -119,118 +118,118 @@
                 class="min-w-full divide-y divide-gray-300"
               >
                 <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
-                  >
-                    Nombre
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
-                  >
-                    Cantidad
-                  </th>
-                  <th></th>
-                  <th
-                    scope="col"
-                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
-                  >
-                    Precio
-                  </th>
-                  <th
-                    scope="col"
-                    class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
-                  >
-                    Costo
-                  </th>
-                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span class="sr-only">Edit</span>
-                  </th>
-                </tr>
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                    >
+                      Nombre
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                    >
+                      Cantidad
+                    </th>
+                    <th></th>
+                    <th
+                      scope="col"
+                      class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                    >
+                      Precio
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-2 py-3.5 text-left text-sm font-semibold text-primary"
+                    >
+                      Costo
+                    </th>
+                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                      <span class="sr-only">Edit</span>
+                    </th>
+                  </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                <tr
-                  *ngFor="
+                  <tr
+                    *ngFor="
                       let sP of saleSessionSelected.products;
                       let i = index;
                       trackBy: trackByProductId
                     "
-                >
-                  <td
-                    class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0"
                   >
-                    {{ sP.productName }}
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
-                  >
-                    <input
-                      [disabled]="saleSessionSelected.isFinalized"
-                      [(ngModel)]="sP.amount"
-                      type="number"
-                      id="product-price"
-                      class="block w-full rounded-xl py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-2xl"
-                      (ngModelChange)="updateProductAmount(i, $event)"
-                      (keydown)="onlyNumbers($event)"
-                      min="0"
-                      #amountInput
-                    />
-                  </td>
-                  <td>
-                    <button
-                      class="p-5 rounded-2xl bg-[#b3241c] text-white font-bold"
-                      type="button"
-                      (click)="toggleWeightCapture(i)"
+                    <td
+                      class="whitespace-nowrap py-2.5 px-2 text-sm font-medium text-primary sm:pl-0"
                     >
-                      {{ toggleCaptureText(i) }}
-                    </button>
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
-                  >
-                    <!-- Product price field -->
-                    <input
-                      [disabled]="saleSessionSelected.isFinalized"
-                      [(ngModel)]="sP.price"
-                      type="number"
-                      id="pp"
-                      class="block w-full rounded-xl py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
-                      (ngModelChange)="updateProductPrice(i, $event)"
-                      (keydown)="onlyNumbers($event)"
-                      min="0"
-                    />
-                    <small
-                      class="text-gray-400 font-medium text-xs mt-1"
-                    ></small>
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
-                  >
-                    {{ (sP.amount || 0) * (sP.price || 0) | currency }}
-                  </td>
-                  <td
-                    class="relative whitespace-nowrap py-2.5 mt-3 flex justify-center gap-x-3"
-                  >
-                    <button (click)="removeProduct(i)">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6 text-red-500 hover:text-red-700"
+                      {{ sP.productName }}
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
+                    >
+                      <input
+                        [disabled]="saleSessionSelected.isFinalized"
+                        [(ngModel)]="sP.amount"
+                        type="number"
+                        id="product-price"
+                        class="block w-full rounded-xl py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-2xl"
+                        (ngModelChange)="updateProductAmount(i, $event)"
+                        (keydown)="onlyNumbers($event)"
+                        min="0"
+                        #amountInput
+                      />
+                    </td>
+                    <td>
+                      <button
+                        class="p-5 rounded-2xl bg-[#b3241c] text-white font-bold"
+                        type="button"
+                        (click)="toggleWeightCapture(i)"
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
+                        {{ toggleCaptureText(i) }}
+                      </button>
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
+                    >
+                      <!-- Product price field -->
+                      <input
+                        [disabled]="saleSessionSelected.isFinalized"
+                        [(ngModel)]="sP.price"
+                        type="number"
+                        id="pp"
+                        class="block w-full rounded-xl py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none ring-0 bg-gray-100 max-w-40"
+                        (ngModelChange)="updateProductPrice(i, $event)"
+                        (keydown)="onlyNumbers($event)"
+                        min="0"
+                      />
+                      <small
+                        class="text-gray-400 font-medium text-xs mt-1"
+                      ></small>
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-2 py-2.5 text-sm text-gray-500"
+                    >
+                      {{ (sP.amount || 0) * (sP.price || 0) | currency }}
+                    </td>
+                    <td
+                      class="relative whitespace-nowrap py-2.5 mt-3 flex justify-center gap-x-3"
+                    >
+                      <button (click)="removeProduct(i)">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6 text-red-500 hover:text-red-700"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -300,7 +299,6 @@
           (click)="clearSale()"
           class="btn-primary mt-4 disabled:cursor-not-allowed"
           *ngIf="saleSessionSelected.isFinalized"
-          [disabled]="isLoading"
         >
           Limpiar Información
         </button>
