@@ -12,7 +12,7 @@ export interface IdentificationType {
 }
 
 export interface PaymentMethod {
-  id: string;
+  id: string | null;
   name: string;
 }
 

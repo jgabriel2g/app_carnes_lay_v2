@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Client } from '../models/client.model';
+import { PaymentMethod } from '../models/global.model';
 
 interface ProductSelected {
   productId: string;
@@ -11,8 +13,8 @@ interface ProductSelected {
 
 export interface ActiveSale {
   date: string;
-  client: string | null;
-  payment_method: string;
+  client: Client | null;
+  payment_method: PaymentMethod | null;
   total_received: number;
   products: ProductSelected[];
   sale: number;
@@ -32,8 +34,8 @@ export class SalesStateService {
   // Initialize with empty sales session
   private initialSale: ActiveSale = {
     date: this.getCurrentDate(),
-    client: '',
-    payment_method: '',
+    client: null,
+    payment_method: null,
     total_received: 0,
     products: [],
     sale: 0,
@@ -85,7 +87,7 @@ export class SalesStateService {
   // Update a specific sales session
   updateSalesSession(updatedSession: ActiveSale): void {
     console.log('🔄 Actualizando sesión de ventas');
-    console.log('Productos en sesión actualizada:', updatedSession.products);
+    console.log('Sesión actualizada:', updatedSession);
 
     try {
       // Crear una copia profunda para evitar problemas de referencia
@@ -115,13 +117,6 @@ export class SalesStateService {
 
       // Guardar en localStorage
       this.saveToStorage();
-
-      console.log('✅ Actualización completada');
-      console.log('Sesión actualizada:', this.selectedSessionSubject.value);
-      console.log(
-        'Productos en la sesión:',
-        this.selectedSessionSubject.value.products
-      );
     } catch (error) {
       console.error('❌ Error al actualizar la sesión:', error);
     }
@@ -148,22 +143,16 @@ export class SalesStateService {
     const newSessions = [...currentSessions];
     newSessions.splice(index, 1);
 
+    if (newSessions.length === 0) {
+      this.resetSessions();
+      return;
+    }
+
     this.salesSessionsSubject.next(newSessions);
 
-    // If we removed the currently selected session, select another one
+    // Si eliminamos la sesión seleccionada, seleccionar la última disponible
     if (this.selectedSession === removedSession) {
-      const newSelectedSession =
-        newSessions.length > 0
-          ? newSessions[newSessions.length - 1]
-          : this.initialSale;
-
-      this.selectedSessionSubject.next(newSelectedSession);
-
-      // If there are no sessions left, add a new empty one
-      if (newSessions.length === 0) {
-        this.addSalesSession(this.initialSale);
-        return;
-      }
+      this.selectedSessionSubject.next(newSessions[newSessions.length - 1]);
     }
 
     this.saveToStorage();
@@ -181,7 +170,7 @@ export class SalesStateService {
   clearSession(session: ActiveSale): void {
     const newSession: ActiveSale = {
       date: this.getCurrentDate(),
-      client: '',
+      client: null,
       payment_method: session.payment_method, // Keep the payment method
       total_received: 0,
       products: [],
@@ -190,7 +179,18 @@ export class SalesStateService {
       bill: null,
     };
 
+    // Forzar la actualización de la sesión
     this.updateSalesSession(newSession);
+
+    // Verificar que la actualización se realizó correctamente
+    setTimeout(() => {
+      if (this.selectedSession.isFinalized) {
+        console.warn(
+          'La sesión no se limpió correctamente, intentando de nuevo...'
+        );
+        this.updateSalesSession(newSession);
+      }
+    }, 100);
   }
 
   // Save state to localStorage

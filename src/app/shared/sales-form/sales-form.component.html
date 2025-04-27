@@ -41,17 +41,15 @@
       <!-- Payment method input field -->
       <div class="col-span-2">
         <label for="id-type">Método de pago</label>
-        <select
+        <p-dropdown
           [disabled]="saleSessionSelected.isFinalized"
           [(ngModel)]="saleSessionSelected.payment_method"
-          id="id-type"
-          name="id-type"
-          class="inputs mt-1"
-        >
-          <option [value]="pM.id" *ngFor="let pM of paymentMethods">
-            {{ pM.name }}
-          </option>
-        </select>
+          [options]="paymentMethods"
+          optionLabel="name"
+          placeholder="Selecciona un método de pago"
+          (onChange)="onPaymentMethodChange()"
+          class="w-full mt-1"
+        ></p-dropdown>
       </div>
 
       <!-- Sale client input field -->
@@ -59,10 +57,11 @@
         <div>
           <label>Selecciona el cliente</label>
           <p-autoComplete
+            [disabled]="saleSessionSelected.isFinalized"
             placeholder="Selecciona Cliente..."
-            [(ngModel)]="selectedClient"
+            [(ngModel)]="saleSessionSelected.client"
             [suggestions]="clientSuggestions"
-            [optionLabel]="'label'"
+            [optionLabel]="'company_name'"
             [forceSelection]="true"
             (completeMethod)="searchClients($event)"
             (onSelect)="onClientSelect($event)"
@@ -237,6 +236,7 @@
         </div>
       </div>
     </div>
+
     <!-- Total Sale and Payment -->
     <div class="xl:col-span-1 col-span-2">
       <dl class="mt-5 w-full">
