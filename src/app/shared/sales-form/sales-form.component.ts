@@ -15,6 +15,7 @@ import {
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DropdownModule } from 'primeng/dropdown';
 import { IonicModule } from '@ionic/angular';
 import { forkJoin, Subscription } from 'rxjs';
 import { SalesService } from '../../core/services/sales.service';
@@ -51,11 +52,10 @@ interface AutoCompleteCompleteEvent {
     FormsModule,
     AutoCompleteModule,
     IonicModule,
+    DropdownModule,
   ],
 })
-export class SalesFormComponent
-  implements OnInit, OnDestroy, AfterViewChecked
-{
+export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() registerBox: any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
 
@@ -124,9 +124,9 @@ export class SalesFormComponent
    */
   private loadInitialData(): void {
     forkJoin([
-      this.salesSvc.getDisplayStock(1000, 0),
+      this.salesSvc.getDisplayStock(300, 0),
       this.salesSvc.getPaymentMethods(),
-      this.thirdPartySvc.getClients(100, 0),
+      this.thirdPartySvc.getClients(30, 0),
     ]).subscribe({
       next: ([stockResp, paymentResp, clientResp]) => {
         this.products = stockResp.results;
@@ -140,7 +140,7 @@ export class SalesFormComponent
           // Update the selected session's payment method
           const updatedSession = {
             ...this.saleSessionSelected,
-            payment_method: this.paymentMethods[0].id,
+            payment_method: this.paymentMethods[0],
           };
           this.salesStateSvc.updateSalesSession(updatedSession);
         }
@@ -163,7 +163,7 @@ export class SalesFormComponent
     }
     const isPaymentEnough =
       this.saleSessionSelected.total_received >=
-      this.saleSessionSelected.sale && this.saleSessionSelected.sale > 0;
+        this.saleSessionSelected.sale && this.saleSessionSelected.sale > 0;
     const hasProducts = this.saleSessionSelected.products.length > 0;
 
     return isPaymentEnough && hasProducts;
@@ -182,7 +182,7 @@ export class SalesFormComponent
 
     const data: CreateBill = {
       date: this.saleSessionSelected.date,
-      payment_method: this.saleSessionSelected.payment_method,
+      payment_method: this.saleSessionSelected.payment_method?.id || '',
       total_received: this.saleSessionSelected.total_received,
       sale: this.registerBox,
       products_data: this.saleSessionSelected.products.map(
@@ -193,7 +193,7 @@ export class SalesFormComponent
         })
       ),
       ...(this.saleSessionSelected.client && {
-        client: this.saleSessionSelected.client,
+        client: this.saleSessionSelected.client.id,
       }),
     };
 
@@ -238,8 +238,8 @@ export class SalesFormComponent
 
     const newSale: ActiveSale = {
       date: this.getCurrentDate(),
-      client: '',
-      payment_method: this.paymentMethods[0].id,
+      client: null,
+      payment_method: this.paymentMethods[0],
       total_received: 0,
       products: [],
       sale: 0,
@@ -306,7 +306,18 @@ export class SalesFormComponent
   onClientSelect(event: any) {
     const updatedSession = {
       ...this.saleSessionSelected,
-      client: event.value.id,
+      client: event.value.value,
+    };
+    this.salesStateSvc.updateSalesSession(updatedSession);
+  }
+
+  /**
+   * On payment method change handler
+   */
+  onPaymentMethodChange() {
+    const updatedSession = {
+      ...this.saleSessionSelected,
+      payment_method: this.saleSessionSelected.payment_method,
     };
     this.salesStateSvc.updateSalesSession(updatedSession);
   }
@@ -469,8 +480,40 @@ export class SalesFormComponent
    * Clear the current sale form
    */
   clearSale() {
-    this.salesStateSvc.clearSession(this.saleSessionSelected);
+    // Limpiar todas las referencias locales
     this.selectedClient = null;
+    this.selectedProduct = null;
+    this.productSuggestions = [];
+    this.clientSuggestions = [];
+
+    // Obtener el índice de la sesión actual
+    const currentIndex = this.saleSessions.findIndex(
+      (session) => session === this.saleSessionSelected
+    );
+    console.log('🔄 Índice de la sesión actual:', currentIndex);
+
+    // Crear una nueva sesión
+    const newSale: ActiveSale = {
+      date: this.getCurrentDate(),
+      client: null,
+      payment_method: this.paymentMethods[0],
+      total_received: 0,
+      products: [],
+      sale: 0,
+      isFinalized: false,
+      bill: null,
+    };
+
+    if (currentIndex !== -1) {
+      // Eliminar la sesión actual
+      this.salesStateSvc.removeSalesSession(currentIndex);
+
+      // Esperar un momento para asegurar que la eliminación se complete
+      setTimeout(() => {
+        // Agregar la nueva sesión
+        this.salesStateSvc.addSalesSession(newSale);
+      }, 100);
+    }
   }
 
   /**
@@ -662,7 +705,7 @@ export class SalesFormComponent
       this.salesStateSvc.selectedSession &&
       this.salesStateSvc.selectedSession.products &&
       this.saleSessionSelected.products.length !==
-      this.salesStateSvc.selectedSession.products.length
+        this.salesStateSvc.selectedSession.products.length
     ) {
       console.log('⚠️ Discrepancia detectada en el número de productos');
       console.log('Local products:', this.saleSessionSelected.products);
