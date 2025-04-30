@@ -61,12 +61,13 @@
             placeholder="Selecciona Cliente..."
             [(ngModel)]="saleSessionSelected.client"
             [suggestions]="clientSuggestions"
-            [optionLabel]="'company_name'"
+            [optionLabel]="'label'"
             [forceSelection]="true"
             (completeMethod)="searchClients($event)"
             (onSelect)="onClientSelect($event)"
             emptyMessage="No se encontraron clientes"
           ></p-autoComplete>
+          <p>{{saleSessionSelected.client?.company_name}}</p>
         </div>
       </div>
 

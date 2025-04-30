@@ -275,7 +275,7 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
           client.email.toLowerCase().includes(query)
       )
       .map((client) => ({
-        label: `${client.first_name} ${client.last_name}`, // 🔹 Mostrará este texto en el input
+        label: `${client.company_name} - ${client.first_name} ${client.last_name}`,
         value: client,
       }));
   }
