@@ -52,8 +52,16 @@ export class SalesMainComponent  implements OnInit {
   async closeBox() {
     this.otpService
       .verifyOtpAndExecute(() => {
-        this.router.navigateByUrl('/home/sales/new/').then();
-        sessionStorage.removeItem('saleBoxInfo');
+        this.salesSvc.closeBoxSale(this.boxInfo.id)
+          .subscribe({
+            error:(err:any) => {
+              console.log(err);
+            },
+            next:(resp:any) => {
+              this.router.navigateByUrl('/home/sales/new/').then();
+              sessionStorage.removeItem('saleBoxInfo');
+            }
+          });
       }, 'eliminar producto')
       .then();
   }
