@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AuthService } from '../../../../../core/services/auth.service';
 import {AlertController} from "@ionic/angular";
-import {mapToCamelCase} from "../../../../../core/utils/mapper";
-import {Sale} from "../../../../../core/models/sale.model";
+import {OtpService} from "../../../../../core/services/otp.service";
 
 @Component({
   selector: 'app-sales-main',
@@ -25,7 +24,8 @@ export class SalesMainComponent  implements OnInit {
     private alertSvc:AlertsService,
     private salesSvc:SalesService,
     private alertController:AlertController,
-    private router:Router
+    private router:Router,
+    private otpService: OtpService
   ) {
     this.checkScreenWidth();
   }
@@ -50,34 +50,12 @@ export class SalesMainComponent  implements OnInit {
   };
 
   async closeBox() {
-    const phonePrompt = await this.alertController.create({
-      header: 'Cerrar Caja',
-      message: 'Por favor, ingresa el número de teléfono del administrador.',
-      inputs: [
-        {
-          name: 'phone',
-          type: 'tel',
-          placeholder: 'Número de teléfono',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Enviar',
-          handler: async (data) => {
-            if (data.phone) {
-              this.requestOtp(data.phone);
-            } else {
-              await this.showAlert('Error', 'Debes ingresar un número de teléfono.');
-            }
-          },
-        },
-      ],
-    });
-    await phonePrompt.present();
+    this.otpService
+      .verifyOtpAndExecute(() => {
+        this.router.navigateByUrl('/home/sales/new/').then();
+        sessionStorage.removeItem('saleBoxInfo');
+      }, 'eliminar producto')
+      .then();
   }
 
   requestOtp(phone: string) {
