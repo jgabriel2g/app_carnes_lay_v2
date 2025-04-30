@@ -73,4 +73,9 @@ export class AuthService {
     return this.http.get(url, this.header)
   }
 
+  validateTOTPCode(token: string, admin_phone_number: string) {
+    const url = `${this.baseUrl}/auth/totp/verify-totp/`;
+    return this.http.post(url, {token: token, admin_phone_number: admin_phone_number}, this.header)
+  }
+
 }

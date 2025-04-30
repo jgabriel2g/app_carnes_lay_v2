@@ -6,25 +6,26 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class OtpService {
-  private otpCode: string = '';
-  private maxAttempts = 3;
-  private attempts = 0;
 
   constructor(
     private alertController: AlertController,
     private authSvc: AuthService
   ) {}
 
-  async verifyOtpAndExecute(action: () => void) {
-    this.attempts = 0;
+  async verifyOtpAndExecute(action: () => void, title: string = 'Cerrar Caja') {
     const phonePrompt = await this.alertController.create({
-      header: 'Cerrar Caja',
-      message: 'Por favor, ingresa el número de teléfono del administrador.',
+      header: title,
+      message: 'Accion valida solo para administradores. Ingresa tu numero de telefono y tu clave dinamica.',
       inputs: [
         {
-          name: 'phone',
+          name: 'admin_phone_number',
           type: 'tel',
-          placeholder: 'Número de teléfono',
+          placeholder: 'Número de telefono',
+        },
+        {
+          name: 'otp',
+          type: 'number',
+          placeholder: 'Clave dinamica',
         },
       ],
       buttons: [
@@ -34,11 +35,11 @@ export class OtpService {
         },
         {
           text: 'Enviar',
-          handler: async (data) => {
-            if (data.phone) {
-              this.requestOtp(data.phone, action);
+          handler: async (data: {otp: string, admin_phone_number: string}) => {
+            if (data.admin_phone_number && data.otp) {
+              this.requestOtp(data.admin_phone_number, data.otp, action);
             } else {
-              await this.showAlert('Error', 'Debes ingresar un número de teléfono.');
+              await this.showAlert('Error', 'Completa todos los campos.');
             }
           },
         },
@@ -47,70 +48,17 @@ export class OtpService {
     await phonePrompt.present();
   }
 
-  private requestOtp(phone: string, action: () => void) {
-    this.authSvc.validateWithOtp(phone).subscribe(
+  private requestOtp(admin_phone_number: string, otp: string, action: () => void) {
+    this.authSvc.validateTOTPCode(otp, admin_phone_number).subscribe(
       async (response: any) => {
-        this.otpCode = response.otp;
-        this.maxAttempts = response.max_attempts;
-        await this.enterOtp(phone, action);
+        console.log('🔄 OTP valido');
+        console.log(response);
+        action();
       },
       async (error) => {
-        await this.showAlert('Error', 'No se pudo enviar el OTP. Inténtalo nuevamente.');
+        await this.showAlert('Error', error.error["error"]);
       }
     );
-  }
-
-  private async enterOtp(phone: string, action: () => void) {
-    if (this.attempts >= this.maxAttempts) {
-      await this.showAlert('Error', 'Has alcanzado el número máximo de intentos.');
-      return;
-    }
-
-    const otpPrompt = await this.alertController.create({
-      header: 'Código OTP',
-      message: 'Por favor, ingresa el código OTP enviado.',
-      inputs: [
-        {
-          name: 'otp',
-          type: 'number',
-          placeholder: 'Código OTP',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Verificar',
-          handler: async (data) => {
-            if (data.otp) {
-              await this.verifyOtp(data.otp, action);
-            } else {
-              await this.showAlert('Error', 'Debes ingresar el código OTP.');
-            }
-          },
-        },
-      ],
-    });
-    await otpPrompt.present();
-  }
-
-  private async verifyOtp(otpInput: string, action: () => void) {
-    if (otpInput === this.otpCode) {
-      await this.showAlert('Éxito', 'OTP validado exitosamente.');
-      this.attempts = 0;
-      this.otpCode = '';
-      action();
-    } else {
-      this.attempts++;
-      if (this.attempts < this.maxAttempts) {
-        await this.showAlert('Error', 'Código OTP incorrecto. Inténtalo nuevamente.');
-        this.enterOtp('', action).then();
-      } else {
-        await this.showAlert('Error', 'Has alcanzado el número máximo de intentos.');
-      }
-    }
   }
 
   private async showAlert(header: string, message: string) {

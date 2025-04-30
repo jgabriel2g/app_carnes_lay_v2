@@ -422,7 +422,7 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
 
         this.salesStateSvc.updateSalesSession(updatedSession);
         this.updateTotalSaleValue();
-      })
+      }, 'eliminar producto')
       .then();
   }
 
