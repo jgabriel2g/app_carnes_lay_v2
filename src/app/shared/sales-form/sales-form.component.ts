@@ -126,7 +126,7 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     forkJoin([
       this.salesSvc.getDisplayStock(300, 0),
       this.salesSvc.getPaymentMethods(),
-      this.thirdPartySvc.getClients(30, 0),
+      this.thirdPartySvc.getClients(300, 0),
     ]).subscribe({
       next: ([stockResp, paymentResp, clientResp]) => {
         this.products = stockResp.results;
