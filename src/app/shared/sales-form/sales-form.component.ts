@@ -161,9 +161,15 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (hasNullAmount) {
       return false;
     }
-    const isPaymentEnough =
-      this.saleSessionSelected.total_received >=
+    let isPaymentEnough: boolean;
+    if (this.saleSessionSelected.payment_method?.is_payable) {
+      isPaymentEnough =
+        this.saleSessionSelected.total_received >=
         this.saleSessionSelected.sale && this.saleSessionSelected.sale > 0;
+    } else {
+      isPaymentEnough = true;
+    }
+
     const hasProducts = this.saleSessionSelected.products.length > 0;
 
     return isPaymentEnough && hasProducts;

@@ -14,6 +14,7 @@ export interface IdentificationType {
 export interface PaymentMethod {
   id: string | null;
   name: string;
+  is_payable: boolean;
 }
 
 export interface PersonType {
