@@ -110,14 +110,52 @@ export class MainComponent implements OnInit {
   nextPage() {
     if (this.metrics?.next) {
       this.currentPage++;
-      this.loadMetrics(this.startDate || undefined, this.endDate, true);
+      this.isTableLoading = true;
+      this.metricsService
+        .getMetricsByUrl(this.metrics.next)
+        .pipe(
+          finalize(() => {
+            this.isTableLoading = false;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            this.metrics = response;
+            this.updateTotals();
+            this.calculateTotals();
+          },
+          error: (err) => {
+            this.error =
+              'Error al cargar las métricas. Por favor, intenta de nuevo más tarde.';
+            console.error('Error loading metrics:', err);
+          },
+        });
     }
   }
 
   previousPage() {
     if (this.metrics?.previous) {
       this.currentPage--;
-      this.loadMetrics(this.startDate || undefined, this.endDate, true);
+      this.isTableLoading = true;
+      this.metricsService
+        .getMetricsByUrl(this.metrics.previous)
+        .pipe(
+          finalize(() => {
+            this.isTableLoading = false;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            this.metrics = response;
+            this.updateTotals();
+            this.calculateTotals();
+          },
+          error: (err) => {
+            this.error =
+              'Error al cargar las métricas. Por favor, intenta de nuevo más tarde.';
+            console.error('Error loading metrics:', err);
+          },
+        });
     }
   }
 
