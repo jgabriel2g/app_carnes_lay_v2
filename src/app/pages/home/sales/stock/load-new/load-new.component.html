@@ -1,101 +1,292 @@
-<div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+<div
+  class="relative z-10"
+  aria-labelledby="modal-title"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+    aria-hidden="true"
+  ></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-    <div class="flex min-h-full   justify-center p-4 text-center items-center sm:p-0">
-      <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+    <div
+      class="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
+    >
+      <div
+        class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+      >
         <div class="sm:flex sm:items-start w-full">
-          <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-red-600">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          <div
+            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="h-6 w-6 text-red-600"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
           </div>
-          <form [formGroup]="productForm" class="mt-3  sm:ml-4 sm:mt-0 sm:text-left">
-            <h3 class="text-center text-xl font-semibold leading-6 text-gray-900 mb-5" id="modal-title">Ingresar producto a vitrina</h3>
+          <form
+            [formGroup]="productForm"
+            class="mt-3 sm:ml-4 sm:mt-0 sm:text-left"
+          >
+            <h3
+              class="text-center text-xl font-semibold leading-6 text-gray-900 mb-5"
+              id="modal-title"
+            >
+              Ingresar producto a vitrina
+            </h3>
 
             <!-- Products finder input field -->
             <div class="mb-3">
               <label>Buscador de producto</label>
               <p-autoComplete
-                [disabled]="displayStockId !== null && displayStockId !== undefined && displayStockId !== true"
-                [placeholder]="displayStockId !== undefined ? selectedItem : 'Producto'"
+                [disabled]="
+                  displayStockId !== null &&
+                  displayStockId !== undefined &&
+                  displayStockId !== true
+                "
+                [placeholder]="
+                  displayStockId !== undefined ? selectedItem : 'Producto'
+                "
                 [suggestions]="suggestions"
                 (completeMethod)="search($event)"
                 (onSelect)="onProductSelect($event)"
                 class="placeholder:text-black"
               ></p-autoComplete>
-              <div class="error-message" *ngIf="productForm.get('product')?.invalid && productForm.get('product')?.touched">
+              <div
+                class="error-message"
+                *ngIf="
+                  productForm.get('product')?.invalid &&
+                  productForm.get('product')?.touched
+                "
+              >
                 Producto es requerido
               </div>
             </div>
 
-
             <!-- Presentation unit input field -->
-            <div  class="mb-3" *ngIf="displayStockId === undefined || displayStockId === true || displayStockId === null" >
-              <label for="unit-type" >Unidad de presentación</label>
-              <select  formControlName="type_of_unit_measurement" id="unit-type" name="location" class="inputs">
+            <div
+              class="mb-3"
+              *ngIf="
+                displayStockId === undefined ||
+                displayStockId === true ||
+                displayStockId === null
+              "
+            >
+              <label for="unit-type">Unidad de presentación</label>
+              <select
+                formControlName="type_of_unit_measurement"
+                id="unit-type"
+                name="location"
+                class="inputs"
+              >
                 <option value="">Selecciona la unidad de presentación</option>
-                <option  *ngFor="let ut of unitTypes" [value]="ut.id" > {{ut.name}}</option>
-
+                <option *ngFor="let ut of unitTypes" [value]="ut.id">
+                  {{ ut.name }}
+                </option>
               </select>
-              <div class="error-message" *ngIf="productForm.get('type_of_unit_measurement')?.invalid && productForm.get('type_of_unit_measurement')?.touched">
+              <div
+                class="error-message"
+                *ngIf="
+                  productForm.get('type_of_unit_measurement')?.invalid &&
+                  productForm.get('type_of_unit_measurement')?.touched
+                "
+              >
                 Unidad de presentación es requerida
               </div>
             </div>
 
             <!-- Product quantity field -->
             <div class="mb-3">
-              <label for="product-quantity" *ngIf="displayStockId !== true && displayStockId !== undefined && displayStockId !== null">Cantidad actual del producto</label>
-              <label for="product-quantity" *ngIf="displayStockId === undefined || displayStockId === true || displayStockId === null">Cantidad del producto</label>
+              <label
+                for="product-quantity"
+                *ngIf="
+                  displayStockId !== true &&
+                  displayStockId !== undefined &&
+                  displayStockId !== null
+                "
+                >Cantidad actual del producto</label
+              >
+              <label
+                for="product-quantity"
+                *ngIf="
+                  displayStockId === undefined ||
+                  displayStockId === true ||
+                  displayStockId === null
+                "
+                >Cantidad del producto</label
+              >
               <div class="relative shadow-md rounded-lg">
-                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z" />
+                <div
+                  class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-red-400"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z"
+                    />
                   </svg>
                 </div>
-                <input formControlName="quantity" type="number" id="product-quantity" class="inputs" placeholder="Ingresa las cantidad a ingresar del producto">
+                <input
+                  formControlName="quantity"
+                  type="number"
+                  id="product-quantity"
+                  class="inputs"
+                  placeholder="Ingresa las cantidad a ingresar del producto"
+                />
               </div>
-              <div *ngIf="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
-                <div class="error-message" *ngIf="productForm.get('quantity')?.errors?.['required']">Cantidad es requerida.</div>
+              <div
+                *ngIf="
+                  productForm.get('quantity')?.invalid &&
+                  productForm.get('quantity')?.touched
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="productForm.get('quantity')?.errors?.['required']"
+                >
+                  Cantidad es requerida.
+                </div>
               </div>
             </div>
             <!-- Product quantity field -->
-            <div class="mb-3" *ngIf="displayStockId !== undefined && displayStockId !== true && displayStockId !== null">
-              <label for="product-quantity-to-add" >Cantidad del producto a agregar</label>
+            <div
+              class="mb-3"
+              *ngIf="
+                displayStockId !== undefined &&
+                displayStockId !== true &&
+                displayStockId !== null
+              "
+            >
+              <label for="product-quantity-to-add"
+                >Cantidad del producto a agregar</label
+              >
               <div class="relative shadow-md rounded-lg">
-                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z" />
+                <div
+                  class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-red-400"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V13.5Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25V18Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V13.5Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007V18Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V18Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V13.5ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 0 0 2.25 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0 0 12 2.25Z"
+                    />
                   </svg>
                 </div>
-                <input formControlName="quantityToAdd" type="number" id="product-quantity-to-add" class="inputs" placeholder="Ingresa las cantidad a ingresar del producto">
+                <input
+                  formControlName="quantityToAdd"
+                  type="number"
+                  id="product-quantity-to-add"
+                  class="inputs"
+                  placeholder="Ingresa las cantidad a ingresar del producto"
+                />
               </div>
-              <div *ngIf="productForm.get('quantityToAdd')?.invalid && productForm.get('quantityToAdd')?.touched">
-                <div class="error-message" *ngIf="productForm.get('quantityToAdd')?.errors?.['required']">Cantidad es requerida.</div>
+              <div
+                *ngIf="
+                  productForm.get('quantityToAdd')?.invalid &&
+                  productForm.get('quantityToAdd')?.touched
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="productForm.get('quantityToAdd')?.errors?.['required']"
+                >
+                  Cantidad es requerida.
+                </div>
               </div>
             </div>
 
             <!-- Product quantity field -->
             <div class="mb-3">
-              <label for="product-price" >Precio del producto</label>
+              <label for="product-price">Precio del producto</label>
               <div class="relative shadow-md rounded-lg">
-                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-red-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                <div
+                  class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-red-400"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
                   </svg>
                 </div>
-                <input formControlName="price" type="number" id="product-price" class="inputs" placeholder="Ingresa el precio">
+                <input
+                  formControlName="price"
+                  type="number"
+                  id="product-price"
+                  class="inputs"
+                  placeholder="Ingresa el precio"
+                />
               </div>
-              <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
-                <div class="error-message" *ngIf="productForm.get('price')?.errors?.['required']">Precio es requerido.</div>
-                <div class="error-message" *ngIf="productForm.get('price')?.errors?.['min']">Precio debe ser mayor a 1 </div>
+              <div
+                *ngIf="
+                  productForm.get('price')?.invalid &&
+                  productForm.get('price')?.touched
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="productForm.get('price')?.errors?.['required']"
+                >
+                  Precio es requerido.
+                </div>
+                <div
+                  class="error-message"
+                  *ngIf="productForm.get('price')?.errors?.['min']"
+                >
+                  Precio debe ser mayor a 1
+                </div>
               </div>
             </div>
-
           </form>
         </div>
         <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-          <button (click)="actionResponse(true)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Agregar</button>
-          <button (click)="actionResponse(false)"  type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancelar</button>
+          <button
+            (click)="actionResponse(true)"
+            type="button"
+            class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+          >
+            Agregar
+          </button>
+          <button
+            (click)="actionResponse(false)"
+            type="button"
+            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
