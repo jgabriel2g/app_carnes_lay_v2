@@ -1,7 +1,7 @@
 export interface PaginatedResponse<T> {
   count: number;
-  next?: string;
-  previous?: string;
+  next: string | null;
+  previous: string | null;
   results: T[];
 }
 
@@ -19,5 +19,6 @@ export interface PaymentMethod {
 
 export interface PersonType {
   id: string;
+  code: string;
   name: string;
 }

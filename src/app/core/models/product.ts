@@ -39,10 +39,15 @@ export interface Stock {
   weight: string;
   is_approved?: boolean;
   stock_details: StockDetail[];
-  created:string;
+  created: string;
 }
 
 export interface Category {
+  id: string;
+  name: string;
+}
+
+export interface Tax {
   id: string;
   name: string;
 }
@@ -54,6 +59,16 @@ export interface Product {
   is_inventory: boolean;
   is_tax: boolean;
   category: Category;
-  stocks: Stock[];
+  tax: Tax;
   is_active: boolean;
+  created: string;
+}
+
+export interface ProductRequest {
+  code: string;
+  name: string;
+  is_inventory: boolean;
+  is_tax: boolean;
+  category: string;
+  tax: string;
 }

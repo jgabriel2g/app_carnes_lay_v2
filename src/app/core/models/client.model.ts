@@ -1,5 +1,5 @@
-import {IdentificationType, PersonType} from "./global.model";
-import {Municipality} from "./location.model";
+import { IdentificationType, PersonType } from './global.model';
+import { Municipality } from './location.model';
 
 export interface Responsibilities {
   id: string;
@@ -29,3 +29,23 @@ export interface Client {
   regime_type: RegimeType;
   responsibilities: Responsibilities;
 }
+
+export interface ClientRequest {
+  person_type: string;
+  first_name: string;
+  last_name: string;
+  identification_type: string;
+  identification_number: string;
+  email: string;
+  phone: string;
+  address: string;
+  municipality: string;
+  company_name: string;
+  regime_type: string;
+  responsibilities: string;
+}
+
+export type PartialClientRequest = Partial<ClientRequest>;
+
+export type ProviderRequest = ClientRequest;
+export type PartialProviderRequest = Partial<ProviderRequest>;

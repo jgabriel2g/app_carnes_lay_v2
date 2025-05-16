@@ -2,37 +2,89 @@
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
       <h1 class="text-base font-semibold leading-6 text-primary">Productos</h1>
-      <p class="mt-2 text-sm text-gray-700">Una lista de todos los productos de la plataforma incluyendo su código, nombre, precio de venta, tipo de unidad y tipo de peso  </p>
+      <p class="mt-2 text-sm text-gray-700">
+        Una lista de todos los productos de la plataforma incluyendo su código,
+        nombre, precio de venta, tipo de unidad y tipo de peso
+      </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <button type="button" routerLink="/home/inventory/products/create" class="btn-primary px-6">Agregar producto</button>
+      <button
+        type="button"
+        routerLink="/home/inventory/products/create"
+        class="btn-primary px-6"
+      >
+        Agregar producto
+      </button>
     </div>
   </div>
   <div class="mt-8 flow-root">
     <div class="flex flex-col items-end justify-center sm:justify-end">
-
       <div class="relative shadow-md rounded-lg">
-        <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
-          <svg class="w-5 h-5 text-red-500 dark:text-red-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+        <div
+          class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-5 h-5 text-red-500 dark:text-red-400"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
         </div>
-        <input type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-red-300  rounded-lg w-80 bg-white focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500" placeholder="Buscar productos">
+        <input
+          type="text"
+          id="table-search"
+          (input)="onSearch($event)"
+          [value]="search"
+          class="block p-2 ps-10 text-sm text-gray-900 border border-red-300 rounded-lg w-80 bg-white focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+          placeholder="Buscar productos"
+        />
       </div>
 
       <div class="mt-3">
-        <select (change)="getProducts()" id="isActive" [(ngModel)]="isActive" name="isActive" class="inputs">
-          <option value=true>Productos activos</option>
-          <option value=false>Productos inactivos</option>
+        <select
+          (change)="getProducts()"
+          id="isActive"
+          [(ngModel)]="isActive"
+          name="isActive"
+          class="inputs"
+        >
+          <option value="true">Productos activos</option>
+          <option value="false">Productos inactivos</option>
         </select>
       </div>
-
     </div>
     <div class="-mx-4 -mb-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8 lg:max-h-[60vh] max-h-[45vh] ">
+      <div
+        class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8 lg:max-h-[60vh] max-h-[45vh]"
+      >
         <table class="min-w-full divide-y divide-gray-300 overflow-y-auto">
           <thead>
             <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0">Código</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-primary">Nombre</th>
+              <th
+                scope="col"
+                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-primary sm:pl-0"
+              >
+                Código
+              </th>
+              <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-primary"
+              >
+                Nombre
+              </th>
+              <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-primary"
+              >
+                Tiene Iva?
+              </th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                 <span class="sr-only">Edit</span>
               </th>
@@ -40,27 +92,85 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr *ngFor="let p of Products">
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0">{{p.code}}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{p.name}}</td>
-              <td class="relative whitespace-nowrap py-4 flex justify-end gap-x-3">
-                <button *ngIf="p.is_active" [routerLink]="['/home/inventory/products/stock/', p.id]"  >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500 hover:text-green-700">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+              <td
+                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-primary sm:pl-0"
+              >
+                {{ p.code }}
+              </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                {{ p.name }}
+              </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                {{ p.is_tax ? "Si" : "No" }}
+              </td>
+              <td
+                class="relative whitespace-nowrap py-4 flex justify-end gap-x-3"
+              >
+                <button
+                  *ngIf="p.is_active"
+                  [routerLink]="['/home/inventory/products/stock/', p.id]"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 text-green-500 hover:text-green-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"
+                    />
                   </svg>
                 </button>
                 <button *ngIf="p.is_active" (click)="goToUpdate(p)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-blue-500 hover:text-blue-700">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 text-blue-500 hover:text-blue-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                    />
                   </svg>
                 </button>
                 <button *ngIf="!p.is_active" (click)="onDelete(p.id, true)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500 hover:text-green-600">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 text-green-500 hover:text-green-600"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                    />
                   </svg>
                 </button>
-                <button  *ngIf="p.is_active" (click)="onDelete(p.id, false)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 hover:text-red-600">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                <button *ngIf="p.is_active" (click)="onDelete(p.id, false)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 text-red-500 hover:text-red-600"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                    />
                   </svg>
                 </button>
               </td>
@@ -72,40 +182,89 @@
       </div>
     </div>
 
-    <nav class="flex justify-center mt-4 pb-4" aria-label="Page navigation example">
-      <ul class="flex items-center gap-x-2 -space-x-px h-10 text-base">
+    <nav
+      class="flex items-center justify-center mt-4 pb-4"
+      aria-label="Pagination"
+    >
+      <ul class="flex flex-wrap items-center justify-center gap-2">
         <li>
-          <button (click)="previousPage()" [disabled]="currentPage === 1" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border-e-0 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="sr-only">Previous</span>
-            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+          <button
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+            class="flex items-center justify-center px-3 py-2 text-sm rounded-full disabled:opacity-50 disabled:cursor-not-allowed text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <span class="sr-only">Anterior</span>
+            <svg
+              class="w-4 h-4"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 1 1 5l4 4"
+              />
             </svg>
           </button>
         </li>
-        <!-- Añade cada botón de número de página dentro de su propio <li> -->
-        <li *ngFor="let page of pageNumbers">
-          <button (click)="goToPage(page)"
-                  [class.active]="currentPage === page"
-                  [ngClass]="{'bg-gray-50 text-gray-600 border-gray-300 hover:bg-red-100 hover:text-red-700 dark:bg-gray-700 dark:text-white': currentPage !== page}"
-                  aria-current="page"
-                  class="z-10 rounded-full flex items-center justify-center px-4 h-10 leading-tight">
+
+        <ng-container *ngFor="let page of pageNumbers">
+          <li *ngIf="isNumber(page)">
+            <button
+              (click)="goToPage(getPageNumber(page))"
+              [class.active]="currentPage === getPageNumber(page)"
+              [ngClass]="{
+                'bg-red-50 text-red-600 border-red-300 hover:bg-red-100 hover:text-red-700':
+                  currentPage === getPageNumber(page),
+                'bg-white text-gray-500 border-gray-300 hover:bg-gray-50 hover:text-gray-700':
+                  currentPage !== getPageNumber(page)
+              }"
+              class="flex items-center justify-center px-4 py-2 text-sm rounded-full border transition-colors duration-200"
+            >
+              {{ page }}
+            </button>
+          </li>
+          <li *ngIf="isString(page)" class="px-2 text-gray-500">
             {{ page }}
-          </button>
-        </li>
+          </li>
+        </ng-container>
+
         <li>
-          <button (click)="nextPage()" [disabled]="offset + limit >= totalItems" class="rounded-full disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="sr-only">Next</span>
-            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+          <button
+            (click)="nextPage()"
+            [disabled]="offset + limit >= totalItems"
+            class="flex items-center justify-center px-3 py-2 text-sm rounded-full disabled:opacity-50 disabled:cursor-not-allowed text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <span class="sr-only">Siguiente</span>
+            <svg
+              class="w-4 h-4"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 9 4-4-4-4"
+              />
             </svg>
           </button>
         </li>
       </ul>
     </nav>
-
-
   </div>
 </div>
 
 <!-- Delete product modal -->
-<app-delete-alert *ngIf="showDeleteAlert" [category]="'Producto'" (isDelete)="delete($event)" ></app-delete-alert>
+<app-delete-alert
+  *ngIf="showDeleteAlert"
+  [category]="'Producto'"
+  (isDelete)="delete($event)"
+></app-delete-alert>

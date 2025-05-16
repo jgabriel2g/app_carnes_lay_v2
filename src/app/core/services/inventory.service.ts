@@ -1,129 +1,130 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import {Observable} from "rxjs";
-import {Product} from "../models/product";
+import { Observable } from 'rxjs';
+import { Product, Tax } from '../models/product';
+import { PaginatedResponse } from '../models/global.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InventoryService {
-
-  constructor(private http:HttpClient, private authSvc:AuthService) { }
+  constructor(private http: HttpClient, private authSvc: AuthService) {}
 
   /* PRODUCTS ENDPOINTS */
   getProducts(
-    limit:number,
-    offset:number,
-    isActive:boolean
-  ) {
-    const url = `${this.authSvc.baseUrl}/inventory/product/?limit=${limit}&offset=${offset}&is_active=${isActive}`;
-    return this.http.get(url, this.authSvc.header);
-  };
+    limit: number,
+    offset: number,
+    isActive: boolean,
+    search: string
+  ): Observable<PaginatedResponse<Product>> {
+    const url = `${this.authSvc.baseUrl}/inventory/product/?limit=${limit}&offset=${offset}&is_active=${isActive}&search=${search}`;
+    return this.http.get<PaginatedResponse<Product>>(url, this.authSvc.header);
+  }
 
   getProductById(id: string): Observable<Product> {
     const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
     return this.http.get<Product>(url, this.authSvc.header);
   }
-  newProduct(data:{}){
+  newProduct(data: {}) {
     const url = `${this.authSvc.baseUrl}/inventory/product/`;
     return this.http.post(url, data, this.authSvc.header);
-  };
+  }
 
-  updateProduct(data:{}, id:any){
+  updateProduct(data: {}, id: any) {
     const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
     return this.http.patch(url, data, this.authSvc.header);
-  };
+  }
 
-  disableProduct( id:any, data:{}){
+  disableProduct(id: any, data: {}) {
     const url = `${this.authSvc.baseUrl}/inventory/product/${id}/`;
-    return this.http.patch(url, data,  this.authSvc.header);
-  };
+    return this.http.patch(url, data, this.authSvc.header);
+  }
 
-  getUnitTypes(){
+  getUnitTypes() {
     const url = `${this.authSvc.baseUrl}/inventory/unit/`;
-    return this.http.get(url, this.authSvc.header)
-  };
+    return this.http.get(url, this.authSvc.header);
+  }
 
-  getWeightTypes(){
+  getWeightTypes() {
     const url = `${this.authSvc.baseUrl}/inventory/weight/`;
-    return this.http.get(url, this.authSvc.header)
-  };
+    return this.http.get(url, this.authSvc.header);
+  }
 
-  getProductCategories(){
+  getProductCategories() {
     const url = `${this.authSvc.baseUrl}/inventory/category/`;
-    return this.http.get(url, this.authSvc.header)
+    return this.http.get(url, this.authSvc.header);
+  }
+
+  getTaxes() {
+    const url = `${this.authSvc.baseUrl}/inventory/tax/`;
+    return this.http.get<PaginatedResponse<Tax>>(url, this.authSvc.header);
   }
 
   /* LOAD STOCK ENDPOINTS */
 
-  getStocks(limit:number, offset:number){
+  getStocks(limit: number, offset: number) {
     const url = `${this.authSvc.baseUrl}/inventory/stock/?limit=${limit}&offset=${offset}`;
     return this.http.get(url, this.authSvc.header);
-  };
+  }
 
-  createStock(data:{}){
+  createStock(data: {}) {
     const url = `${this.authSvc.baseUrl}/inventory/stock/`;
     return this.http.post(url, data, this.authSvc.header);
-  };
+  }
 
-  deleteStockById(id:string){
+  deleteStockById(id: string) {
     const url = `${this.authSvc.baseUrl}/inventory/stock/${id}/`;
     return this.http.delete(url, this.authSvc.header);
   }
 
-  getStockDetail( stockId:any){
+  getStockDetail(stockId: any) {
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/?stock_id=${stockId}`;
     return this.http.get(url, this.authSvc.header);
-  };
+  }
 
-  addStockDetail(data:{}){
+  addStockDetail(data: {}) {
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/`;
     return this.http.post(url, data, this.authSvc.header);
-  };
+  }
 
-  deleteStockDetail(id:any){
+  deleteStockDetail(id: any) {
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/${id}/`;
     return this.http.delete(url, this.authSvc.header);
   }
 
-  purchaseStockDetail(data:{}){
+  purchaseStockDetail(data: {}) {
     const url = `${this.authSvc.baseUrl}/inventory/purchase/`;
     return this.http.post(url, data, this.authSvc.header);
-  };
+  }
 
-  updatePurchase(data:{}, id:any){
+  updatePurchase(data: {}, id: any) {
     const url = `${this.authSvc.baseUrl}/inventory/purchase/${id}/`;
     return this.http.patch(url, data, this.authSvc.header);
   }
 
-  getPurchases(limit:number, offset:number){
+  getPurchases(limit: number, offset: number) {
     const url = `${this.authSvc.baseUrl}/inventory/purchase/?limit=${limit}&offset=${offset}`;
-    return this.http.get(url,  this.authSvc.header);
-  };
+    return this.http.get(url, this.authSvc.header);
+  }
 
-
-  getPurchaseById(id:any){
+  getPurchaseById(id: any) {
     const url = `${this.authSvc.baseUrl}/inventory/purchase/${id}/`;
-    return this.http.get(url,  this.authSvc.header);
-  };
+    return this.http.get(url, this.authSvc.header);
+  }
 
-  getStockDetailsByStock(stockId:string){
+  getStockDetailsByStock(stockId: string) {
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/?stock_id=${stockId}`;
     return this.http.get(url, this.authSvc.header);
-  };
+  }
 
-  getStockByProduct(productId:string){
+  getStockByProduct(productId: string) {
     const url = `${this.authSvc.baseUrl}/inventory/stock/?product_id=${productId}`;
     return this.http.get(url, this.authSvc.header);
-  };
+  }
 
-  updateStockDetail(stockDetailId:string, data:{}){
+  updateStockDetail(stockDetailId: string, data: {}) {
     const url = `${this.authSvc.baseUrl}/inventory/stock-detail/${stockDetailId}/`;
-    return this.http.patch(url, data ,this.authSvc.header);
-  };
-
-
-
-
+    return this.http.patch(url, data, this.authSvc.header);
+  }
 }

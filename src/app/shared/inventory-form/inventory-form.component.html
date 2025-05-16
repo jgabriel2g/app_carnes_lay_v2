@@ -1,10 +1,22 @@
-<div class="container mx-auto pb-4 px-6 sm:px-6 lg:px-8  md:max-w-full">
+<div class="container mx-auto pb-4 px-6 sm:px-6 lg:px-8 md:max-w-full">
   <div class="py-10">
     <div>
       <nav class="mb-6" aria-label="Back">
-        <a routerLink="/home/inventory/products" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
-          <svg class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+        <a
+          routerLink="/home/inventory/products"
+          class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+              clip-rule="evenodd"
+            />
           </svg>
           Retroceder
         </a>
@@ -13,23 +25,51 @@
         <ol role="list" class="flex items-center space-x-4">
           <li>
             <div class="flex">
-              <a  class="text-sm font-medium text-gray-500 hover:text-gray-700">Home</a>
+              <a class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                >Home</a
+              >
             </div>
           </li>
           <li>
             <div class="flex items-center">
-              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 flex-shrink-0 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
               </svg>
-              <a routerLink="/home/inventory/products" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Inventario</a>
+              <a
+                routerLink="/home/inventory/products"
+                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+                >Inventario</a
+              >
             </div>
           </li>
           <li>
             <div class="flex items-center">
-              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 flex-shrink-0 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
               </svg>
-              <a  aria-current="page" class="ml-4 text-sm font-medium text-red-500 hover:text-red-700">Formulario</a>
+              <a
+                aria-current="page"
+                class="ml-4 text-sm font-medium text-red-500 hover:text-red-700"
+                >Formulario</a
+              >
             </div>
           </li>
         </ol>
@@ -37,61 +77,231 @@
     </div>
     <div class="mt-4 md:flex md:items-center md:justify-between">
       <div class="min-w-0 flex-1">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Productos</h2>
+        <h2
+          class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
+        >
+          Productos
+        </h2>
       </div>
       <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
-        <button [disabled]="isLoading" (click)="onSubmit()" type="button" class="btn-primary px-6">Guardar</button>
+        <button
+          [disabled]="isLoading"
+          (click)="onSubmit()"
+          type="button"
+          class="btn-primary px-6"
+        >
+          Guardar
+        </button>
       </div>
     </div>
   </div>
 
-  <form [formGroup]="productForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full pt-10  mx-auto ">
-    <!-- Code input field -->
-    <div class="mb-2 w-full">
-      <label for="code" >Código</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <input formControlName="code" type="text" name="code" id="code" class="inputs" placeholder="Ingresa el código">
-      </div>
-    </div>
-
-    <!-- Name input field -->
-    <div class="mb-2 w-full">
-      <label for="name" >Nombre</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <input formControlName="name" type="text" name="name" id="name" class="inputs" placeholder="Ingresa el nombre del producto">
-      </div>
-    </div>
-
-    <!-- Category input field -->
-    <div class="mb-2 w-full">
-      <label for="name" >Categoría</label>
+  <form [formGroup]="productForm" class="space-y-8 divide-y divide-gray-200">
+    <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
       <div>
-        <select formControlName="category" id="sales-box" name="sales-box" class="inputs shadow-md">
-          <option *ngFor="let c of Categories" [value]=c.id >{{c.name}}</option>
-          <option  [value]=0 >Selecciona la categoría del producto</option>
-        </select>
+        <div>
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            Información del Producto
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            Ingresa la información básica del producto.
+          </p>
+        </div>
+
+        <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+          <!-- Código y Nombre en la misma fila -->
+          <div class="sm:grid sm:grid-cols-2 sm:gap-4 sm:items-start">
+            <div class="sm:col-span-1">
+              <label for="code" class="block text-sm font-medium text-gray-700"
+                >Código</label
+              >
+              <div class="mt-1">
+                <input
+                  formControlName="code"
+                  type="text"
+                  name="code"
+                  id="code"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+                  placeholder="Ingresa el código del producto"
+                />
+                <div
+                  *ngIf="
+                    productForm.get('code')?.invalid &&
+                    productForm.get('code')?.touched
+                  "
+                  class="mt-1 text-sm text-red-600"
+                >
+                  El código es requerido
+                </div>
+              </div>
+            </div>
+
+            <div class="sm:col-span-1">
+              <label for="name" class="block text-sm font-medium text-gray-700"
+                >Nombre</label
+              >
+              <div class="mt-1">
+                <input
+                  formControlName="name"
+                  type="text"
+                  name="name"
+                  id="name"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+                  placeholder="Ingresa el nombre del producto"
+                />
+                <div
+                  *ngIf="
+                    productForm.get('name')?.invalid &&
+                    productForm.get('name')?.touched
+                  "
+                  class="mt-1 text-sm text-red-600"
+                >
+                  El nombre es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Categoría y Tax en la misma fila -->
+          <div class="sm:grid sm:grid-cols-2 sm:gap-4 sm:items-start">
+            <div class="sm:col-span-1">
+              <label
+                for="category"
+                class="block text-sm font-medium text-gray-700"
+                >Categoría</label
+              >
+              <div class="mt-1">
+                <select
+                  formControlName="category"
+                  id="category"
+                  name="category"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+                >
+                  <option [ngValue]="0" disabled>
+                    Selecciona una categoría
+                  </option>
+                  <option *ngFor="let c of Categories" [ngValue]="c.id">
+                    {{ c.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    productForm.get('category')?.invalid &&
+                    productForm.get('category')?.touched
+                  "
+                  class="mt-1 text-sm text-red-600"
+                >
+                  La categoría es requerida
+                </div>
+              </div>
+            </div>
+
+            <div class="sm:col-span-1">
+              <label for="tax" class="block text-sm font-medium text-gray-700"
+                >Impuesto</label
+              >
+              <div class="mt-1">
+                <select
+                  formControlName="tax"
+                  id="tax"
+                  name="tax"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+                >
+                  <option [ngValue]="0" disabled>Selecciona un impuesto</option>
+                  <option *ngFor="let t of Taxes" [ngValue]="t.id">
+                    {{ t.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    productForm.get('tax')?.invalid &&
+                    productForm.get('tax')?.touched
+                  "
+                  class="mt-1 text-sm text-red-600"
+                >
+                  El impuesto es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opciones de configuración -->
+          <div class="pt-5">
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <input
+                  formControlName="is_inventory"
+                  type="checkbox"
+                  id="is_inventory"
+                  class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                />
+                <label
+                  for="is_inventory"
+                  class="ml-3 block text-sm font-medium text-gray-700"
+                >
+                  Solo para inventario
+                </label>
+              </div>
+
+              <div class="flex items-center">
+                <input
+                  formControlName="is_tax"
+                  type="checkbox"
+                  id="is_tax"
+                  class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                />
+                <label
+                  for="is_tax"
+                  class="ml-3 block text-sm font-medium text-gray-700"
+                >
+                  Tiene impuesto
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-
-
-    <!-- Only for inventory field  -->
-    <label class="inline-flex items-center cursor-pointer mb-2 w-full lg:col-span-3 md:col-span-2 ">
-      <input formControlName="is_inventory" type="checkbox" value=true class="sr-only peer">
-      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600"></div>
-      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Solo para inventario</span>
-    </label>
-
-    <!-- have tax field  -->
-    <label class="inline-flex items-center cursor-pointer mb-2 w-full lg:col-span-3 md:col-span-2">
-      <input formControlName="is_tax" type="checkbox" value=true class="sr-only peer">
-      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600"></div>
-      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Tiene impuesto</span>
-    </label>
-
+    <div class="pt-5">
+      <div class="flex justify-end gap-x-3">
+        <button
+          type="button"
+          routerLink="/home/inventory/products"
+          class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          [disabled]="isLoading"
+          (click)="onSubmit()"
+          class="inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <svg
+            *ngIf="isLoading"
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          {{ isLoading ? "Guardando..." : "Guardar" }}
+        </button>
+      </div>
+    </div>
   </form>
 </div>
-
-
-
-

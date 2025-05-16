@@ -1,7 +1,25 @@
-<ion-content *ngIf="windowWith < 500" >
-  <app-clients-form [clientData]="ClientInfo" (formSubmit)="updateClient($event)"></app-clients-form>
+<ion-content *ngIf="windowWith < 500">
+  <div *ngIf="isLoading" class="flex justify-center items-center h-full">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <app-clients-form
+    *ngIf="!isLoading && clientInfo"
+    [clientData]="clientInfo"
+    (formSubmit)="updateClient($event)"
+    [isLoading]="isLoading"
+  >
+  </app-clients-form>
 </ion-content>
 
-<div *ngIf="windowWith >  500">
- <app-clients-form  [clientData]="ClientInfo" (formSubmit)="updateClient($event)"></app-clients-form>
+<div *ngIf="windowWith > 500">
+  <div *ngIf="isLoading" class="flex justify-center items-center h-full">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <app-clients-form
+    *ngIf="!isLoading && clientInfo"
+    [clientData]="clientInfo"
+    (formSubmit)="updateClient($event)"
+    [isLoading]="isLoading"
+  >
+  </app-clients-form>
 </div>

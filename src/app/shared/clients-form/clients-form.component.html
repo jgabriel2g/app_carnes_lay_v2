@@ -1,10 +1,23 @@
-<div class="container mx-auto pb-4 px-6 sm:px-6 lg:px-8  max-w-full ">
+<div class="container mx-auto pb-4 px-6 sm:px-6 lg:px-8 max-w-full">
   <div class="py-4">
+    <!-- Breadcrumb navigation -->
     <div>
       <nav class="mb-10" aria-label="Back">
-        <a routerLink="/home/clients" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
-          <svg class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+        <a
+          routerLink="/home/clients"
+          class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            class="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+              clip-rule="evenodd"
+            />
           </svg>
           Retroceder
         </a>
@@ -13,242 +26,772 @@
         <ol role="list" class="flex items-center space-x-4">
           <li>
             <div class="flex">
-              <a class="text-sm font-medium text-gray-500 hover:text-gray-700">Home</a>
+              <a class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                >Home</a
+              >
             </div>
           </li>
           <li>
             <div class="flex items-center">
-              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 flex-shrink-0 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
               </svg>
-              <a routerLink="/home/clients" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Clientes</a>
+              <a
+                routerLink="/home/clients"
+                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+                >Clientes</a
+              >
             </div>
           </li>
           <li>
             <div class="flex items-center">
-              <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 flex-shrink-0 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                />
               </svg>
-              <a  aria-current="page" class="ml-4 text-sm font-medium text-red-500 hover:text-red-700">Formulario</a>
+              <a
+                aria-current="page"
+                class="ml-4 text-sm font-medium text-red-500 hover:text-red-700"
+                >Formulario</a
+              >
             </div>
           </li>
         </ol>
       </nav>
     </div>
+
+    <!-- Header -->
     <div class="mt-4 md:flex md:items-center md:justify-between">
       <div class="min-w-0 flex-1">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Clientes</h2>
+        <h2
+          class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
+        >
+          {{ clientData ? "Editar Cliente" : "Nuevo Cliente" }}
+        </h2>
       </div>
       <div class="mt-4 flex flex-shrink-0 md:ml-4 md:mt-0">
-        <button [disabled]="isLoading" (click)="onSubmit()" type="button" class="btn-primary px-6">Guardar</button>
+        <button
+          [disabled]="isLoading || clientsForm.invalid"
+          (click)="onSubmit()"
+          type="button"
+          class="btn-primary px-6 flex items-center gap-2"
+          [class.opacity-50]="isLoading || clientsForm.invalid"
+          [class.cursor-not-allowed]="isLoading || clientsForm.invalid"
+        >
+          <ion-spinner
+            *ngIf="isLoading"
+            name="crescent"
+            class="w-5 h-5"
+          ></ion-spinner>
+          {{ isLoading ? "Guardando..." : "Guardar" }}
+        </button>
       </div>
     </div>
   </div>
 
-  <form [formGroup]="clientsForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-full pt-10  mx-auto ">
+  <!-- Form -->
+  <div class="relative">
+    <!-- Loader overlay -->
+    <div
+      *ngIf="isLoading || !Departments.length"
+      class="absolute inset-0 bg-white/80 backdrop-blur-md z-10 flex items-center justify-center"
+    >
+      <div class="flex flex-col items-center gap-4">
+        <ion-spinner
+          name="crescent"
+          class="w-12 h-12 text-primary"
+        ></ion-spinner>
+        <p class="text-gray-600 text-lg font-medium">Cargando información...</p>
+      </div>
+    </div>
 
-
-    <!-- first name input field -->
-    <div class="mb-2 w-full">
-      <label for="names" >Razón social</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+    <form
+      [formGroup]="clientsForm"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-full pt-10 mx-auto"
+    >
+      <!-- Company Name -->
+      <div class="mb-2 w-full">
+        <label
+          for="company_name"
+          class="block text-sm font-medium text-gray-700"
+          >Razón social</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="company_name"
+            type="text"
+            id="company_name"
+            class="inputs"
+            placeholder="Ingresa la razón social"
+            [class.border-red-500]="
+              clientsForm.get('company_name')?.invalid &&
+              clientsForm.get('company_name')?.touched
+            "
+          />
         </div>
-        <input formControlName="company_name" type="text" name="company_names" id="company_names" class="inputs" placeholder="Ingresa la razón social">
-      </div>
-      <div *ngIf="clientsForm.get('company_name')?.invalid && clientsForm.get('company_name')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('company_name')?.errors?.['required']">La razón social es requerida</small>
-      </div>
-    </div>
-    <div class="mb-2 w-full">
-      <label for="names" >Nombres</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+        <div
+          *ngIf="
+            clientsForm.get('company_name')?.invalid &&
+            clientsForm.get('company_name')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('company_name')?.errors?.['required']"
+          >
+            La razón social es requerida
+          </small>
         </div>
-        <input formControlName="first_name" type="text" name="names" id="names" class="inputs" placeholder="Ingresa el nombre">
       </div>
-      <div *ngIf="clientsForm.get('first_name')?.invalid && clientsForm.get('first_name')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('first_name')?.errors?.['required']">Primer nombre es requerido</small>
-      </div>
-    </div>
 
-    <!-- last name input field -->
-    <div class="mb-2 w-full">
-      <label for="last-names">Apellidos</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+      <!-- First Name -->
+      <div class="mb-2 w-full">
+        <label for="first_name" class="block text-sm font-medium text-gray-700"
+          >Nombres</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="first_name"
+            type="text"
+            id="first_name"
+            class="inputs"
+            placeholder="Ingresa el nombre"
+            [class.border-red-500]="
+              clientsForm.get('first_name')?.invalid &&
+              clientsForm.get('first_name')?.touched
+            "
+          />
         </div>
-        <input formControlName="last_name" type="text" name="last-names" id="last-names" class="inputs" placeholder="Ingresa el apellido">
-      </div>
-      <div *ngIf="clientsForm.get('last_name')?.invalid && clientsForm.get('last_name')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('last_name')?.errors?.['required']">Apellido es requerido</small>
-      </div>
-    </div>
-
-    <!-- email name input field -->
-    <div class="mb-2 w-full">
-      <label for="email" >Correo electrónico</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+        <div
+          *ngIf="
+            clientsForm.get('first_name')?.invalid &&
+            clientsForm.get('first_name')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('first_name')?.errors?.['required']"
+          >
+            Primer nombre es requerido
+          </small>
         </div>
-        <input formControlName="email" type="email" name="email" id="email" class="inputs" placeholder="Ingresa el correo electrónico">
       </div>
-      <div *ngIf="clientsForm.get('email')?.invalid && clientsForm.get('email')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('email')?.errors?.['required']">Correo electrónico es requerido</small>
-        <small class="error-message" *ngIf="clientsForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</small>
-      </div>
-    </div>
 
-    <!-- phone name input field -->
-    <div class="mb-2 w-full">
-      <label for="phone" >Teléfono</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+      <!-- Last Name -->
+      <div class="mb-2 w-full">
+        <label for="last_name" class="block text-sm font-medium text-gray-700"
+          >Apellidos</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="last_name"
+            type="text"
+            id="last_name"
+            class="inputs"
+            placeholder="Ingresa el apellido"
+            [class.border-red-500]="
+              clientsForm.get('last_name')?.invalid &&
+              clientsForm.get('last_name')?.touched
+            "
+          />
         </div>
-        <input formControlName="phone" type="text" name="phone" id="phone" class="inputs" placeholder="Ingresa el teléfono">
-      </div>
-      <div *ngIf="clientsForm.get('phone')?.invalid && clientsForm.get('phone')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('phone')?.errors?.['required']">Teléfono es requerido</small>
-      </div>
-    </div>
-
-    <!-- id type name input field -->
-    <div class="mb-2 w-full">
-      <label for="id-type" >Tipo de identificación</label>
-      <select formControlName="identification_type" id="id-type" name="id-type" class="inputs">
-        <option value=0>Selecciona el tipo de documento</option>
-        <option [value]="d.id" *ngFor="let d of DocTypes">{{d.name}}</option>
-      </select>
-      <div *ngIf="clientsForm.get('identification_type')?.invalid && clientsForm.get('identification_type')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('identification_type')?.errors">Tipo de documento es requerido</small>
-      </div>
-    </div>
-
-    <!-- id  input field -->
-    <div class="mb-2 w-full">
-      <label for="id" >Número de identificación</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+        <div
+          *ngIf="
+            clientsForm.get('last_name')?.invalid &&
+            clientsForm.get('last_name')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('last_name')?.errors?.['required']"
+          >
+            Apellido es requerido
+          </small>
         </div>
-        <input  formControlName="identification_number" type="number" name="id" id="id" class="inputs" placeholder="Ingresa el número de identificación">
       </div>
-      <div *ngIf="clientsForm.get('identification_number')?.invalid && clientsForm.get('identification_number')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('identification_number')?.errors?.['required']">El Documento es requerido</small>
-      </div>
-    </div>
 
-    <!-- Verification digit  -->
-    <div class="mb-2 w-full" *ngIf="clientsForm.get('identification_type')?.value == 'f75e85c8-cf51-41db-b3fa-acbd0412647a'">
-      <label for="id" >Dígito de identificación</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+      <!-- Email -->
+      <div class="mb-2 w-full">
+        <label for="email" class="block text-sm font-medium text-gray-700"
+          >Correo electrónico</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="email"
+            type="email"
+            id="email"
+            class="inputs"
+            placeholder="Ingresa el correo electrónico"
+            [class.border-red-500]="
+              clientsForm.get('email')?.invalid &&
+              clientsForm.get('email')?.touched
+            "
+          />
         </div>
-        <input  formControlName="digit_check" type="number" name="id" id="id" class="inputs" placeholder="Ingresa el número de identificación">
-      </div>
-      <div *ngIf="clientsForm.get('digit_check')?.invalid && clientsForm.get('digit_check')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('digit_check')?.errors?.['required']">El Dígito de seguridad es requerido</small>
-      </div>
-    </div>
-
-    <!-- department field -->
-    <div class="mb-2 w-full">
-      <label for="id" >Dirección de residencia</label>
-      <div class="relative mt-1s rounded-2xl shadow-md">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-          </svg>
+        <div
+          *ngIf="
+            clientsForm.get('email')?.invalid &&
+            clientsForm.get('email')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('email')?.errors?.['required']"
+          >
+            Correo electrónico es requerido
+          </small>
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('email')?.errors?.['email']"
+          >
+            Ingresa un correo electrónico válido
+          </small>
         </div>
-        <input formControlName="address" type="text" name="id" id="id" class="inputs" placeholder="Ingresa la dirección de residencia">
       </div>
-      <div *ngIf="clientsForm.get('address')?.invalid && clientsForm.get('address')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('address')?.errors?.['required']">La dirección es requerido</small>
-      </div>
-    </div>
 
-    <!-- Departamento input field -->
-    <div class="mb-2 w-full">
-      <label for="id-type" >Departamento</label>
-      <select (change)="catchMunicipalities()" formControlName="department" id="id-type" name="id-type" class="inputs">
-        <option value=''>Selecciona el departamento</option>
-        <option [value]="d.id"  *ngFor="let d of Departments">{{d.name}}</option>
-      </select>
-      <div *ngIf="clientsForm.get('department')?.invalid && clientsForm.get('department')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('department')?.errors?.['required']">El departamento es requerido</small>
+      <!-- Phone -->
+      <div class="mb-2 w-full">
+        <label for="phone" class="block text-sm font-medium text-gray-700"
+          >Teléfono</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="phone"
+            type="tel"
+            id="phone"
+            class="inputs"
+            placeholder="Ingresa el teléfono"
+            [class.border-red-500]="
+              clientsForm.get('phone')?.invalid &&
+              clientsForm.get('phone')?.touched
+            "
+          />
+        </div>
+        <div
+          *ngIf="
+            clientsForm.get('phone')?.invalid &&
+            clientsForm.get('phone')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('phone')?.errors?.['required']"
+          >
+            Teléfono es requerido
+          </small>
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('phone')?.errors?.['minlength'] || clientsForm.get('phone')?.errors?.['maxlength']"
+          >
+            El teléfono debe tener 10 dígitos
+          </small>
+        </div>
       </div>
-    </div>
-    <!-- Municipalities input field -->
-    <div class="mb-2 w-full" *ngIf="Municipalities.length" >
-      <label for="id-type" >Municipio</label>
-      <select formControlName="municipality" id="id-type" name="id-type" class="inputs">
-        <option value="">Selecciona el municipio</option>
-        <option [value]="d.id" *ngFor="let d of Municipalities">{{d.name}}</option>
-      </select>
-      <div *ngIf="clientsForm.get('municipality')?.invalid && clientsForm.get('municipality')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('municipality')?.errors">Municipio es requerido</small>
-      </div>
-    </div>
 
-    <!-- Person types input field -->
-    <div class="mb-2 w-full"  >
-      <label for="id-type" >Tipo de persona</label>
-      <select formControlName="person_type" id="id-type" name="id-type" class="inputs">
-        <option value="">Selecciona el tipo de persona</option>
-        <option [value]="d.id" *ngFor="let d of PersonTypes">{{d.name}}</option>
-      </select>
-      <div *ngIf="clientsForm.get('person_type')?.invalid && clientsForm.get('person_type')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('person_type')?.errors">El tipo de persona es requerido</small>
+      <!-- Identification Type -->
+      <div class="mb-2 w-full">
+        <label
+          for="identification_type"
+          class="block text-sm font-medium text-gray-700"
+          >Tipo de identificación</label
+        >
+        <select
+          formControlName="identification_type"
+          id="identification_type"
+          class="inputs"
+          [class.border-red-500]="
+            clientsForm.get('identification_type')?.invalid &&
+            clientsForm.get('identification_type')?.touched
+          "
+        >
+          <option [ngValue]="0">Selecciona el tipo de documento</option>
+          <option *ngFor="let d of DocTypes" [ngValue]="d.id">
+            {{ d.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clientsForm.get('identification_type')?.invalid &&
+            clientsForm.get('identification_type')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('identification_type')?.errors?.['required']"
+          >
+            Tipo de documento es requerido
+          </small>
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('identification_type')?.errors?.['min']"
+          >
+            Selecciona un tipo de documento válido
+          </small>
+        </div>
       </div>
-    </div>
 
-    <!-- Regime types input field -->
-    <div class="mb-2 w-full"  >
-      <label for="id-type" >Tipo de régimen</label>
-      <select formControlName="regime_type" id="id-type" name="id-type" class="inputs">
-        <option value="">Selecciona el régimen</option>
-        <option [value]="d.id" *ngFor="let d of RegimeTypes">{{d.name}}</option>
-      </select>
-      <div *ngIf="clientsForm.get('regime')?.invalid && clientsForm.get('regime')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('regime')?.errors">El régimen es requerido</small>
+      <!-- Identification Number -->
+      <div class="mb-2 w-full">
+        <label
+          for="identification_number"
+          class="block text-sm font-medium text-gray-700"
+          >Número de identificación</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="identification_number"
+            type="text"
+            id="identification_number"
+            class="inputs"
+            placeholder="Ingresa el número de identificación"
+            [class.border-red-500]="
+              clientsForm.get('identification_number')?.invalid &&
+              clientsForm.get('identification_number')?.touched
+            "
+          />
+        </div>
+        <div
+          *ngIf="
+            clientsForm.get('identification_number')?.invalid &&
+            clientsForm.get('identification_number')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('identification_number')?.errors?.['required']"
+          >
+            El Documento es requerido
+          </small>
+        </div>
       </div>
-    </div>
 
-    <!-- Responsibilities input field -->
-    <div class="mb-2 w-full"  >
-      <label for="id-type" >Responsabilidades</label>
-      <select formControlName="responsibilities" id="id-type" name="id-type" class="inputs">
-        <option value="">Selecciona la responsabilidad</option>
-        <option [value]="d.id" *ngFor="let d of Responsibilities">{{d.name}}</option>
-      </select>
-      <div *ngIf="clientsForm.get('responsibilities')?.invalid && clientsForm.get('responsibilities')?.touched">
-        <small class="error-message" *ngIf="clientsForm.get('responsibilities')?.errors">La responsabilidad es requerido</small>
+      <!-- Verification Digit -->
+      <div
+        class="mb-2 w-full"
+        *ngIf="
+          clientsForm.get('identification_type')?.value ===
+          'f75e85c8-cf51-41db-b3fa-acbd0412647a'
+        "
+      >
+        <label for="digit_check" class="block text-sm font-medium text-gray-700"
+          >Dígito de verificación</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="digit_check"
+            type="text"
+            id="digit_check"
+            class="inputs"
+            placeholder="Ingresa el dígito de verificación"
+            [class.border-red-500]="
+              clientsForm.get('digit_check')?.invalid &&
+              clientsForm.get('digit_check')?.touched
+            "
+          />
+        </div>
+        <div
+          *ngIf="
+            clientsForm.get('digit_check')?.invalid &&
+            clientsForm.get('digit_check')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('digit_check')?.errors?.['required']"
+          >
+            El dígito de verificación es requerido
+          </small>
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('digit_check')?.errors?.['minlength'] || clientsForm.get('digit_check')?.errors?.['maxlength']"
+          >
+            El dígito de verificación debe ser un solo carácter
+          </small>
+        </div>
       </div>
-    </div>
-  </form>
+
+      <!-- Address -->
+      <div class="mb-2 w-full">
+        <label for="address" class="block text-sm font-medium text-gray-700"
+          >Dirección de residencia</label
+        >
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+              />
+            </svg>
+          </div>
+          <input
+            formControlName="address"
+            type="text"
+            id="address"
+            class="inputs"
+            placeholder="Ingresa la dirección de residencia"
+            [class.border-red-500]="
+              clientsForm.get('address')?.invalid &&
+              clientsForm.get('address')?.touched
+            "
+          />
+        </div>
+        <div
+          *ngIf="
+            clientsForm.get('address')?.invalid &&
+            clientsForm.get('address')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('address')?.errors?.['required']"
+          >
+            La dirección es requerida
+          </small>
+        </div>
+      </div>
+
+      <!-- Department -->
+      <div class="mb-2 w-full">
+        <label for="department" class="block text-sm font-medium text-gray-700"
+          >Departamento</label
+        >
+        <select
+          (change)="catchMunicipalities()"
+          formControlName="department"
+          id="department"
+          class="inputs"
+          [class.border-red-500]="
+            clientsForm.get('department')?.invalid &&
+            clientsForm.get('department')?.touched
+          "
+        >
+          <option [ngValue]="''">Selecciona el departamento</option>
+          <option *ngFor="let d of Departments" [ngValue]="d.id">
+            {{ d.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clientsForm.get('department')?.invalid &&
+            clientsForm.get('department')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('department')?.errors?.['required']"
+          >
+            El departamento es requerido
+          </small>
+        </div>
+      </div>
+
+      <!-- Municipality -->
+      <div class="mb-2 w-full">
+        <label
+          for="municipality"
+          class="block text-sm font-medium text-gray-700"
+          >Municipio</label
+        >
+        <select
+          formControlName="municipality"
+          id="municipality"
+          class="inputs"
+          [class.border-red-500]="
+            clientsForm.get('municipality')?.invalid &&
+            clientsForm.get('municipality')?.touched
+          "
+        >
+          <option [ngValue]="''">Selecciona el municipio</option>
+          <option *ngFor="let m of Municipalities" [ngValue]="m.id">
+            {{ m.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clientsForm.get('municipality')?.invalid &&
+            clientsForm.get('municipality')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('municipality')?.errors?.['required']"
+          >
+            Municipio es requerido
+          </small>
+        </div>
+      </div>
+
+      <!-- Person Type -->
+      <div class="mb-2 w-full">
+        <label for="person_type" class="block text-sm font-medium text-gray-700"
+          >Tipo de persona</label
+        >
+        <select
+          formControlName="person_type"
+          id="person_type"
+          class="inputs"
+          [class.border-red-500]="
+            clientsForm.get('person_type')?.invalid &&
+            clientsForm.get('person_type')?.touched
+          "
+        >
+          <option [ngValue]="''">Selecciona el tipo de persona</option>
+          <option *ngFor="let d of PersonTypes" [ngValue]="d.id">
+            {{ d.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clientsForm.get('person_type')?.invalid &&
+            clientsForm.get('person_type')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('person_type')?.errors?.['required']"
+          >
+            El tipo de persona es requerido
+          </small>
+        </div>
+      </div>
+
+      <!-- Regime Type -->
+      <div class="mb-2 w-full">
+        <label for="regime_type" class="block text-sm font-medium text-gray-700"
+          >Tipo de régimen</label
+        >
+        <select
+          formControlName="regime_type"
+          id="regime_type"
+          class="inputs"
+          [class.border-red-500]="
+            clientsForm.get('regime_type')?.invalid &&
+            clientsForm.get('regime_type')?.touched
+          "
+        >
+          <option [ngValue]="''">Selecciona el régimen</option>
+          <option *ngFor="let d of RegimeTypes" [ngValue]="d.id">
+            {{ d.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clientsForm.get('regime_type')?.invalid &&
+            clientsForm.get('regime_type')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('regime_type')?.errors?.['required']"
+          >
+            El régimen es requerido
+          </small>
+        </div>
+      </div>
+
+      <!-- Responsibilities -->
+      <div class="mb-2 w-full">
+        <label
+          for="responsibilities"
+          class="block text-sm font-medium text-gray-700"
+          >Responsabilidades</label
+        >
+        <select
+          formControlName="responsibilities"
+          id="responsibilities"
+          class="inputs"
+          [class.border-red-500]="
+            clientsForm.get('responsibilities')?.invalid &&
+            clientsForm.get('responsibilities')?.touched
+          "
+        >
+          <option [ngValue]="''">Selecciona la responsabilidad</option>
+          <option *ngFor="let d of Responsibilities" [ngValue]="d.id">
+            {{ d.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            clientsForm.get('responsibilities')?.invalid &&
+            clientsForm.get('responsibilities')?.touched
+          "
+          class="mt-1"
+        >
+          <small
+            class="text-red-600"
+            *ngIf="clientsForm.get('responsibilities')?.errors?.['required']"
+          >
+            La responsabilidad es requerida
+          </small>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
-
-
-
-
-
