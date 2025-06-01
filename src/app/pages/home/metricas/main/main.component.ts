@@ -23,7 +23,7 @@ export class MainComponent implements OnInit {
 
   // Filtros de fecha
   startDate: string | null = null;
-  endDate: string = new Date().toISOString().split('T')[0];
+  endDate: string | null = new Date().toISOString().split('T')[0];
   currentPage = 1;
   totalPages = 1;
 
@@ -52,11 +52,15 @@ export class MainComponent implements OnInit {
     this.isTableLoading = true;
     this.error = null;
 
-    console.log('startDate', this.startDate);
-    console.log('endDate', this.endDate);
+    // Usar los parámetros pasados o los valores de la instancia
+    const dateStart = startDate || this.startDate;
+    const dateEnd = endDate || this.endDate;
+
+    console.log('startDate', dateStart);
+    console.log('endDate', dateEnd);
 
     this.metricsService
-      .getMetrics(startDate, endDate)
+      .getMetrics(dateStart as string, dateEnd as string)
       .pipe(
         finalize(() => {
           if (!isPageChange) {
@@ -160,7 +164,13 @@ export class MainComponent implements OnInit {
   }
 
   applyDateFilter() {
-    this.loadMetrics();
+    console.log('applyDateFilter');
+    console.log('startDate', this.startDate);
+    console.log('endDate', this.endDate);
+    this.loadMetrics(
+      this.startDate as string | undefined,
+      this.endDate as string | undefined
+    );
   }
 
   clearDateFilter() {
