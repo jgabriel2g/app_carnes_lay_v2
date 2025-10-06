@@ -29,14 +29,8 @@ export class TicketComponent  implements OnInit, AfterViewInit {
     }
   }
 
-  print() {
-    if (window.electronAPI) {
-      this.isPrinting = true;
-
-      const ticketElement = document.getElementById('ticket');
-
-      if (ticketElement) {
-        const styles = `h4, h5, h6, p {
+  getTicketStyles(): string {
+    return  `h4, h5, h6, p {
   margin-bottom: 0 !important;
   margin-top: 3px !important;
 }
@@ -97,10 +91,20 @@ table {
 .items-center {     align-items: center; }
 .w-full {     width: 100%; }
 `
+  }
+
+  print() {
+    if (window.electronAPI) {
+      this.isPrinting = true;
+
+      const ticketElement = document.getElementById('ticket');
+
+      if (ticketElement) {
+        const styles = this.getTicketStyles();
         const ticketHtml = `
         <html lang="es">
           <head>
-            <title>Daily Ticket</title>
+            <title>Ticket de venta</title>
             <style>${styles}</style>
           </head>
           <body>
@@ -109,13 +113,63 @@ table {
         </html>
       `;
         window.electronAPI.send('print-ticket', ticketHtml);
-      }
 
+        if (this.bill && this.bill.total_cost >= 20000) {
+          const numberOfRewardTickets = Math.floor(this.bill.total_cost / 20000);
+          this.printMultipleRewardTickets(numberOfRewardTickets);
+        }
+      }
       this.isPrinting = false;
     } else {
       window.print();
     }
     this.router.navigateByUrl('/home/sales/new/').then();
+  }
+
+  private printMultipleRewardTickets(numberOfTickets: number): void {
+    for (let i = 1; i <= numberOfTickets; i++) {
+      setTimeout(() => {
+        this.printRewardTicket();
+      }, i * 500);
+    }
+  }
+
+  private printRewardTicket(): void {
+    const rewardTicketHtml = this.generateRewardTicketHtml();
+    window.electronAPI.send('print-ticket', rewardTicketHtml);
+  }
+
+  private generateRewardTicketHtml(): string {
+    const styles = this.getTicketStyles();
+
+    return `
+    <html lang="es">
+      <head>
+        <title>Ticket de Recompensa</title>
+        <style>${styles}</style>
+      </head>
+      <body>
+        <div class="ticket-total">
+          <div class="ticket-total">
+            <div class="ticket-info mb-2">
+              <p class="text-center font-bold">¡PARTICIPA EN LA RIFA!</p>
+              <br>
+              <p class="text-center font-bold mb-2">Completa con tus datos y participa en el sorteo de una moto boxer</p>
+              <br>
+              <div class="text-left">
+                <p class="mb-1"><small>Nombre:_____________________________________</small></p>
+                <br>
+                <p class="mb-1"><small>Cédula:______________________________________</small></p>
+                <br>
+                <p class="mb-1"><small>Teléfono:____________________________________</small></p>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+    `;
   }
 
   convertToNumber(value:string) {
@@ -127,5 +181,4 @@ table {
       key => totalUnitMeasurements[key].total > 0
     );
   }
-
 }
