@@ -206,9 +206,6 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isLoading = true;
     this.salesSvc.createBill(data).subscribe({
       next: (resp: any) => {
-        console.log(resp);
-
-        // Update session in state service
         const updatedSession = {
           ...this.saleSessionSelected,
           isFinalized: true,
@@ -216,7 +213,6 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         };
         this.salesStateSvc.updateSalesSession(updatedSession);
 
-        // Print ticket immediately after successful sale
         this.printTicketDirectly(resp);
 
         this.isLoading = false;
@@ -473,19 +469,20 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   async printBill() {
     if (this.saleSessionSelected.bill) {
-      this.printTicketDirectly(this.saleSessionSelected.bill);
+      this.printTicketDirectly(this.saleSessionSelected.bill, false);
     }
   }
 
-  private printTicketDirectly(bill: any) {
+  private printTicketDirectly(bill: any, isRewardTicket = true) {
     if (window.electronAPI) {
       const ticketHtml = this.generateTicketHtml(bill);
       window.electronAPI.send('print-ticket', ticketHtml);
 
-      // Print reward tickets if applicable
-      if (bill.total_cost >= 20000) {
-        const numberOfRewardTickets = Math.floor(bill.total_cost / 20000);
-        this.printMultipleRewardTickets(numberOfRewardTickets);
+      if (isRewardTicket) {
+        if (bill.total_cost >= 20000) {
+          const numberOfRewardTickets = Math.floor(bill.total_cost / 20000);
+          this.printMultipleRewardTickets(numberOfRewardTickets);
+        }
       }
     } else {
       this.alertSvc.presentAlert('Error', 'Función de impresión solo disponible en Electron').then();
