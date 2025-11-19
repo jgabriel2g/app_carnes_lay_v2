@@ -1,8 +1,8 @@
 {
-  "name": "carnes-la-victoria",
-  "version": "0.0.1",
+  "name": "carnes-lay",
+  "version": "1.0.0",
   "author": "Jesus Garcia",
-  "homepage": "https://ionicframework.com/",
+  "homepage": "https://app.laycloud.lat/auth/login",
   "main": "desktop/main.js",
   "scripts": {
     "ng": "ng",
@@ -12,7 +12,14 @@
     "test": "ng test",
     "lint": "ng lint",
     "electron": "electron .",
-    "buildApps": "electron-builder"
+    "electron:dev": "ng build --configuration development && electron .",
+    "electron:prod": "ng build --configuration production && electron .",
+    "build:mac": "ng build --configuration production && electron-builder --mac",
+    "build:mac-arm": "ng build --configuration production && electron-builder --mac --arm64",
+    "build:mac-intel": "ng build --configuration production && electron-builder --mac --x64",
+    "build:win": "ng build --configuration production && electron-builder --win --x64",
+    "build:all": "ng build --configuration production && electron-builder --mac --win --x64 --arm64",
+    "buildApps": "npm run build:all"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +40,8 @@
     "@capacitor/status-bar": "6.0.1",
     "@ionic/angular": "^8.0.0",
     "@serialport/parser-readline": "^12.0.0",
+    "dotenv": "^17.2.3",
+    "electron-updater": "^6.6.2",
     "flowbite": "^2.5.1",
     "ionicons": "^7.0.0",
     "lodash": "^4.17.21",
@@ -81,19 +90,34 @@
   },
   "description": "An Ionic project",
   "build": {
-    "appId": "com.lavictoria.fe",
-    "productName": "Carnes La victoria",
+    "appId": "com.lay.fe",
+    "productName": "Carnes Lay",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "jgabriel2g",
+        "repo": "app_carnes_lay_v2",
+        "private": true
+      }
+    ],
     "mac": {
-      "target": "dmg",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64"]
+        }
+      ],
       "category": "public.app-category.utilities"
     },
     "win": {
       "target": [
         {
-          "target": "nsis"
+          "target": "nsis",
+          "arch": ["x64"]
         },
         {
-          "target": "zip"
+          "target": "zip",
+          "arch": ["x64"]
         }
       ],
       "icon": "build/icon.ico",
@@ -105,7 +129,9 @@
     "files": [
       "www/",
       "desktop/main.js",
-      "desktop/preload.js"
+      "desktop/preload.js",
+      "desktop/config/**/*",
+      "desktop/services/**/*"
     ]
   },
   "asarUnpack": [

@@ -11,13 +11,13 @@ module.exports = {
   WINDOW: {
     WIDTH: 1200,
     HEIGHT: 1000,
-    TITLE: "Carnes La Victoria",
+    TITLE: "Carnes Lay",
   },
 
   // URLs permitidas
   ALLOWED_URLS: {
     DEV: "http://localhost:4200",
-    PROD: "https://lay-v2.netlify.app/",
+    PROD: "https://app.laycloud.lat",
   },
 
   // Configuración de impresión

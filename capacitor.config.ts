@@ -2,10 +2,10 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'Carnes La victoria',
+  appName: 'Carnes Lay',
   webDir: 'www',
   server: {
-    url: 'https://lay-v2.netlify.app',
+    url: 'https://app.laycloud.lat',
     cleartext: true
   }
 };

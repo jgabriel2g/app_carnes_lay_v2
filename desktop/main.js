@@ -1,7 +1,12 @@
+// load environment variables from .env file
+require("dotenv").config();
+
 const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 const config = require("./config/app.config");
 const serialService = require("./services/serial.service");
 const printService = require("./services/print.service");
+const updaterService = require("./services/updater.service");
 
 
 // Crear ventana principal
@@ -17,8 +22,15 @@ async function createWindow() {
     },
   });
 
-  await win.loadURL(config.ALLOWED_URLS.DEV);
+  // Cargar desde build local (www/ está en el root del proyecto, un nivel arriba de desktop/)
+  const indexPath = path.join(__dirname, '..', 'www', 'index.html');
+  const loadUrl = `file://${indexPath}`;
 
+  console.log(`🚀 Iniciando en modo: ${process.env.NODE_ENV || "production"}`);
+  console.log(`📍 Cargando desde: ${loadUrl}`);
+
+  await win.loadURL(loadUrl);
+  // await win.loadURL(config.ALLOWED_URLS.PROD);
   win.setMenu(null);
 
   if (process.env.NODE_ENV === "development") {
@@ -33,6 +45,9 @@ async function createWindow() {
   // Iniciar servicios
   await serialService.connectSerial(win);
 
+  // Inicializar auto-updater
+  updaterService.initUpdater(win);
+
   return win;
 }
 
@@ -42,6 +57,9 @@ ipcMain.on("trigger-print", () => printService.printCurrentWindow());
 ipcMain.on("print-ticket", (event, ticketHtml) =>
   printService.printTicket(ticketHtml)
 );
+
+// Eventos de actualización
+ipcMain.on("check-for-updates", () => updaterService.checkForUpdates());
 
 
 // Iniciar aplicación

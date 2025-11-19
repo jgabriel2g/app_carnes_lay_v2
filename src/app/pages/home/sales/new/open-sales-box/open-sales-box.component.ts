@@ -9,71 +9,78 @@ import { AuthService } from '../../../../../core/services/auth.service';
   templateUrl: './open-sales-box.component.html',
   styleUrls: ['./open-sales-box.component.scss'],
 })
-export class OpenSalesBoxComponent  implements OnInit {
-  public isLoading:boolean = true;
-  public boxInitMoney:number = 0;
-  constructor(public authSvc:AuthService, private alertSvc:AlertsService, private salesSvc:SalesService, private router:Router) { }
+export class OpenSalesBoxComponent implements OnInit {
+  public isLoading: boolean = true;
+  public boxInitMoney: number = 0;
+  constructor(
+    public authSvc: AuthService,
+    private alertSvc: AlertsService,
+    private salesSvc: SalesService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.getSalesBox();
   }
 
-  getSalesBox(){
-    const saleBox = sessionStorage.getItem('saleBoxInfo')
-    if (saleBox){
+  getSalesBox() {
+    const saleBox = sessionStorage.getItem('saleBoxInfo');
+    if (saleBox) {
       this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
     }
     this.salesSvc.getMyOpenSale().subscribe({
-      error:() => {
+      error: () => {
         this.isLoading = false;
         console.log('No se encontró ninguna caja de ventas abierta');
       },
-      next:(resp:any) => {
+      next: (resp: any) => {
         this.isLoading = false;
         if (resp.is_open) {
           sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp));
           this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
         }
-      }
+      },
     });
-  };
+  }
 
-  openSalesBox(){
-    if (this.boxInitMoney <= 0 ) {
-      this.alertSvc.presentAlert('Ooops', 'Debes ingresar un monto de inicio').then();
+  openSalesBox() {
+    if (this.boxInitMoney <= 0) {
+      this.alertSvc
+        .presentAlert('Ooops', 'Debes ingresar un monto de inicio')
+        .then();
     } else {
       this.isLoading = true;
       const data = {
-        base_money: this.boxInitMoney
+        base_money: this.boxInitMoney,
       };
-      this.salesSvc.createNewBoxSale(data)
-      .subscribe({
-        error:(err:any) => {
+      this.salesSvc.createNewBoxSale(data).subscribe({
+        error: (err: any) => {
           this.isLoading = false;
         },
-        next:(resp:any) => {
+        next: (resp: any) => {
           sessionStorage.setItem('saleBoxInfo', JSON.stringify(resp));
           this.router.navigateByUrl('/home/sales/new/salesMain/1').then();
           this.isLoading = false;
-        }
+        },
       });
     }
-  };
+  }
 
   handleError(err: any) {
     if (err.error) {
       const errorKeys = Object.keys(err.error);
 
       let errorMessage = '';
-      errorKeys.forEach(key => {
+      errorKeys.forEach((key) => {
         errorMessage += ` ${err.error[key]}\n`;
       });
 
       this.alertSvc.presentAlert('Ooops', errorMessage).then();
-      return
+      return;
     } else {
-      this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.').then();
+      this.alertSvc
+        .presentAlert('Ooops', 'An unexpected error occurred.')
+        .then();
     }
-  };
-
+  }
 }

@@ -4,7 +4,7 @@
       class="flex flex-col justify-center items-center gap-y-4 h-full mx-auto md:max-w-md max-w-[290px]"
     >
       <img
-        ngSrc="../../../../assets/images/logo_lay.png"
+        src="assets/images/logo_lay.png"
         class="mb-5"
         alt=""
         height="120"
@@ -71,6 +71,7 @@
             id="password"
             class="inputs pl-10 pr-10"
             placeholder="*****"
+            (keyup.enter)="login()"
           />
           <div
             class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"

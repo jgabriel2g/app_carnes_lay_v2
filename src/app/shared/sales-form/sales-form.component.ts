@@ -216,6 +216,9 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         };
         this.salesStateSvc.updateSalesSession(updatedSession);
 
+        // Print ticket immediately after successful sale
+        this.printTicketDirectly(resp);
+
         this.isLoading = false;
         this.reloadBoxInfo.emit(true);
         this.alertSvc.presentAlert('Éxito', 'Venta completada').then();
@@ -469,9 +472,323 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   async printBill() {
-    await this.router.navigate(['/ticket'], {
-      state: { bill: this.saleSessionSelected.bill },
-    });
+    if (this.saleSessionSelected.bill) {
+      this.printTicketDirectly(this.saleSessionSelected.bill);
+    }
+  }
+
+  private printTicketDirectly(bill: any) {
+    if (window.electronAPI) {
+      const ticketHtml = this.generateTicketHtml(bill);
+      window.electronAPI.send('print-ticket', ticketHtml);
+
+      // Print reward tickets if applicable
+      if (bill.total_cost >= 20000) {
+        const numberOfRewardTickets = Math.floor(bill.total_cost / 20000);
+        this.printMultipleRewardTickets(numberOfRewardTickets);
+      }
+    } else {
+      this.alertSvc.presentAlert('Error', 'Función de impresión solo disponible en Electron').then();
+    }
+  }
+
+  private generateTicketHtml(bill: any): string {
+    const styles = this.getTicketStyles();
+    const ticketContent = this.generateTicketContent(bill);
+
+    return `
+      <html lang="es">
+        <head>
+          <title>Ticket de venta</title>
+          <style>${styles}</style>
+        </head>
+        <body>
+          ${ticketContent}
+        </body>
+      </html>
+    `;
+  }
+
+  private generateTicketContent(bill: any): string {
+    const clientInfo = bill.client ? `
+      <div class="client-info mb-2">
+        <table class="table table-centered table-borderless w-full mb-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="w-full">
+            <tr class="flex justify-between items-center w-full">
+              <td class="text-left font-medium">CLIENTE</td>
+              <td class="text-right">
+                ${bill.client.first_name} ${bill.client.last_name}
+              </td>
+            </tr>
+            <tr class="flex justify-between items-center w-full">
+              <td class="text-left font-medium">NIT/CC</td>
+              <td class="text-right">${bill.client.identification_number}</td>
+            </tr>
+            <tr class="flex justify-between items-center w-full">
+              <td class="text-left font-medium">EMAIL</td>
+              <td class="text-right">${bill.client.email}</td>
+            </tr>
+            <tr class="flex justify-between items-center w-full">
+              <td class="text-left font-medium">TELÉFONO</td>
+              <td class="text-right">${bill.client.phone}</td>
+            </tr>
+            <tr class="flex justify-between items-center w-full">
+              <td class="text-left font-medium">DIRECCIÓN</td>
+              <td class="text-right">
+                ${bill.client.address || 'No ingresada'}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    ` : '';
+
+    const clientBasicInfo = !bill.client ? `
+      <tr class="w-full flex justify-between items-center">
+        <td class="text-left font-medium">Cliente:</td>
+        <td class="text-right">Consumidor final</td>
+      </tr>
+      <tr class="w-full flex justify-between items-center">
+        <td class="text-left font-medium">NIT/CC:</td>
+        <td class="text-right">222222222222</td>
+      </tr>
+    ` : '';
+
+    const productsHtml = bill.display_products.map((p: any) => `
+      <div class="flex w-full justify-between items-start">
+        <div class="text-xs text-left">
+          <p class="text-sm">${p.code} ${p.product}</p>
+          <small>${p.amount}${p.type_of_unit_measurement} x $${p.price}</small>
+        </div>
+        <div class="price text-xs text-end">
+          <p class="text-sm">
+            $${(Number(p.amount) * Number(p.price)).toLocaleString('es-CO', { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+      </div>
+    `).join('');
+
+    const unitMeasurementsHtml = Object.keys(bill.total_unit_measurements || {})
+      .filter(unit => bill.total_unit_measurements[unit].total > 0)
+      .map(unit => `
+        <h5 class="pb-1 text-[12px] font-semibold">
+          ${bill.total_unit_measurements[unit].total}
+          ${bill.total_unit_measurements[unit].name} totales
+        </h5>
+      `).join('');
+
+    const createdDate = new Date(bill.created).toLocaleString('es-CO');
+
+    return `
+      <div id="ticket" style="max-width: 300px">
+        <div class="ticket-header mb-1 text-center w-full">
+          <h4 class="text-xs">CARNES LAY</h4>
+          <h5 class="text-xs">NIT 19602067-7</h5>
+          <h6 class="text-xs">Dir. CL 5 # 9-55 MERCADO PÚBLICO, FUNDACIÓN</h6>
+          <h6 class="text-xs font-bold">
+            DOCUMENTO ELECTRÓNICO EN PROCESO DE VALIDACION. NO REEMPLAZA LA FACTURA
+          </h6>
+          <br />
+          <h6 class="text-xs font-bold">
+            ORDEN DE DESPACHO. <br />
+            ${bill.id}
+          </h6>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-info mb-2">
+            <h5 class="mx-auto text-center font-bold">Sistema POS</h5>
+            <table class="text-center w-full mb-0 mt-2">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="w-full">
+                <tr class="w-full flex justify-between items-center">
+                  <td class="text-left font-medium">Fecha de Generación</td>
+                  <td class="text-right">${createdDate}</td>
+                </tr>
+                <tr class="w-full flex justify-between items-center">
+                  <td class="text-left font-medium">Medio de Pago</td>
+                  <td class="text-right">${bill.payment_method.name}</td>
+                </tr>
+                ${clientBasicInfo}
+                <tr class="w-full flex justify-between items-center">
+                  <td class="text-left font-medium">Vendedor:</td>
+                  <td class="text-right">
+                    ${bill.user.first_name} ${bill.user.last_name}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          ${clientInfo}
+
+          <div class="ticket-description mb-1">
+            <div class="flex justify-between">
+              <h6 class="text-xs font-bold">PRODUCTO</h6>
+              <h6 class="text-xs font-bold">VALOR</h6>
+            </div>
+            ${productsHtml}
+          </div>
+          <div class="ticket-total">
+            ${unitMeasurementsHtml}
+          </div>
+          <div class="ticket-total">
+            <div class="flex justify-between">
+              <h5 class="pb-1 text-[12px] font-semibold">SUBTOTAL</h5>
+              <h5 class="text-xs">$${Number(bill.total_cost).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</h5>
+            </div>
+          </div>
+          <div class="ticket-total">
+            <div class="flex justify-between">
+              <h5 class="pb-1 text-[12px] font-semibold">RECIBIDO:</h5>
+              <h5 class="text-xs">$${Number(bill.total_received).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</h5>
+            </div>
+          </div>
+          <div class="ticket-total">
+            <div class="flex justify-between">
+              <h5 class="pb-1 text-[12px] font-semibold">CAMBIO:</h5>
+              <h5 class="text-xs">$${Number(bill.total_sent).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-footer text-center w-full">
+          <h1 class="text-base font-bold">Gracias por su compra</h1>
+          <h6 class="text-xs font-bold">
+            ESTE DOCUMENTO NO REEMPLAZA NI SE CONSIDERA LA FACTURA ELECTRONICA, LA
+            CUAL SERA ENVIADA POR CORREO ELECTRONICO
+          </h6>
+          <h6 class="text-xs">Software de facturación electrónica propio</h6>
+        </div>
+      </div>
+    `;
+  }
+
+  private getTicketStyles(): string {
+    return `h4, h5, h6, p {
+  margin-bottom: 0 !important;
+  margin-top: 3px !important;
+}
+
+.ticket-header , .ticket-info, .client-info, .ticket-description , .ticket-total{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: dashed .5px black;
+}
+.table>:not(caption)>*>*{
+    padding: 0 !important;
+}
+
+table {
+  font-size: 12px;
+}
+
+.ticket-auth {
+  font-size: 11px;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.logo {
+  height: 100px;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-0 {     margin-bottom: 0px; }
+.mt-2 {     margin-top: 0.5rem/* 8px */; }
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {     align-items: center; }
+.w-full {     width: 100%; }
+.text-left {     text-align: left; }
+.text-right {     text-align: right; }
+.text-sm {     font-size: 0.875rem; line-height: 1.25rem; }
+.text-base {     font-size: 1rem; line-height: 1.5rem; }
+.font-medium {     font-weight: 500; }
+.items-start {     align-items: flex-start; }
+`;
+  }
+
+  private printMultipleRewardTickets(numberOfTickets: number): void {
+    for (let i = 1; i <= numberOfTickets; i++) {
+      setTimeout(() => {
+        this.printRewardTicketDirectly();
+      }, i * 500);
+    }
+  }
+
+  private printRewardTicketDirectly(): void {
+    const rewardTicketHtml = this.generateRewardTicketHtml();
+    if (window.electronAPI) {
+      window.electronAPI.send('print-ticket', rewardTicketHtml);
+    }
+  }
+
+  private generateRewardTicketHtml(): string {
+    const styles = this.getTicketStyles();
+
+    return `
+    <html lang="es">
+      <head>
+        <title>Ticket de Recompensa</title>
+        <style>${styles}</style>
+      </head>
+      <body>
+        <div class="ticket-total">
+          <div class="ticket-total">
+            <div class="ticket-info mb-2">
+              <p class="text-center font-bold">¡PARTICIPA EN LA RIFA!</p>
+              <br>
+              <p class="text-center font-bold mb-2">Completa con tus datos y participa en el sorteo de una moto boxer</p>
+              <br>
+              <div class="text-left">
+                <p class="mb-1"><small>Nombre:_____________________________________</small></p>
+                <br>
+                <p class="mb-1"><small>Cédula:______________________________________</small></p>
+                <br>
+                <p class="mb-1"><small>Teléfono:____________________________________</small></p>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+    `;
   }
 
   printRewardTicket() {
