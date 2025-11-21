@@ -109,7 +109,6 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
     console.log('Sesión seleccionada actualizada:', this.saleSessionSelected);
     // TODO: Implementar el cliente seleccionado en la sesión
-
     this.loadInitialData();
     this.writeWeightOnInput();
   }
@@ -478,7 +477,7 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       const ticketHtml = this.generateTicketHtml(bill);
       window.electronAPI.send('print-ticket', ticketHtml);
 
-      if (isRewardTicket) {
+      if (isRewardTicket && !this.authSvc.isOwner()) {
         if (bill.total_cost >= 20000) {
           const numberOfRewardTickets = Math.floor(bill.total_cost / 20000);
           this.printMultipleRewardTickets(numberOfRewardTickets);

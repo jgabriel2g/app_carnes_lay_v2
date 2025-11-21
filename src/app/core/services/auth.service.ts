@@ -68,6 +68,11 @@ export class AuthService {
     return userRoles.some((role:any) => rolesPermissions[role].permissions.includes(permission));
   };
 
+  isOwner(): boolean {
+    const userRoles = JSON.parse(sessionStorage.getItem('userGroup') ||  '');
+    return userRoles.some((role:any) => role === 1);
+  };
+
   validateWithOtp(phone_number: string) {
     const url = `${this.baseUrl}/auth/validate/?phone_number=${phone_number}`;
     return this.http.get(url, this.header)
