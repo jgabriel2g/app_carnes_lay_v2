@@ -40,16 +40,15 @@ export class ListComponent implements OnInit, OnDestroy {
     private router: Router,
     private alertSvc: AlertsService
   ) {
-    // Configurar el debounce para la búsqueda con switchMap
     this.searchSubject
       .pipe(
         takeUntil(this.destroy$),
-        debounceTime(300), // Esperar 300ms después de que el usuario deje de escribir
-        distinctUntilChanged(), // Solo emitir si el valor ha cambiado
+        debounceTime(300),
+        distinctUntilChanged(),
         switchMap((searchTerm) => {
           this.isLoading = true;
           this.search = searchTerm;
-          this.currentPage = 1; // Resetear a la primera página
+          this.currentPage = 1;
           this.offset = 0;
 
           return this.inventorySvc.getProducts(

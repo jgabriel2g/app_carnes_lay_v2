@@ -1,6 +1,6 @@
 {
   "name": "carnes-lay",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Jesus Garcia",
   "homepage": "https://app.laycloud.lat/auth/login",
   "main": "desktop/main.js",

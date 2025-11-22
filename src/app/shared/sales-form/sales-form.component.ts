@@ -30,7 +30,6 @@ import {
 } from '../../core/models/sale.model';
 import { PaymentMethod } from '../../core/models/global.model';
 import { Client } from '../../core/models/client.model';
-import { Router } from '@angular/router';
 import {
   ActiveSale,
   SalesStateService,
@@ -89,8 +88,7 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     private salesSvc: SalesService,
     private salesStateSvc: SalesStateService,
     private ngZone: NgZone,
-    private otpService: OtpService,
-    private router: Router
+    private otpService: OtpService
   ) {}
 
   ngOnInit() {

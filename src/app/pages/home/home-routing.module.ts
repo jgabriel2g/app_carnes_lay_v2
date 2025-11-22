@@ -49,17 +49,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'providers',
-        loadChildren: () =>
-          import('../../pages/home/providers/providers.module').then(
-            (m) => m.ProvidersModule
-          ),
-        canActivate: [RoleGuard],
-        data: {
-          permissions: ['manage-providers'],
-        },
-      },
-      {
         path: 'clients',
         loadChildren: () =>
           import('../../pages/home/clients/clients.module').then(
@@ -68,17 +57,6 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: {
           permissions: ['manage-clients'],
-        },
-      },
-      {
-        path: 'pay-roll',
-        loadChildren: () =>
-          import('../../pages/home/pay-roll/pay-roll.module').then(
-            (m) => m.PayRollModule
-          ),
-        canActivate: [RoleGuard],
-        data: {
-          permissions: ['manage-employees'],
         },
       },
       {
