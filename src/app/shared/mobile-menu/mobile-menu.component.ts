@@ -1,7 +1,5 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router, ActivatedRoute, ActivationEnd, RouterModule } from '@angular/router';
-import { Subscription, filter, map } from 'rxjs';
-import { IonTabs } from "@ionic/angular/standalone";
+import { Component, EventEmitter, Output } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
@@ -27,6 +25,4 @@ export class MobileMenuComponent    {
   actionResponse(value:boolean) {
     this.close.emit(value);
   }
-
-
 }

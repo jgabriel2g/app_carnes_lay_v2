@@ -83,4 +83,12 @@ export class AuthService {
     return this.http.post(url, {token: token, admin_phone_number: admin_phone_number}, this.header)
   }
 
+  hasAdminPermission(): boolean {
+    const userRoles = JSON.parse(sessionStorage.getItem('userGroup') ||  '');
+    if (userRoles.length === 0) {
+     return false
+    }
+    return !!userRoles.some((role: any) => role === 1);
+  }
+
 }

@@ -18,17 +18,13 @@ async function createWindow() {
     webPreferences: {
       preload: `${app.getAppPath()}/desktop/preload.js`,
       contextIsolation: true,
-      nodeIntegration: true,
+      nodeIntegration: false,
     },
   });
 
-  // Cargar desde build local (www/ está en el root del proyecto, un nivel arriba de desktop/)
+  // Cargar front desde el build de angular
   const indexPath = path.join(__dirname, '..', 'www', 'index.html');
   const loadUrl = `file://${indexPath}`;
-
-  console.log(`🚀 Iniciando en modo: ${process.env.NODE_ENV || "production"}`);
-  console.log(`📍 Cargando desde: ${loadUrl}`);
-
   await win.loadURL(loadUrl);
   // await win.loadURL(config.ALLOWED_URLS.PROD);
   win.setMenu(null);
