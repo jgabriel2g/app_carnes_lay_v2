@@ -220,7 +220,7 @@ export class SalesFormComponent implements OnInit, OnDestroy {
         };
         this.salesStateSvc.updateSalesSession(updatedSession);
 
-        this.ticketPrinterSvc.printBillTicket(resp, true);
+        this.ticketPrinterSvc.printBillTicket(resp, false);
 
         this.isLoading = false;
         this.reloadBoxInfo.emit(true);
