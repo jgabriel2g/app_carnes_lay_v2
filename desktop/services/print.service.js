@@ -13,13 +13,21 @@ class PrintService {
         `data:text/html;charset=utf-8,${encodeURIComponent(ticketHtml)}`
       );
 
-      // Obtener altura del contenido en píxeles
-      const contentHeight = await printWindow.webContents.executeJavaScript(
-        "document.body.scrollHeight"
-      );
+      // Esperar a que el layout termine de renderizar
+      const contentHeight = await printWindow.webContents.executeJavaScript(`
+        new Promise(resolve => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              document.body.style.margin = '0';
+              document.body.style.padding = '0';
+              resolve(document.body.scrollHeight);
+            });
+          });
+        });
+      `);
 
-      // Convertir px a micrones (1px ≈ 264.58 micrones a 96 DPI)
-      const heightInMicrons = Math.ceil(contentHeight * 264.58) + 5000; // +5mm margen
+      // Convertir px a micrones (1px = 25400/96 ≈ 264.58 micrones a 96 DPI)
+      const heightInMicrons = Math.ceil(contentHeight * 264.58) + 10000; // +10mm margen
 
       const printOptions = {
         ...config.PRINT.OPTIONS,
