@@ -5,8 +5,8 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -14,20 +14,21 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, NgOptimizedImage],
+  imports: [CommonModule, RouterModule],
 })
 export class SideBarComponent implements OnInit {
-  @Output() close = new EventEmitter<boolean>();
+  @Output() toggleSidebar = new EventEmitter<boolean>();
 
   public windowWith: any;
   public showInventoryMenu: boolean = false;
   public showSalesMenu: boolean = false;
-  public isColapsed: boolean = false;
+  public isCollapsed: boolean = false;
+
   ngOnInit() {
     this.checkScreenWidth();
   }
 
-  constructor(public authSvc: AuthService) {
+  constructor(public authSvc: AuthService, private router: Router) {
     this.checkScreenWidth();
   }
 
@@ -41,7 +42,12 @@ export class SideBarComponent implements OnInit {
   }
 
   toCollapse() {
-    this.isColapsed = !this.isColapsed;
-    this.close.emit(this.isColapsed);
+    this.isCollapsed = !this.isCollapsed;
+    this.toggleSidebar.emit(this.isCollapsed);
+  }
+
+  onLogout() {
+    this.authSvc.logout();
+    this.router.navigate(['/auth/login']).then();
   }
 }

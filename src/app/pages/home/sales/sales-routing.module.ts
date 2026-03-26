@@ -33,16 +33,6 @@ const routes: Routes = [
       ]
     }
   },
-  {
-    path: 'market-rates',
-    loadChildren: () => import('../sales/market-rates/market-rates.module').then( m => m.MarketRatesModule),
-    canActivate:[RoleGuard],
-    data: {
-      permissions:[
-        'view-market-rates'
-      ]
-    }
-  },
 ];
 
 @NgModule({

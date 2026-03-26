@@ -34,14 +34,12 @@ class SerialService {
   }
 
   async connectSerial(win) {
-    console.log("⏳ Intentando conectar bascula...");
     clearTimeout(this.reconnectTimer);
 
     if (this.port?.isOpen) return;
 
     const path = await this.findBalancePath();
     if (!path) {
-      console.log("Báscula no encontrada, reintentando...");
       this.scheduleReconnect(win);
       return;
     }

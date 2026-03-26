@@ -3,51 +3,50 @@ import { SalesService } from '../../../../../core/services/sales.service';
 import { Router } from '@angular/router';
 import { AlertsService } from '../../../../../core/services/alerts.service';
 import { AuthService } from '../../../../../core/services/auth.service';
-import {AlertController} from "@ionic/angular";
-import {OtpService} from "../../../../../core/services/otp.service";
+import { AlertController } from '@ionic/angular';
+import { OtpService } from '../../../../../core/services/otp.service';
 
 @Component({
   selector: 'app-sales-main',
   templateUrl: './sales-main.component.html',
   styleUrls: ['./sales-main.component.scss'],
 })
-export class SalesMainComponent  implements OnInit {
-  public windowWith:any;
-  public isColapsed:boolean = false
-  public boxInfo:any;
+export class SalesMainComponent implements OnInit {
+  public windowWith: any;
+  public isColapsed: boolean = false;
+  public boxInfo: any;
   maxAttempts = 3;
   attempts = 0;
-  otpCode: string = ''
+  otpCode: string = '';
 
   constructor(
-    public authSvc:AuthService,
-    private alertSvc:AlertsService,
-    private salesSvc:SalesService,
-    private alertController:AlertController,
-    private router:Router,
+    public authSvc: AuthService,
+    private alertSvc: AlertsService,
+    private salesSvc: SalesService,
+    private alertController: AlertController,
+    private router: Router,
     private otpService: OtpService
   ) {
     this.checkScreenWidth();
   }
 
   ngOnInit() {
-      this.checkScreenWidth();
-      setTimeout(() => this.checkScreenWidth(), 0);
-      this.getBoxSalesById();
-  };
+    this.checkScreenWidth();
+    setTimeout(() => this.checkScreenWidth(), 0);
+    this.getBoxSalesById();
+  }
 
-  getBoxSalesById(){
-    this.boxInfo = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '')
-    this.salesSvc.getBoxSaleById(this.boxInfo.id)
-          .subscribe({
-            error:(err:any) => {
-              console.log(err)
-            },
-            next:(resp:any) => {
-              this.boxInfo = resp;
-            }
-          });
-  };
+  getBoxSalesById() {
+    this.boxInfo = JSON.parse(sessionStorage.getItem('saleBoxInfo') || '');
+    this.salesSvc.getBoxSaleById(this.boxInfo.id).subscribe({
+      error: (err: any) => {
+        console.log(err);
+      },
+      next: (resp: any) => {
+        this.boxInfo = resp;
+      },
+    });
+  }
 
   async closeBox() {
     this.otpService
@@ -74,14 +73,20 @@ export class SalesMainComponent  implements OnInit {
         await this.enterOtp(phone);
       },
       async (error) => {
-        await this.showAlert('Error', 'No se pudo enviar el OTP. Inténtalo nuevamente.');
+        await this.showAlert(
+          'Error',
+          'No se pudo enviar el OTP. Inténtalo nuevamente.'
+        );
       }
     );
   }
 
   async enterOtp(phone: string) {
     if (this.attempts >= this.maxAttempts) {
-      await this.showAlert('Error', 'Has alcanzado el número máximo de intentos.');
+      await this.showAlert(
+        'Error',
+        'Has alcanzado el número máximo de intentos.'
+      );
       return;
     }
 
@@ -120,26 +125,31 @@ export class SalesMainComponent  implements OnInit {
       await this.showAlert('Éxito', 'Caja cerrada exitosamente.');
       this.attempts = 0;
       this.otpCode = '';
-      this.salesSvc.closeBoxSale(this.boxInfo.id)
-        .subscribe({
-          error:(err:any) => {
-            console.log(err);
-          },
-          next:(resp:any) => {
-            // const result = resp;
-            // result.isMobile = false;
-            // this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
-            this.router.navigateByUrl('/home/sales/new/').then();
-            sessionStorage.removeItem('saleBoxInfo');
-          }
-        });
+      this.salesSvc.closeBoxSale(this.boxInfo.id).subscribe({
+        error: (err: any) => {
+          console.log(err);
+        },
+        next: (resp: any) => {
+          // const result = resp;
+          // result.isMobile = false;
+          // this.router.navigateByUrl('/daily-ticket', { state: { sale: result } }).then();
+          this.router.navigateByUrl('/home/sales/new/').then();
+          sessionStorage.removeItem('saleBoxInfo');
+        },
+      });
     } else {
       this.attempts++;
       if (this.attempts < this.maxAttempts) {
-        await this.showAlert('Error', 'Código OTP incorrecto. Inténtalo nuevamente.');
-        this.enterOtp('').then()
+        await this.showAlert(
+          'Error',
+          'Código OTP incorrecto. Inténtalo nuevamente.'
+        );
+        this.enterOtp('').then();
       } else {
-        await this.showAlert('Error', 'Has alcanzado el número máximo de intentos.');
+        await this.showAlert(
+          'Error',
+          'Has alcanzado el número máximo de intentos.'
+        );
       }
     }
   }
@@ -155,30 +165,29 @@ export class SalesMainComponent  implements OnInit {
 
   checkScreenWidth() {
     this.windowWith = window.innerWidth;
-  };
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.checkScreenWidth();
-  };
+  }
 
-  reloadBoxInfo(event:any) {
+  reloadBoxInfo(event: any) {
     this.getBoxSalesById();
-  };
+  }
 
   handleError(err: any) {
     if (err.error) {
       const errorKeys = Object.keys(err.error);
 
       let errorMessage = '';
-      errorKeys.forEach(key => {
+      errorKeys.forEach((key) => {
         errorMessage += ` ${err.error[key]}\n`;
       });
 
       this.alertSvc.presentAlert('Ooops', errorMessage);
     } else {
       this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.');
-    };
-  };
-
+    }
+  }
 }

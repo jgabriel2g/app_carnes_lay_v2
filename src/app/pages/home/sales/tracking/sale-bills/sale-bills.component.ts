@@ -66,12 +66,12 @@ export class SaleBillsComponent  implements OnInit {
    * Muestra detalles de la factura seleccionada (Navega a /ticket).
    */
   showBillDetail(billId: string){
-    this.salesSvc.getBillById(billId).subscribe({
-      next: bill => {
-        this.router.navigateByUrl('/ticket', { state: { bill } }).then();
-      },
-      error: err => console.error(err)
-    });
+    // this.salesSvc.getBillById(billId).subscribe({
+    //   next: bill => {
+    //     this.router.navigateByUrl('/ticket', { state: { bill } }).then();
+    //   },
+    //   error: err => console.error(err)
+    // });
   }
 
   /**

@@ -68,6 +68,11 @@ export class AuthService {
     return userRoles.some((role:any) => rolesPermissions[role].permissions.includes(permission));
   };
 
+  isOwner(): boolean {
+    const userRoles = JSON.parse(sessionStorage.getItem('userGroup') ||  '');
+    return userRoles.some((role:any) => role === 1);
+  };
+
   validateWithOtp(phone_number: string) {
     const url = `${this.baseUrl}/auth/validate/?phone_number=${phone_number}`;
     return this.http.get(url, this.header)
@@ -76,6 +81,14 @@ export class AuthService {
   validateTOTPCode(token: string, admin_phone_number: string) {
     const url = `${this.baseUrl}/auth/totp/verify-totp/`;
     return this.http.post(url, {token: token, admin_phone_number: admin_phone_number}, this.header)
+  }
+
+  hasAdminPermission(): boolean {
+    const userRoles = JSON.parse(sessionStorage.getItem('userGroup') ||  '');
+    if (userRoles.length === 0) {
+     return false
+    }
+    return !!userRoles.some((role: any) => role === 1);
   }
 
 }

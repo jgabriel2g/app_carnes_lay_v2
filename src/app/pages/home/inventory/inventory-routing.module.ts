@@ -15,21 +15,10 @@ const routes: Routes = [
     }
   },
   {
-    path: 'merchandiseEntry',
-    loadChildren: () => import('./merchandise-entry/merchandise-entry.module').then( m => m.MerchandiseEntryModule),
-    canActivate:[RoleGuard],
-    data: {
-      permissions:[
-        'view-merchandise-entry'
-      ]
-    }
-  },
-  {
     path:'**',
     redirectTo:'',
     pathMatch:'full',
   },
-
 ];
 
 @NgModule({

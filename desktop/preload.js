@@ -11,5 +11,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.removeAllListeners(channel);
   },
   triggerPrint: () => ipcRenderer.send('trigger-print'),
-  onWeight: (callback) => ipcRenderer.on('weight', (event, value) => callback(value))
+  onWeight: (callback) => ipcRenderer.on('weight', (event, value) => callback(value)),
+
+  // Auto-Updater API
+  checkForUpdates: () => ipcRenderer.send('check-for-updates'),
+  onUpdaterEvent: (callback) => ipcRenderer.on('updater-event', (event, data) => callback(data)),
+  removeUpdaterListener: () => ipcRenderer.removeAllListeners('updater-event')
 })

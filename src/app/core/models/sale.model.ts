@@ -19,6 +19,7 @@ export interface ProductStock {
     name: string;
   },
   remaining_percentage: number;
+  barcode?: string | null;
 }
 
 export interface ProductSummary {

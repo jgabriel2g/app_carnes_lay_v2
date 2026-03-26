@@ -10,7 +10,6 @@ import {
   ViewChildren,
   NgZone,
   OnDestroy,
-  AfterViewChecked,
 } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -23,6 +22,7 @@ import { AlertsService } from '../../core/services/alerts.service';
 import { ThirdPartyService } from '../../core/services/third-party.service';
 import { AuthService } from '../../core/services/auth.service';
 import { OtpService } from '../../core/services/otp.service';
+import { TicketPrinterService } from '../../core/services/ticket-printer.service';
 import {
   CreateBill,
   ProductSelected,
@@ -30,11 +30,11 @@ import {
 } from '../../core/models/sale.model';
 import { PaymentMethod } from '../../core/models/global.model';
 import { Client } from '../../core/models/client.model';
-import { Router } from '@angular/router';
 import {
   ActiveSale,
   SalesStateService,
 } from '../../core/services/sales-state.service';
+import { BarcodeDecoderService } from '../../core/services/barcode-decoder.service';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -55,12 +55,12 @@ interface AutoCompleteCompleteEvent {
     DropdownModule,
   ],
 })
-export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class SalesFormComponent implements OnInit, OnDestroy {
   @Input() registerBox: any;
   @Output() reloadBoxInfo = new EventEmitter<boolean>();
 
-  @ViewChild('productInput') productInput!: ElementRef;
   @ViewChildren('amountInput') amountInputs!: QueryList<ElementRef>;
+  @ViewChild('scannerTrap') scannerTrap!: ElementRef;
 
   public selectedClient: Client | null = null;
   public selectedProduct: ProductStock | null = null;
@@ -82,6 +82,10 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   public isCapturingWeight: boolean = false;
   public activeInputIndex: number | null = null;
 
+  // Scanner properties
+  public scannerTrapValue: string = '';
+  public scannerIsActive: boolean = false;
+
   constructor(
     public authSvc: AuthService,
     private alertSvc: AlertsService,
@@ -90,32 +94,35 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     private salesStateSvc: SalesStateService,
     private ngZone: NgZone,
     private otpService: OtpService,
-    private router: Router
+    private ticketPrinterSvc: TicketPrinterService,
+    private barcodeDecoder: BarcodeDecoderService
   ) {}
 
   ngOnInit() {
-    // Subscribe to sales sessions from state service
     this.subscriptions.add(
       this.salesStateSvc.salesSessions$.subscribe((sessions) => {
         this.saleSessions = sessions;
       })
     );
-
-    // Subscribe to selected session from state service
     this.subscriptions.add(
       this.salesStateSvc.selectedSession$.subscribe((session) => {
         this.saleSessionSelected = session;
+        if (session.client) {
+          this.selectedClient = {
+            label: `${session.client.company_name} - ${session.client.first_name} ${session.client.last_name}`,
+            value: session.client,
+          } as any;
+        } else {
+          this.selectedClient = null;
+        }
       })
     );
-    console.log('Sesión seleccionada actualizada:', this.saleSessionSelected);
-    // TODO: Implementar el cliente seleccionado en la sesión
-
     this.loadInitialData();
     this.writeWeightOnInput();
+    this.initScanner();
   }
 
   ngOnDestroy() {
-    // Clean up subscriptions to prevent memory leaks
     this.subscriptions.unsubscribe();
   }
 
@@ -206,15 +213,14 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isLoading = true;
     this.salesSvc.createBill(data).subscribe({
       next: (resp: any) => {
-        console.log(resp);
-
-        // Update session in state service
         const updatedSession = {
           ...this.saleSessionSelected,
           isFinalized: true,
           bill: resp,
         };
         this.salesStateSvc.updateSalesSession(updatedSession);
+
+        this.ticketPrinterSvc.printBillTicket(resp, false);
 
         this.isLoading = false;
         this.reloadBoxInfo.emit(true);
@@ -415,7 +421,19 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Remove product from the list
    */
   removeProduct(index: number) {
-    // Restaurar la verificación OTP
+    if (this.authSvc.hasAdminPermission()) {
+      const updatedProducts = [...this.saleSessionSelected.products];
+      updatedProducts.splice(index, 1);
+
+      const updatedSession = {
+        ...this.saleSessionSelected,
+        products: updatedProducts,
+      };
+
+      this.salesStateSvc.updateSalesSession(updatedSession);
+      this.updateTotalSaleValue();
+      return
+    }
     this.otpService
       .verifyOtpAndExecute(() => {
         const updatedProducts = [...this.saleSessionSelected.products];
@@ -468,18 +486,14 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.alertSvc.presentAlert('Ooops', 'An unexpected error occurred.').then();
   }
 
-  async printBill() {
-    await this.router.navigate(['/ticket'], {
-      state: { bill: this.saleSessionSelected.bill },
-    });
+  printBill(): void {
+    if (this.saleSessionSelected.bill) {
+      this.ticketPrinterSvc.printBillTicket(this.saleSessionSelected.bill, false);
+    }
   }
 
-  printRewardTicket() {
-    sessionStorage.setItem(
-      'bill',
-      JSON.stringify(this.saleSessionSelected.bill)
-    );
-    window.open('/reward', '_blank');
+  printRewardTicket(): void {
+    this.ticketPrinterSvc.printRewardTicket();
   }
 
   /**
@@ -518,6 +532,8 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       setTimeout(() => {
         // Agregar la nueva sesión
         this.salesStateSvc.addSalesSession(newSale);
+        // Reenfocar el scanner
+        this.focusScannerTrap();
       }, 100);
     }
   }
@@ -561,7 +577,6 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   writeWeightOnInput() {
     if (window.electronAPI) {
-      // —— VERSIÓN ELECTRON ANTIGUA ——
       window.electronAPI.receive('weight', (data: any) => {
         this.ngZone.run(() => {
           if (!this.isCapturingWeight || this.activeInputIndex === null) return;
@@ -583,50 +598,11 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         });
       });
     }
-    // else {
-    //   // —— VERSIÓN POSTMESSAGE (FALLBACK) ——
-    //   const handler = (event: MessageEvent) => {
-    //     if (!this.isCapturingWeight || this.activeInputIndex === null) return;
-    //     // opcionalmente: if (event.origin !== 'tu-origen-esperado') return;
-    //     const msg = event.data;
-    //     if (typeof msg === 'string' && msg.startsWith('weight:')) {
-    //       const weight = parseFloat(msg.substring(7));
-    //       if (!isNaN(weight)) {
-    //         this.ngZone.run(() => {
-    //           const updatedProducts = [...this.saleSessionSelected.products];
-    //           updatedProducts[this.activeInputIndex!] = {
-    //             ...updatedProducts[this.activeInputIndex!],
-    //             amount: weight,
-    //           };
-    //           this.salesStateSvc.updateSalesSession({
-    //             ...this.saleSessionSelected,
-    //             products: updatedProducts,
-    //           });
-    //           this.updateTotalSaleValue();
-    //         });
-    //       }
-    //     }
-    //   };
-    //   window.addEventListener('message', handler);
-    //   // si quieres, almacena `handler` para luego removerlo con removeEventListener
-    // }
   }
 
   /**
    * Toggle weight capture for a specific product
    */
-  // toggleWeightCapture(index: number) {
-  //   // If we're already capturing for this index, stop
-  //   if (this.isCapturingWeight && this.activeInputIndex === index) {
-  //     this.isCapturingWeight = false;
-  //     this.activeInputIndex = null;
-  //     return;
-  //   }
-  //
-  //   // Start capturing for this index
-  //   this.isCapturingWeight = true;
-  //   this.activeInputIndex = index;
-  // }
   toggleWeightCapture(index: number) {
     if (this.isCapturingWeight && this.activeInputIndex === index) {
       this.isCapturingWeight = false;
@@ -700,32 +676,6 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
-   * Método para detectar y solucionar problemas con el servicio de estado
-   * (solo para depuración)
-   */
-  ngAfterViewChecked() {
-    // Verificamos si hay una discrepancia entre el estado local y el del servicio
-    if (
-      this.saleSessionSelected &&
-      this.saleSessionSelected.products &&
-      this.salesStateSvc.selectedSession &&
-      this.salesStateSvc.selectedSession.products &&
-      this.saleSessionSelected.products.length !==
-        this.salesStateSvc.selectedSession.products.length
-    ) {
-      console.log('⚠️ Discrepancia detectada en el número de productos');
-      console.log('Local products:', this.saleSessionSelected.products);
-      console.log(
-        'Service products:',
-        this.salesStateSvc.selectedSession.products
-      );
-
-      // Forzar sincronización si es necesario
-      this.saleSessionSelected = { ...this.salesStateSvc.selectedSession };
-    }
-  }
-
-  /**
    * Método para limpiar el input de producto después de seleccionar
    */
   clearProductInput() {
@@ -760,5 +710,139 @@ export class SalesFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     } catch (error) {
       console.error('Error al limpiar campo de autocompletado:', error);
     }
+  }
+
+  // ==================== SCANNER METHODS ====================
+
+  /**
+   * Inicializa el scanner de códigos de barras
+   */
+  private initScanner(): void {
+    setTimeout(() => this.focusScannerTrap(), 500);
+    this.setupGlobalClickListener();
+  }
+
+  /**
+   * Maneja el evento keydown del scanner trap
+   */
+  onScannerTrapKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const barcode = this.scannerTrapValue.trim();
+      if (barcode.length > 0) {
+        this.processBarcode(barcode);
+        this.scannerTrapValue = '';
+      }
+    }
+  }
+
+  onScannerTrapFocus(): void {
+    this.scannerIsActive = true;
+  }
+
+  onScannerTrapBlur(): void {
+    this.scannerIsActive = false;
+  }
+
+  onInputFocus(): void {
+    // Placeholder para futura lógica
+  }
+
+  onInputBlur(): void {
+    setTimeout(() => {
+      const activeElement = document.activeElement as HTMLElement;
+      const tagName = activeElement?.tagName?.toUpperCase() || '';
+      if (
+        !this.saleSessionSelected?.isFinalized &&
+        tagName !== 'INPUT' &&
+        tagName !== 'TEXTAREA' &&
+        tagName !== 'SELECT' &&
+        !activeElement?.classList?.contains('p-inputtext') &&
+        activeElement?.closest('.p-autocomplete') === null &&
+        activeElement?.closest('.p-dropdown') === null
+      ) {
+        this.focusScannerTrap();
+      }
+    }, 100);
+  }
+
+  /**
+   * Enfoca el input oculto del scanner
+   */
+  focusScannerTrap(): void {
+    if (this.scannerTrap?.nativeElement) {
+      this.scannerTrap.nativeElement.focus();
+    }
+  }
+
+  /**
+   * Configura el listener global de clicks para reenfocar el scanner
+   */
+  private setupGlobalClickListener(): void {
+    document.addEventListener('click', (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isInteractiveElement =
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'SELECT' ||
+        target.closest('.p-autocomplete') !== null ||
+        target.closest('.p-dropdown') !== null ||
+        target.closest('.p-inputtext') !== null ||
+        target.closest('.p-button') !== null;
+
+      if (!isInteractiveElement) {
+        setTimeout(() => this.focusScannerTrap(), 10);
+      }
+    });
+  }
+
+  /**
+   * Procesa un código de barras escaneado
+   */
+  private processBarcode(barcode: string): void {
+    this.ngZone.run(() => {
+      const productsWithBarcode = this.products.filter((p) => p.barcode);
+      const decoded = this.barcodeDecoder.decode(barcode, productsWithBarcode);
+
+      if (!decoded.isValid) {
+        this.alertSvc.presentAlert('Error', 'Código de barras inválido');
+        return;
+      }
+
+      // Buscar producto por código (sin ceros a la izquierda)
+      const productCodeWithoutZeros = parseInt(decoded.productCode, 10).toString();
+      const product = this.products.find(
+        (p) => p.product.code === productCodeWithoutZeros
+      );
+
+      if (!product) {
+        this.alertSvc.presentAlert(
+          'Error',
+          `Producto con código ${productCodeWithoutZeros} no encontrado`
+        );
+        return;
+      }
+
+      // Agregar producto a la sesión
+      const productToAdd: ProductSelected = {
+        productId: product.id,
+        productName: product.product.name,
+        amount: decoded.weight,
+        price: product.price,
+        type_of_unit_measurement: product.type_of_unit_measurement.name,
+      };
+
+      const currentProducts = [...this.saleSessionSelected.products];
+      currentProducts.push(productToAdd);
+
+      const updatedSession = {
+        ...this.saleSessionSelected,
+        products: currentProducts,
+      };
+
+      this.salesStateSvc.updateSalesSession(updatedSession);
+      this.updateTotalSaleValue();
+    });
   }
 }

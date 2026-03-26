@@ -1,5 +1,5 @@
 <div class="overflow-y-scroll h-full">
-  <app-side-bar (close)="toCollapse($event)" ></app-side-bar>
+  <app-side-bar (toggleSidebar)="toCollapse($event)" ></app-side-bar>
   <app-header></app-header>
   <main class="h-full  " [ngClass]="{'lg:pl-60': !isCollapse, 'lg:pl-20':  isCollapse}" >
     <div class="h-full lg:min-h-screen px-5 py-6 sm:px-6 lg:px-8" >
