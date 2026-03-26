@@ -126,9 +126,9 @@
       "sign": false
     },
     "nsis": {
-      "oneClick": false,
+      "oneClick": true,
       "perMachine": true,
-      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
       "deleteAppDataOnUninstall": true,
       "include": "build/installer.nsh"
     },

@@ -1,18 +1,23 @@
 ; Script personalizado de NSIS para instalador/desinstalador
 
 !macro customInstall
-  ; Cerrar la app si está corriendo antes de instalar
+  ; Intentar cierre limpio primero, luego forzar
+  nsExec::Exec 'taskkill /IM "Carnes Lay.exe"'
+  Pop $0
+  Sleep 1500
+  ; Forzar si sigue corriendo
   nsExec::Exec 'taskkill /F /IM "Carnes Lay.exe" /T'
   Pop $0
   Sleep 1000
 !macroend
 
 !macro customUnInstall
-  ; Cerrar la app si está corriendo antes de desinstalar
+  ; Intentar cierre limpio primero, luego forzar
+  nsExec::Exec 'taskkill /IM "Carnes Lay.exe"'
+  Pop $0
+  Sleep 1500
   nsExec::Exec 'taskkill /F /IM "Carnes Lay.exe" /T'
   Pop $0
-
-  ; Esperar 1 segundo para que se cierren los procesos
   Sleep 1000
 
   ; Eliminar datos de usuario (AppData)

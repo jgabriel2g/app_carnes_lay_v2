@@ -1,5 +1,6 @@
 const { autoUpdater } = require("electron-updater");
 const { dialog } = require("electron");
+const secrets = require("../config/secrets");
 
 /**
  * Servicio de Auto-Actualización
@@ -18,6 +19,9 @@ function initUpdater(win) {
   // Configuración
   autoUpdater.autoDownload = true; // Descargar automáticamente
   autoUpdater.autoInstallOnAppQuit = true; // Instalar al cerrar la app
+  autoUpdater.requestHeaders = {
+    Authorization: `token ${secrets.GH_TOKEN}`,
+  };
 
   // Solo verificar actualizaciones en producción
   if (process.env.NODE_ENV === "development") {
@@ -108,9 +112,10 @@ function showUpdateReadyDialog(info) {
 
   dialog.showMessageBox(mainWindow, dialogOpts).then((returnValue) => {
     if (returnValue.response === 0) {
-      // Usuario eligió "Reiniciar ahora"
+      // isSilent=true: instala sin mostrar wizard NSIS
+      // isForceRunAfter=true: reabre la app después de instalar
       console.log("🔄 Reiniciando para aplicar actualización...");
-      autoUpdater.quitAndInstall();
+      autoUpdater.quitAndInstall(true, true);
     } else {
       console.log("⏸️  Actualización pospuesta. Se aplicará al cerrar la app.");
     }

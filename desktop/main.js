@@ -9,6 +9,8 @@ const printService = require("./services/print.service");
 const updaterService = require("./services/updater.service");
 
 
+let mainWindow = null;
+
 // Crear ventana principal
 async function createWindow() {
   const win = new BrowserWindow({
@@ -44,6 +46,7 @@ async function createWindow() {
   // Inicializar auto-updater
   updaterService.initUpdater(win);
 
+  mainWindow = win;
   return win;
 }
 
@@ -65,6 +68,13 @@ app.whenReady().then(async () => {
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+});
+
+// Permitir que el auto-updater cierre la app sin resistencia
+app.on("before-quit", () => {
+  if (mainWindow) {
+    mainWindow.removeAllListeners("close");
+  }
 });
 
 // Cerrar aplicación

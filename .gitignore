@@ -65,6 +65,9 @@ yarn-error.log
 testem.log
 /typings
 
+# Secrets
+desktop/config/secrets.js
+
 # System files
 .DS_Store
 Thumbs.db
