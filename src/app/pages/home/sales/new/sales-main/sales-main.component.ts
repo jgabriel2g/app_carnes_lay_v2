@@ -62,7 +62,7 @@ export class SalesMainComponent  implements OnInit {
               sessionStorage.removeItem('saleBoxInfo');
             }
           });
-      }, 'eliminar producto')
+      }, 'Cerrar Caja')
       .then();
   }
 
