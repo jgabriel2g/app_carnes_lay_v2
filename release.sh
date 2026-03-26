@@ -40,6 +40,10 @@ git push origin "v${VERSION}" --force
 echo "🔨 Construyendo y publicando para Windows..."
 npm run publish:win
 
+# Publicar el release (electron-builder lo crea como draft)
+echo "📢 Publicando release..."
+gh release edit "v${VERSION}" --repo jgabriel2g/app_carnes_lay_v2 --draft=false --latest
+
 echo ""
 echo "✅ Release v${VERSION} publicado exitosamente"
 echo "🔗 https://github.com/jgabriel2g/app_carnes_lay_v2/releases/tag/v${VERSION}"
