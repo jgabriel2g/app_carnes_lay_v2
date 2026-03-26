@@ -27,13 +27,10 @@ export class BarcodeDecoderService {
    * Decodifica un código de barras.
    *
    * Formatos soportados:
-   * - 7 dígitos: PPKKGGG (2 dígitos producto + 2 kilos + 3 gramos)
    * - 8 dígitos: PPPKKGGG (3 dígitos producto + 2 kilos + 3 gramos)
    * - Otros: Busca coincidencia exacta en el listado de productos
    *
-   * Ejemplos:
-   * - "0101500" = producto 01, peso 01.500 kg
-   * - "00101500" = producto 001, peso 01.500 kg
+   * Ejemplo: "01501500" = producto 015, peso 01.500 kg
    */
   decode(barcode: string, products: ProductWithBarcode[] = []): DecodedBarcode {
     const result: DecodedBarcode = {
@@ -49,8 +46,8 @@ export class BarcodeDecoderService {
       return result;
     }
 
-    // Formato de balanza: 7 u 8 dígitos numéricos
-    if (barcode.length === 7 || barcode.length === 8) {
+    // Formato de balanza: exactamente 8 dígitos numéricos (PPP + KKGGG)
+    if (barcode.length === 8 && /^\d+$/.test(barcode)) {
       return this.decodeScaleBarcode(barcode, result);
     }
 
@@ -59,21 +56,12 @@ export class BarcodeDecoderService {
   }
 
   /**
-   * Decodifica código de balanza (7 u 8 dígitos)
-   * - 7 dígitos: PP + KKGGG
-   * - 8 dígitos: PPP + KKGGG
+   * Decodifica código de balanza (8 dígitos: PPP + KKGGG)
    */
   private decodeScaleBarcode(barcode: string, result: DecodedBarcode): DecodedBarcode {
-    // Validar que sean solo números
-    if (!/^\d+$/.test(barcode)) {
-      console.warn('Código de barras inválido: contiene caracteres no numéricos', barcode);
-      return result;
-    }
-
     try {
-      const productCodeLength = barcode.length === 7 ? 2 : 3;
-      const productCode = barcode.substring(0, productCodeLength);
-      const weightString = barcode.substring(productCodeLength); // Últimos 5 dígitos
+      const productCode = barcode.substring(0, 3);
+      const weightString = barcode.substring(3); // Últimos 5 dígitos
 
       // Convertir peso: KK.GGG
       const kilos = parseInt(weightString.substring(0, 2), 10);
